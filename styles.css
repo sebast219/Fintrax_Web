@@ -1,0 +1,13 @@
+/* Logo Image Styles */
+.logo-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    margin-right: 10px;
+}
+
+/* Remove any fingerprint-related styles if they exist */
+.fingerprint-section,
+.fingerprint-btn {
+    display: none !important;
+}
