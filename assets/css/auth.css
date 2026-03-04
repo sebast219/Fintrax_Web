@@ -31,7 +31,7 @@
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: #f0f0f0;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 50%, #e9ecef 100%);
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -43,8 +43,10 @@ body {
 .mobile-container {
     width: 100%;
     max-width: 390px;
-    min-height: 844px;
-    background-color: var(--bg-white);
+    min-height: 400px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 40px;
     position: relative;
     overflow: hidden;
@@ -169,8 +171,8 @@ body {
 
 
 .custom-input {
-    background-color: #F2F2F7;
-    border: none;
+    background: rgba(242, 242, 247, 0.8);
+    border: 1px solid rgba(142, 142, 147, 0.2);
     border-radius: 12px;
     padding: 14px 16px;
     font-size: 15px;
@@ -184,9 +186,9 @@ body {
 }
 
 .custom-input:focus {
-    background-color: #E5E5EA;
-    box-shadow: none;
-    border: none;
+    background: rgba(229, 229, 234, 0.9);
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
     outline: none;
 }
 
@@ -271,6 +273,34 @@ body {
 .signup-section {
     text-align: center;
     margin-top: 24px;
+}
+
+.signup-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.btn-back {
+    background: rgba(142, 142, 147, 0.1);
+    border: 1px solid rgba(142, 142, 147, 0.3);
+    color: var(--text-gray);
+    padding: 10px 24px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    order: 2;
+}
+
+.btn-back:hover {
+    background: rgba(142, 142, 147, 0.2);
+    color: var(--text-dark);
+    transform: translateY(-1px);
+    text-decoration: none;
 }
 
 .signup-text {
