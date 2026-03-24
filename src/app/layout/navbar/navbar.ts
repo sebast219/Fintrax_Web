@@ -1,14 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-navbar',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
 })
 export class Navbar {
   showNotifications = false;
+  
+  // Inyectar AuthService
+  auth = inject(AuthService);
+  private router = inject(Router);
   
   constructor() { }
   
@@ -21,5 +27,10 @@ export class Navbar {
   closeNotifications() {
     console.log('closeNotifications called');
     this.showNotifications = false;
+  }
+  
+  logout() {
+    this.auth.logout();
+    this.router.navigate(['/login']);
   }
 }

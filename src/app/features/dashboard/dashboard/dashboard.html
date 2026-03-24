@@ -6,8 +6,9 @@
     <div class="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-purple-100/40 rounded-full blur-3xl opacity-30"></div>
 </div>
 
-<!-- Main Content -->
-<main class="relative z-10 pt-24 pb-12 max-w-7xl mx-auto px-6 lg:px-8">
+<!-- Main Content Wrapper -->
+<div class="main-content-wrapper">
+    <main class="relative z-10 pt-24 pb-12 max-w-7xl mx-auto px-6 lg:px-8">
     
     <!-- Welcome Section -->
     <section class="mb-10 animate-enter" style="animation-delay: 0.1s">
@@ -15,7 +16,7 @@
             <div>
                 <p class="text-sm font-medium text-slate-500 mb-1">Bienvenido de vuelta</p>
                 <h1 class="text-4xl md:text-5xl font-display font-bold tracking-tight text-slate-900">
-                    John Doe
+                    {{ auth.getCurrentUserName() || 'Usuario' }}
                 </h1>
             </div>
             <div class="flex items-center gap-3">
@@ -141,7 +142,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         
         <!-- Chart Section -->
-        <section class="lg:col-span-2 bg-white rounded-2xl p-6 shadow-card animate-enter border border-slate-100" style="animation-delay: 0.35s">
+        <section class="chart-section lg:col-span-2 bg-white rounded-2xl p-6 shadow-card animate-enter border border-slate-100" style="animation-delay: 0.35s">
             <div class="flex items-center justify-between mb-6">
                 <div>
                     <h2 class="text-lg font-display font-bold text-slate-900">Resumen Financiero</h2>
@@ -553,3 +554,4 @@
         </section>
     </div>
 </main>
+</div>

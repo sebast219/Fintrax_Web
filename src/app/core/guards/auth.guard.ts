@@ -1,25 +1,14 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
-import { SupabaseService } from '../services/supabase.service';
-import { Observable } from 'rxjs';
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class AuthGuard implements CanActivate {
-  constructor(
-    private supabaseService: SupabaseService,
-    private router: Router
-  ) {}
+export const authGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
 
-  async canActivate(): Promise<boolean> {
-    const { data: { user } } = await this.supabaseService.getCurrentUser();
-    
-    if (user) {
-      return true;
-    } else {
-      this.router.navigate(['/auth/login']);
-      return false;
-    }
+  if (auth.isLoggedIn()) {
+    return true;
   }
-}
+
+  return router.createUrlTree(['/login']);
+};
