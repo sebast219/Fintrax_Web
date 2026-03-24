@@ -8,7 +8,7 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    loadComponent: () => import('./dashboard.component').then(c => c.DashboardComponent)
+    loadComponent: () => import('./features/dashboard/dashboard/dashboard.component').then(c => c.DashboardComponent)
   },
   {
     path: '**',
