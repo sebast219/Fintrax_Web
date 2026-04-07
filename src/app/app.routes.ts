@@ -28,6 +28,12 @@ export const routes: Routes = [
       .then(c => c.DashboardComponent),
     canActivate: [authGuard]
   },
+  {
+    path: 'cards',
+    loadComponent: () => import('./features/cards/cards/cards.component')
+      .then(c => c.CardsComponent),
+    canActivate: [authGuard]
+  },
 
   // Cualquier otra URL redirige al login
   { 

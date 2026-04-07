@@ -1,0 +1,95 @@
+<app-navbar></app-navbar>
+
+<!-- Background -->
+<div class="fixed inset-0 overflow-hidden pointer-events-none">
+  <div class="absolute top-0 left-1/4 w-[800px] h-[800px] bg-blue-100/40 rounded-full blur-3xl opacity-30"></div>
+  <div class="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-purple-100/40 rounded-full blur-3xl opacity-30"></div>
+</div>
+
+<div class="main-content-wrapper">
+  <main class="relative z-10 pt-24 pb-12 max-w-7xl mx-auto px-6">
+
+    <!-- Header -->
+    <section class="mb-10">
+      <p class="text-sm text-slate-500">Tus métodos de pago</p>
+      <h1 class="text-4xl font-bold text-slate-900">
+        Mis Tarjetas 💳
+      </h1>
+    </section>
+
+    <!-- Cards Grid -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+      <div *ngFor="let card of cards" class="card-container">
+
+        <div class="card-inner">
+
+          <!-- FRONT -->
+          <div 
+            class="card-face card-front"
+            [ngClass]="{
+              'bg-gradient-to-br from-slate-800 to-slate-900 text-white': card.type === 'dark',
+              'bg-gradient-to-br from-gray-300 to-gray-400 text-white': card.type === 'light'
+            }"
+          >
+            <div class="flex justify-between">
+              <span class="text-sm opacity-70">Fintrack</span>
+              <div class="w-10 h-6 bg-white/20 rounded"></div>
+            </div>
+
+            <div class="mt-10">
+              <p class="tracking-widest text-lg">{{ card.number }}</p>
+            </div>
+
+            <div class="mt-6 flex justify-between items-end">
+              <div>
+                <p class="text-xs opacity-70">Titular</p>
+                <p class="font-semibold">{{ auth.getCurrentUserName() || card.name }}</p>
+              </div>
+              <p class="text-lg font-bold">
+                {{ card.balance | currency:'USD':'symbol' }}
+              </p>
+            </div>
+          </div>
+
+          <!-- BACK -->
+          <div class="card-face card-back bg-slate-100">
+            <div class="w-full h-10 bg-slate-800 mt-4"></div>
+
+            <div class="p-4">
+              <p class="text-xs text-slate-500">CVV</p>
+              <div class="bg-white p-2 rounded text-right font-mono shadow-inner">
+                123
+              </div>
+
+              <p class="text-xs text-slate-400 mt-4">
+                No compartas esta información.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+    <div class="grid md:grid-cols-2 gap-6 mt-6">
+
+  <!-- Total gastado -->
+  <div class="bg-white p-4 rounded-xl shadow">
+    <h2 class="text-lg font-semibold">Total Gastado</h2>
+    <p class="text-3xl font-bold text-red-500 mt-2">
+      $ {{ totalGastado | number }}
+    </p>
+  </div>
+
+  <!-- Gráfico pastel -->
+  <div class="bg-white p-4 rounded-xl shadow">
+    <h2 class="text-lg font-semibold mb-4">Gasto por tarjeta</h2>
+    <canvas id="pieChart"></canvas>
+  </div>
+
+</div>
+
+  </main>
+</div>

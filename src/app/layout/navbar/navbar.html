@@ -11,8 +11,15 @@
 
             <!-- Nav Links -->
             <nav class="hidden md:flex items-center gap-1">
-                <button class="px-4 py-2 rounded-lg text-sm font-medium text-slate-900 bg-slate-100/80">Dashboard</button>
-                <button class="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100/50 transition-colors">Tarjetas</button>
+                <a routerLink="/dashboard"
+                    class="px-4 py-2 rounded-lg text-sm font-medium text-slate-900 bg-slate-100/80">
+                    Dashboard
+                </a>
+
+                <a routerLink="/cards"
+                    class="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100/50 transition-colors">
+                    Tarjetas
+                </a>
                 <button class="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100/50 transition-colors">Informes</button>
                 <button class="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100/50 transition-colors">Configuración</button>
             </nav>
