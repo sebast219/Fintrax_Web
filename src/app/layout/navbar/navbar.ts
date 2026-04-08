@@ -11,25 +11,37 @@ import { AuthService } from '../../core/services/auth.service';
 })
 export class Navbar {
   showNotifications = false;
-  
+  showUserMenu = false;
+
   // Inyectar AuthService
   auth = inject(AuthService);
   private router = inject(Router);
-  
+
   constructor() { }
-  
+
   toggleNotifications() {
     console.log('toggleNotifications called');
     this.showNotifications = !this.showNotifications;
+    this.showUserMenu = false;
     console.log('showNotifications:', this.showNotifications);
   }
-  
+
   closeNotifications() {
     console.log('closeNotifications called');
     this.showNotifications = false;
   }
-  
+
+  toggleUserMenu() {
+    this.showUserMenu = !this.showUserMenu;
+    this.showNotifications = false;
+  }
+
+  closeUserMenu() {
+    this.showUserMenu = false;
+  }
+
   logout() {
+    this.showUserMenu = false;
     this.auth.logout();
     this.router.navigate(['/login']);
   }
