@@ -23,7 +23,7 @@ export class RegisterComponent {
   error = signal('');
   success = signal('');
 
-  onSubmit() {
+  async onSubmit() {
     if (!this.name || !this.email || !this.password || !this.confirmPassword) {
       this.error.set('Completa todos los campos');
       return;
@@ -43,17 +43,21 @@ export class RegisterComponent {
     this.error.set('');
     this.success.set('');
 
-    const result = this.auth.register(this.name, this.email, this.password);
-    
-    if (result.success) {
-      this.success.set(result.message);
-      setTimeout(() => {
-        this.router.navigate(['/login']);
-      }, 2000);
-    } else {
-      this.error.set(result.message);
+    try {
+      const result = await this.auth.register(this.name, this.email, this.password);
+      
+      if (result.success) {
+        this.success.set(result.message);
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 2000);
+      } else {
+        this.error.set(result.message);
+      }
+    } catch (error: any) {
+      this.error.set('Error de conexión con el servidor');
+    } finally {
+      this.isLoading = false;
     }
-    
-    this.isLoading = false;
   }
 }

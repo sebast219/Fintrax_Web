@@ -21,7 +21,7 @@ export class LoginComponent {
   error = signal('');
   success = signal('');
 
-  onSubmit() {
+  async onSubmit() {
     if (!this.email || !this.password) {
       this.error.set('Completa todos los campos');
       return;
@@ -31,17 +31,21 @@ export class LoginComponent {
     this.error.set('');
     this.success.set('');
 
-    const result = this.auth.login(this.email, this.password);
-    
-    if (result.success) {
-      this.success.set(result.message);
-      setTimeout(() => {
-        this.router.navigate(['/dashboard']);
-      }, 1000);
-    } else {
-      this.error.set(result.message);
+    try {
+      const result = await this.auth.login(this.email, this.password);
+      
+      if (result.success) {
+        this.success.set(result.message);
+        setTimeout(() => {
+          this.router.navigate(['/dashboard']);
+        }, 1000);
+      } else {
+        this.error.set(result.message);
+      }
+    } catch (error: any) {
+      this.error.set('Error de conexión con el servidor');
+    } finally {
+      this.isLoading = false;
     }
-    
-    this.isLoading = false;
   }
 }
