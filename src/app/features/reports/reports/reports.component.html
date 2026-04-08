@@ -1,0 +1,228 @@
+<app-navbar></app-navbar>
+
+<!-- Background Ambient -->
+<div class="fixed inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-0 left-1/4 w-[800px] h-[800px] bg-blue-100/40 rounded-full blur-3xl opacity-30"></div>
+    <div class="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-purple-100/40 rounded-full blur-3xl opacity-30"></div>
+</div>
+
+<!-- Main Content Wrapper -->
+<div class="main-content-wrapper">
+    <main class="relative z-10 pt-24 pb-12 max-w-7xl mx-auto px-6 lg:px-8">
+
+    <!-- HEADER -->
+    <section class="mb-10">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+                <p class="text-sm font-medium text-slate-500 mb-1">Análisis financiero</p>
+                <h1 class="text-4xl md:text-5xl font-display font-bold tracking-tight text-slate-900">
+                    Informes & Estadísticas
+                </h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="relative">
+                    <select (change)="onRangeChange($event)" class="appearance-none bg-white border border-slate-200 text-slate-700 py-2.5 pl-4 pr-10 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer shadow-sm">
+                        <option value="30">Últimos 30 días</option>
+                        <option value="6">Últimos 6 meses</option>
+                        <option value="12">Último año</option>
+                    </select>
+                    <svg class="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+                <button (click)="exportPDF()" class="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium shadow-sm border border-blue-700 flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    Exportar PDF
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- KPI -->
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+        <div *ngFor="let kpi of kpis" class="bg-white rounded-2xl p-6 shadow-card hover:shadow-card-hover transition-all duration-300 border border-slate-100">
+            <div class="flex items-start justify-between mb-4">
+                <div>
+                    <p class="text-sm font-medium text-slate-500 mb-1">{{ kpi.title }}</p>
+                    <p class="text-3xl font-display font-bold text-slate-900">{{ kpi.value }}</p>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-900 shadow-sm border border-slate-200">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CHARTS -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+
+        <!-- Distribución de Gastos -->
+        <div class="bg-white rounded-2xl p-6 shadow-card border border-slate-100">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h3 class="text-lg font-display font-bold text-slate-900">Distribución de Gastos</h3>
+                    <p class="text-sm text-slate-500">Por categorías principales</p>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-center mb-6">
+                <div class="relative w-48 h-48">
+                    <svg viewBox="0 0 200 200" class="w-full h-full transform -rotate-90">
+                        <circle cx="100" cy="100" r="80" fill="none" stroke="#F1F5F9" stroke-width="20"/>
+                        <circle cx="100" cy="100" r="80" fill="none" stroke="#3B82F6" stroke-width="20" 
+                                stroke-dasharray="175.93 439.82" stroke-dashoffset="0"/>
+                        <circle cx="100" cy="100" r="80" fill="none" stroke="#10B981" stroke-width="20" 
+                                stroke-dasharray="87.96 527.79" stroke-dashoffset="-175.93"/>
+                        <circle cx="100" cy="100" r="80" fill="none" stroke="#F59E0B" stroke-width="20" 
+                                stroke-dasharray="131.95 483.80" stroke-dashoffset="-263.89"/>
+                        <circle cx="100" cy="100" r="80" fill="none" stroke="#EF4444" stroke-width="20" 
+                                stroke-dasharray="87.96 527.79" stroke-dashoffset="-395.84"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 rounded-full bg-blue-500"></div>
+                    <span class="text-sm font-medium text-slate-600">Alimentación 35%</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    <span class="text-sm font-medium text-slate-600">Transporte 20%</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                    <span class="text-sm font-medium text-slate-600">Entretenimiento 25%</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                    <span class="text-sm font-medium text-slate-600">Servicios 20%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tendencia de Gastos Hormiga -->
+        <div class="bg-white rounded-2xl p-6 shadow-card border border-slate-100">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h3 class="text-lg font-display font-bold text-slate-900">Tendencia de Gastos Hormiga</h3>
+                    <p class="text-sm text-slate-500">Evolución semanal</p>
+                </div>
+            </div>
+            
+            <div class="h-64 relative">
+                <svg viewBox="0 0 400 250" class="w-full h-full">
+                    <defs>
+                        <linearGradient id="antGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#F59E0B;stop-opacity:0.3"/>
+                            <stop offset="100%" style="stop-color:#F59E0B;stop-opacity:0"/>
+                        </linearGradient>
+                    </defs>
+                    
+                    <!-- Grid -->
+                    <g stroke="#F1F5F9" stroke-width="1">
+                        <line x1="0" y1="50" x2="400" y2="50"/>
+                        <line x1="0" y1="100" x2="400" y2="100"/>
+                        <line x1="0" y1="150" x2="400" y2="150"/>
+                        <line x1="0" y1="200" x2="400" y2="200"/>
+                    </g>
+
+                    <!-- Area Chart -->
+                    <path d="M 0 180 Q 50 170, 100 160 T 200 140 T 300 130 T 400 120 L 400 250 L 0 250 Z" 
+                          fill="url(#antGrad)" opacity="0.8"/>
+                    <path d="M 0 180 Q 50 170, 100 160 T 200 140 T 300 130 T 400 120" 
+                          fill="none" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/>
+
+                    <!-- Data Points -->
+                    <circle cx="0" cy="180" r="4" fill="#F59E0B" stroke="white" stroke-width="2"/>
+                    <circle cx="100" cy="160" r="4" fill="#F59E0B" stroke="white" stroke-width="2"/>
+                    <circle cx="200" cy="140" r="4" fill="#F59E0B" stroke="white" stroke-width="2"/>
+                    <circle cx="300" cy="130" r="4" fill="#F59E0B" stroke="white" stroke-width="2"/>
+                    <circle cx="400" cy="120" r="4" fill="#F59E0B" stroke="white" stroke-width="2"/>
+
+                    <!-- Labels -->
+                    <text x="0" y="230" fill="#64748B" font-size="11" font-weight="500">Sem 1</text>
+                    <text x="80" y="230" fill="#64748B" font-size="11" font-weight="500">Sem 2</text>
+                    <text x="180" y="230" fill="#64748B" font-size="11" font-weight="500">Sem 3</text>
+                    <text x="280" y="230" fill="#64748B" font-size="11" font-weight="500">Sem 4</text>
+                    <text x="360" y="230" fill="#64748B" font-size="11" font-weight="500">Sem 5</text>
+                </svg>
+            </div>
+
+            <div class="flex items-center justify-between mt-4 pt-4 border-t border-slate-100">
+                <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                    <span class="text-sm font-medium text-slate-600">Gastos Hormiga</span>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm font-semibold text-slate-900">Tendencia: <span class="text-green-600">-15%</span></p>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- INSIGHTS -->
+    <section class="bg-white rounded-2xl p-6 shadow-card mb-8 border border-slate-100">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-200">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+            </div>
+            <h3 class="text-lg font-display font-bold text-slate-900">Insights Clave</h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div *ngFor="let insight of insights" class="flex gap-4 p-4 bg-amber-50 rounded-xl border border-amber-200 shadow-sm">
+                <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center flex-shrink-0 mt-0.5 shadow-md">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-slate-900 text-sm mb-1">{{ insight.title }}</h4>
+                    <p class="text-sm text-slate-600 leading-relaxed">{{ insight.text }}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TABLE -->
+    <section class="bg-white rounded-2xl p-6 shadow-card border border-slate-100">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-display font-bold text-slate-900">Detalle por Categoría</h3>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b border-slate-100">
+                        <th class="text-left py-3 px-4 text-sm font-semibold text-slate-700">Categoría</th>
+                        <th class="text-right py-3 px-4 text-sm font-semibold text-slate-700">Monto</th>
+                        <th class="text-right py-3 px-4 text-sm font-semibold text-slate-700">Porcentaje</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of categoryDetails" class="border-b border-slate-50 hover:bg-slate-50 transition-colors">
+                        <td class="py-3 px-4">
+                            <div class="flex items-center gap-3">
+                                <span class="text-lg">{{ item.name }}</span>
+                            </div>
+                        </td>
+                        <td class="py-3 px-4 text-right font-semibold text-slate-900">{{ formatMoney(item.amount) }}</td>
+                        <td class="py-3 px-4 text-right">
+                            <span class="inline-flex items-center px-2 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold">{{ item.percentage }}%</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    </main>
+</div>

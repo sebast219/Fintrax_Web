@@ -34,7 +34,11 @@ export const routes: Routes = [
       .then(c => c.CardsComponent),
     canActivate: [authGuard]
   },
-
+    {
+    path: 'reports',
+    loadComponent: () => import('./features/reports/reports/reports.component').then(m => m.ReportsComponent),
+    canActivate: [authGuard]
+  },
   // Cualquier otra URL redirige al login
   { 
     path: '**', 

@@ -1,0 +1,157 @@
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 100px 20px;
+}
+
+.background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+
+  .blur {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.3;
+
+    &.blue {
+      background: #3b82f6;
+      top: 0;
+      left: 20%;
+    }
+
+    &.purple {
+      background: #a855f7;
+      bottom: 0;
+      right: 20%;
+    }
+  }
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 40px;
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+  }
+
+  .subtitle {
+    color: #64748b;
+    font-size: 14px;
+  }
+
+  .actions {
+    display: flex;
+    gap: 10px;
+
+    select, button {
+      padding: 10px 15px;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+      cursor: pointer;
+    }
+
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+
+      &:hover {
+        background: #1d4ed8;
+      }
+    }
+  }
+}
+
+/* CARDS */
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+/* KPI */
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+
+  h2 {
+    font-size: 1.8rem;
+    margin-top: 5px;
+
+    &.danger {
+      color: #ef4444;
+    }
+
+    &.warning {
+      color: #f59e0b;
+    }
+  }
+}
+
+/* CHARTS */
+.charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+
+  .circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: auto;
+    background: linear-gradient(45deg, #3b82f6, #a855f7, #ef4444);
+  }
+
+  .placeholder {
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+  }
+}
+
+/* INSIGHTS */
+.insights {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .insight {
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+  }
+}
+
+/* TABLE */
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th, td {
+    padding: 10px;
+    text-align: left;
+  }
+
+  thead {
+    border-bottom: 1px solid #e2e8f0;
+    color: #64748b;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid #f1f5f9;
+  }
+}
