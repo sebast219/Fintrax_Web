@@ -1,0 +1,81 @@
+.pricing {
+  // Animaciones
+  .plan-card {
+    animation: slideInUp 0.6s ease-out;
+  }
+
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  // Efectos hover
+  .plan-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  }
+
+  // Tarjeta destacada
+  .featured-plan {
+    position: relative;
+    border: 2px solid theme('colors.purple.600');
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, theme('colors.purple.400'), theme('colors.purple.600'));
+      border-radius: inherit;
+      z-index: -1;
+    }
+  }
+
+  // Gradientes
+  .bg-gradient-to-br {
+    background: linear-gradient(135deg, theme('colors.gray.50'), theme('colors.blue.50'));
+  }
+
+  // Transiciones
+  .transition-shadow {
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+
+  // Tabla de comparación
+  .comparison-table {
+    th, td {
+      &:first-child {
+        text-align: left;
+      }
+      &:not(:first-child) {
+        text-align: center;
+      }
+    }
+  }
+
+  // Badges
+  .badge-popular {
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  .badge-recommended {
+    background: linear-gradient(45deg, theme('colors.purple.600'), theme('colors.purple.700'));
+  }
+}

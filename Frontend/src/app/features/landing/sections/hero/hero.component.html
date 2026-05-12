@@ -1,0 +1,80 @@
+<section class="hero bg-gradient-to-br from-blue-600 to-purple-700 text-white">
+  <div class="container mx-auto px-4 py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <!-- Contenido del Hero -->
+      <div class="space-y-8">
+        <h1 class="text-4xl lg:text-6xl font-bold leading-tight">
+          Gestiona tus 
+          <span class="text-yellow-300">finanzas</span>
+          <br>
+          de forma inteligente
+        </h1>
+        <p class="text-xl lg:text-2xl text-blue-100 mt-4">
+          Control total de tus ingresos, gastos y metas financieras
+          <br>
+          en una sola plataforma
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 mt-8">
+          <button 
+            (click)="navigateToLogin()"
+            class="px-8 py-4 bg-white text-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition-colors duration-200 shadow-lg">
+            Iniciar Sesión
+          </button>
+          <button 
+            (click)="navigateToRegister()"
+            class="px-8 py-4 bg-transparent border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors duration-200">
+            Crear Cuenta
+          </button>
+        </div>
+
+        <!-- Características rápidas -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-12">
+          <div class="flex items-center space-x-3">
+            <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+              📊
+            </div>
+            <span class="text-sm">Dashboard en tiempo real</span>
+          </div>
+          <div class="flex items-center space-x-3">
+            <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+              💳
+            </div>
+            <span class="text-sm">Gestión de tarjetas</span>
+          </div>
+          <div class="flex items-center space-x-3">
+            <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+              📈
+            </div>
+            <span class="text-sm">Reportes detallados</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Imagen o gráfico del Hero -->
+      <div class="relative">
+        <div class="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-purple-400/20 rounded-2xl transform rotate-3"></div>
+        <div class="relative bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+          <div class="text-center space-y-4">
+            <div class="text-6xl">📱</div>
+            <h3 class="text-xl font-semibold">Disponible en todos tus dispositivos</h3>
+            <p class="text-blue-100">
+              Accede a tus finanzas desde cualquier lugar
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Indicador de scroll -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+      <button 
+        (click)="scrollToFeatures()"
+        class="text-white/80 hover:text-white transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3m0 11V3m-7 7h14M5 10a7 7 0 0 1 14 0v-1a7 7 0 0 1-14 0v1z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</section>

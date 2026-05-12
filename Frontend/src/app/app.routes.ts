@@ -2,47 +2,77 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
-  // Página de presentación
+  // 🏠 LANDING PAGE (Públicas)
   {
     path: '',
     loadComponent: () => import('./features/landing/landing.component')
       .then(m => m.LandingComponent),
-    pathMatch: 'full'
+    data: { title: 'Fintrax - Gestión Financiera Personal' }
   },
-
-  // Rutas públicas (sin autenticación)
+  
+  // 🔐 AUTH ROUTES (Públicas)
   {
-    path: 'login',
-    loadComponent: () => import('./features/auth/login/login.component')
-      .then(m => m.LoginComponent)
+    path: 'auth',
+    children: [
+      {
+        path: 'login',
+        loadComponent: () => import('./features/auth/login/login.component')
+          .then(m => m.LoginComponent),
+        data: { title: 'Inicia Sesión' }
+      },
+      {
+        path: 'register',
+        loadComponent: () => import('./features/auth/register/register.component')
+          .then(m => m.RegisterComponent),
+        data: { title: 'Crear Cuenta' }
+      }
+    ]
   },
-  {
-    path: 'register',
-    loadComponent: () => import('./features/auth/register/register.component')
-      .then(m => m.RegisterComponent)
-  },
-
-  // Ruta privada: requiere estar logueado
+  
+  // 💳 DASHBOARD (Protegidas)
   {
     path: 'dashboard',
     loadComponent: () => import('./features/dashboard/dashboard/dashboard.component')
-      .then(c => c.DashboardComponent),
-    canActivate: [authGuard]
+      .then(m => m.DashboardComponent),
+    canActivate: [authGuard],
+    data: { title: 'Dashboard' }
   },
+  
+  // 🎴 CARDS (Protegidas)
   {
     path: 'cards',
     loadComponent: () => import('./features/cards/cards/cards.component')
-      .then(c => c.CardsComponent),
-    canActivate: [authGuard]
+      .then(m => m.CardsComponent),
+    canActivate: [authGuard],
+    data: { title: 'Mis Tarjetas' }
   },
-    {
+  
+  // 📊 REPORTS (Protegidas)
+  {
     path: 'reports',
     loadComponent: () => import('./features/reports/reports/reports.component').then(m => m.ReportsComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+    data: { title: 'Reportes' }
   },
-  // Cualquier otra URL redirige al inicio
+
+  // ⚙️ SETTINGS (Protegidas)
+  {
+    path: 'settings',
+    loadComponent: () => import('./features/reports/reports/reports.component')
+      .then(m => m.ReportsComponent),
+    canActivate: [authGuard],
+    data: { title: 'Configuración - Próximamente' }
+  },
+  
+  // 🔴 ERROR PAGES
+  {
+    path: 'not-found',
+    loadComponent: () => import('./features/landing/landing.component')
+      .then(m => m.LandingComponent),
+    data: { title: 'Página No Encontrada' }
+  },
   {
     path: '**',
-    redirectTo: '/'
+    redirectTo: 'not-found'
   }
 ];

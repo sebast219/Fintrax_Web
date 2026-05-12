@@ -1,0 +1,61 @@
+.faq {
+  // Animaciones
+  .faq-item {
+    animation: slideIn 0.4s ease-out;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  // Efectos hover
+  .faq-button:hover {
+    background-color: theme('colors.gray.50');
+  }
+
+  // Transiciones
+  .transition-colors {
+    transition: all 0.2s ease-in-out;
+  }
+
+  // Iconos de pregunta/respuesta
+  .q-icon {
+    background: linear-gradient(135deg, theme('colors.blue.100'), theme('colors.blue.200'));
+  }
+
+  .a-icon {
+    background: linear-gradient(135deg, theme('colors.green.100'), theme('colors.green.200'));
+  }
+
+  // Búsqueda
+  .search-input {
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+  }
+
+  // Categorías
+  .category-button {
+    position: relative;
+    
+    &.active {
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 20px;
+        height: 2px;
+        background: theme('colors.blue.600');
+      }
+    }
+  }
+}

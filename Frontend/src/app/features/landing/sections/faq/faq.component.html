@@ -1,0 +1,112 @@
+<section class="py-16 bg-gray-50">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+        Preguntas
+        <span class="text-blue-600">Frecuentes</span>
+      </h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        Todo lo que necesitas saber sobre Fintrax
+      </p>
+    </div>
+
+    <!-- Filtro por categoría -->
+    <div class="flex justify-center mb-8">
+      <div class="inline-flex bg-white rounded-lg shadow-md p-1">
+        <button 
+          *ngFor="let category of ['todos', ...categories]; trackBy: $index"
+          (click)="setCategory(category)"
+          class="px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+          [class]="selectedCategory() === category 
+            ? 'bg-blue-600 text-white' 
+            : 'text-gray-600 hover:text-gray-900'">
+          {{ category === 'todos' ? 'Todas' : category.charAt(0).toUpperCase() + category.slice(1) }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Búsqueda -->
+    <div class="max-w-2xl mx-auto mb-8">
+      <div class="relative">
+        <input 
+          type="text"
+          placeholder="Buscar en las preguntas frecuentes..."
+          (input)="searchFAQs($any.target.value)"
+          class="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- Lista de FAQs -->
+    <div class="max-w-4xl mx-auto">
+      <div class="space-y-4">
+        <div 
+          *ngFor="let faq of getFilteredFAQs(); trackBy: faq.id" 
+          class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+          <button 
+            (click)="toggleFAQ(faq.id)"
+            class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors duration-200">
+            <div class="flex items-center">
+              <span class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-semibold mr-3">
+                Q
+              </span>
+              <span class="font-medium text-gray-900">{{ faq.question }}</span>
+            </div>
+            <svg 
+              class="w-5 h-5 text-gray-400 transition-transform duration-200"
+              [class]="faq.expanded ? 'rotate-180' : ''"
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          
+          <div 
+            *ngIf="faq.expanded" 
+            class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+            <div class="flex items-start">
+              <span class="w-8 h-8 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-sm font-semibold mr-3">
+                A
+              </span>
+              <p class="text-gray-700 leading-relaxed">{{ faq.answer }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Acciones adicionales -->
+    <div class="text-center mt-12">
+      <div class="space-y-4">
+        <div class="flex justify-center space-x-4">
+          <button 
+            (click)="toggleAll(true)"
+            class="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200">
+            Expandir Todas
+          </button>
+          <button 
+            (click)="toggleAll(false)"
+            class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors duration-200">
+            Colapsar Todas
+          </button>
+        </div>
+        
+        <div class="text-gray-600">
+          <p class="mb-2">¿No encontraste lo que buscabas?</p>
+          <div class="flex justify-center space-x-4">
+            <button class="text-blue-600 hover:text-blue-700 font-medium">
+              Contactar Soporte
+            </button>
+            <span class="text-gray-400">•</span>
+            <button class="text-blue-600 hover:text-blue-700 font-medium">
+              Visitar Centro de Ayuda
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

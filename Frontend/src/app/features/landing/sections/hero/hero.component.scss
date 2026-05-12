@@ -1,0 +1,33 @@
+.hero {
+  // Animaciones personalizadas
+  .animate-bounce {
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-10px);
+    }
+    60% {
+      transform: translateY(-5px);
+    }
+  }
+
+  // Gradientes personalizados
+  .bg-gradient-to-br {
+    background: linear-gradient(135deg, theme('colors.blue.600'), theme('colors.purple.700'));
+  }
+
+  // Efectos de glassmorphism
+  .backdrop-blur-sm {
+    backdrop-filter: blur(4px);
+  }
+
+  // Transiciones suaves
+  .transition-colors {
+    transition: all 0.2s ease-in-out;
+  }
+}
