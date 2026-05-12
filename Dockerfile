@@ -13,7 +13,7 @@ WORKDIR /app/Backend
 RUN npm ci
 
 # Copy source code from Backend directory
-COPY . .
+COPY Backend/ ./
 
 # Generate Prisma client
 RUN npx prisma generate
