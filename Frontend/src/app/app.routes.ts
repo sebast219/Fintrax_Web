@@ -2,11 +2,12 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
-  // Redirige la raíz al login
-  { 
-    path: '', 
-    redirectTo: '/login', 
-    pathMatch: 'full' 
+  // Página de presentación
+  {
+    path: '',
+    loadComponent: () => import('./features/landing/landing.component')
+      .then(m => m.LandingComponent),
+    pathMatch: 'full'
   },
 
   // Rutas públicas (sin autenticación)
@@ -39,9 +40,9 @@ export const routes: Routes = [
     loadComponent: () => import('./features/reports/reports/reports.component').then(m => m.ReportsComponent),
     canActivate: [authGuard]
   },
-  // Cualquier otra URL redirige al login
-  { 
-    path: '**', 
-    redirectTo: '/login' 
+  // Cualquier otra URL redirige al inicio
+  {
+    path: '**',
+    redirectTo: '/'
   }
 ];

@@ -7,6 +7,7 @@ import { LoggerModule } from './common/logger/logger.module';
 import { HealthModule } from './common/health/health.module';
 import { CacheModule } from './common/cache/cache.module';
 import { MetricsModule } from './common/metrics/metrics.module';
+import { RedisModule } from './common/redis/redis.module';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { RateLimitGuard } from './common/guards/rate-limit.guard';
 import { AuthModule } from './modules/auth/auth.module';
@@ -29,6 +30,7 @@ import { RecurringModule } from './modules/recurring/recurring.module';
     HealthModule,
     CacheModule,
     MetricsModule,
+    RedisModule,
     PrismaModule,
     AuthModule,
     UsersModule,

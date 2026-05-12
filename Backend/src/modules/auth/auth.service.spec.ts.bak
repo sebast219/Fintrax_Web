@@ -1,0 +1,270 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { AuthService } from './auth.service';
+import { JwtService } from '@nestjs/jwt';
+import { PrismaService } from '../../prisma/prisma.service';
+import { UnauthorizedException, ConflictException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+
+describe('AuthService', () => {
+  let service: AuthService;
+  let prismaService: PrismaService;
+  let jwtService: JwtService;
+
+  const mockPrismaService = {
+    user: {
+      findUnique: jest.fn(),
+      create: jest.fn(),
+      update: jest.fn(),
+    },
+    $transaction: jest.fn(),
+  };
+
+  const mockJwtService = {
+    sign: jest.fn(),
+    verify: jest.fn(),
+  };
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        AuthService,
+        {
+          provide: PrismaService,
+          useValue: mockPrismaService,
+        },
+        {
+          provide: JwtService,
+          useValue: mockJwtService,
+        },
+      ],
+    }).compile();
+
+    service = module.get<AuthService>(AuthService);
+    prismaService = module.get<PrismaService>(PrismaService);
+    jwtService = module.get<JwtService>(JwtService);
+
+    jest.clearAllMocks();
+  });
+
+  describe('signUp', () => {
+    const validDto = {
+      email: 'test@example.com',
+      password: 'password123',
+      fullName: 'Test User',
+    };
+
+    it('should create a new user successfully', async () => {
+      // Mock user not found
+      mockPrismaService.user.findUnique.mockResolvedValue(null);
+      
+      // Mock transaction
+      const mockUser = {
+        id: 'user-id',
+        email: validDto.email,
+        fullName: validDto.fullName,
+      };
+      mockPrismaService.$transaction.mockImplementation(async (callback) => {
+        return callback(mockPrismaService);
+      });
+      mockPrismaService.user.create.mockResolvedValue(mockUser);
+      mockPrismaService.user.update.mockResolvedValue({});
+
+      // Mock JWT tokens
+      mockJwtService.sign.mockReturnValue('mock-token');
+
+      const result = await service.signUp(validDto);
+
+      expect(result).toHaveProperty('accessToken');
+      expect(result).toHaveProperty('refreshToken');
+      expect(result.user.email).toBe(validDto.email);
+      expect(mockPrismaService.user.findUnique).toHaveBeenCalledWith({
+        where: { email: validDto.email },
+      });
+    });
+
+    it('should throw ConflictException if user already exists', async () => {
+      mockPrismaService.user.findUnique.mockResolvedValue({
+        id: 'existing-user',
+        email: validDto.email,
+      });
+
+      await expect(service.signUp(validDto)).rejects.toThrow(ConflictException);
+    });
+
+    it('should hash password before storing', async () => {
+      mockPrismaService.user.findUnique.mockResolvedValue(null);
+      mockPrismaService.$transaction.mockImplementation(async (callback) => {
+        return callback(mockPrismaService);
+      });
+      mockPrismaService.user.create.mockResolvedValue({
+        id: 'user-id',
+        email: validDto.email,
+        fullName: validDto.fullName,
+      });
+      mockJwtService.sign.mockReturnValue('mock-token');
+
+      const bcryptHashSpy = jest.spyOn(bcrypt, 'hash').mockResolvedValue('hashed-password' as any);
+
+      await service.signUp(validDto);
+
+      expect(bcryptHashSpy).toHaveBeenCalledWith(validDto.password, 12);
+    });
+
+    it('should create default account and categories', async () => {
+      mockPrismaService.user.findUnique.mockResolvedValue(null);
+      const mockUser = {
+        id: 'user-id',
+        email: validDto.email,
+        fullName: validDto.fullName,
+      };
+      
+      mockPrismaService.$transaction.mockImplementation(async (callback) => {
+        const tx = {
+          user: {
+            create: mockPrismaService.user.create,
+          },
+          account: {
+            create: jest.fn(),
+          },
+          category: {
+            createMany: jest.fn(),
+          },
+        };
+        return callback(tx);
+      });
+      
+      mockPrismaService.user.create.mockResolvedValue(mockUser);
+      mockJwtService.sign.mockReturnValue('mock-token');
+
+      await service.signUp(validDto);
+
+      expect(mockPrismaService.$transaction).toHaveBeenCalled();
+    });
+  });
+
+  describe('signIn', () => {
+    const validDto = {
+      email: 'test@example.com',
+      password: 'password123',
+    };
+
+    const mockUser = {
+      id: 'user-id',
+      email: validDto.email,
+      fullName: 'Test User',
+      passwordHash: 'hashed-password',
+      isActive: true,
+    };
+
+    it('should authenticate user with valid credentials', async () => {
+      mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
+      jest.spyOn(bcrypt, 'compare').mockResolvedValue(true);
+      mockJwtService.sign.mockReturnValue('mock-token');
+
+      const result = await service.signIn(validDto);
+
+      expect(result).toHaveProperty('accessToken');
+      expect(result).toHaveProperty('refreshToken');
+      expect(result.user.email).toBe(validDto.email);
+      expect(mockPrismaService.user.update).toHaveBeenCalledWith({
+        where: { id: mockUser.id },
+        data: { lastLoginAt: expect.any(Date) },
+      });
+    });
+
+    it('should throw UnauthorizedException for non-existent user', async () => {
+      mockPrismaService.user.findUnique.mockResolvedValue(null);
+
+      await expect(service.signIn(validDto)).rejects.toThrow(UnauthorizedException);
+    });
+
+    it('should throw UnauthorizedException for invalid password', async () => {
+      mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
+      jest.spyOn(bcrypt, 'compare').mockResolvedValue(false);
+
+      await expect(service.signIn(validDto)).rejects.toThrow(UnauthorizedException);
+    });
+
+    it('should throw UnauthorizedException for inactive user', async () => {
+      const inactiveUser = { ...mockUser, isActive: false };
+      mockPrismaService.user.findUnique.mockResolvedValue(inactiveUser);
+      jest.spyOn(bcrypt, 'compare').mockResolvedValue(true);
+
+      await expect(service.signIn(validDto)).rejects.toThrow(UnauthorizedException);
+    });
+  });
+
+  describe('refreshToken', () => {
+    const userId = 'user-id';
+    const mockUser = {
+      id: userId,
+      email: 'test@example.com',
+      fullName: 'Test User',
+      isActive: true,
+    };
+
+    it('should refresh token for valid user', async () => {
+      mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
+      mockJwtService.sign.mockReturnValue('new-token');
+
+      const result = await service.refreshToken(userId);
+
+      expect(result).toHaveProperty('accessToken');
+      expect(result).toHaveProperty('refreshToken');
+      expect(result.user.email).toBe(mockUser.email);
+    });
+
+    it('should throw UnauthorizedException for invalid user', async () => {
+      mockPrismaService.user.findUnique.mockResolvedValue(null);
+
+      await expect(service.refreshToken('invalid-id')).rejects.toThrow(UnauthorizedException);
+    });
+
+    it('should throw UnauthorizedException for inactive user', async () => {
+      const inactiveUser = { ...mockUser, isActive: false };
+      mockPrismaService.user.findUnique.mockResolvedValue(inactiveUser);
+
+      await expect(service.refreshToken(userId)).rejects.toThrow(UnauthorizedException);
+    });
+  });
+
+  describe('generateTokenResponse', () => {
+    const userId = 'user-id';
+    const email = 'test@example.com';
+    const fullName = 'Test User';
+
+    it('should generate token response with correct payload', () => {
+      mockJwtService.sign.mockReturnValue('mock-token');
+
+      const result = (service as any).generateTokenResponse(userId, email, fullName);
+
+      expect(mockJwtService.sign).toHaveBeenCalledWith(
+        { sub: userId, email },
+        { expiresIn: '24h' }
+      );
+      expect(mockJwtService.sign).toHaveBeenCalledWith(
+        { sub: userId, email },
+        { expiresIn: '7d' }
+      );
+      expect(result).toEqual({
+        accessToken: 'mock-token',
+        refreshToken: 'mock-token',
+        user: { id: userId, email, fullName },
+      });
+    });
+  });
+
+  describe('getDefaultCategories', () => {
+    it('should return default categories for new user', async () => {
+      const userId = 'user-id';
+      const categories = (service as any).getDefaultCategories(userId);
+
+      expect(categories).toHaveLength(12); // 8 expense + 4 income categories
+      expect(categories[0]).toHaveProperty('userId', userId);
+      expect(categories[0]).toHaveProperty('name', 'Alimentación');
+      expect(categories[0]).toHaveProperty('type', 'EXPENSE');
+      expect(categories[8]).toHaveProperty('name', 'Salario');
+      expect(categories[8]).toHaveProperty('type', 'INCOME');
+    });
+  });
+});

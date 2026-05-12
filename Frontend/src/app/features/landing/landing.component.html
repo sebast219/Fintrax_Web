@@ -1,0 +1,95 @@
+<div class="min-h-screen bg-[#0A0A0F] text-[#F8FAFC]">
+  <div class="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-6 py-10 sm:px-10 lg:px-16">
+    <header class="flex items-center justify-between">
+      <div class="text-xs uppercase tracking-[0.35em] text-[#94A3B8]">Fintrax</div>
+      @if (isLoggedIn) {
+        <button
+          type="button"
+          (click)="goToDashboard()"
+          class="rounded-lg border border-[#1E293B] px-4 py-2 text-xs uppercase tracking-[0.2em] text-[#F8FAFC] transition hover:border-[#00D4AA] hover:text-[#00D4AA]"
+        >
+          Ir al dashboard
+        </button>
+      } @else {
+        <div class="flex items-center gap-3">
+          <a
+            routerLink="/login"
+            class="rounded-lg border border-[#1E293B] px-4 py-2 text-xs uppercase tracking-[0.2em] text-[#F8FAFC] transition hover:border-[#6366F1] hover:text-[#6366F1]"
+          >
+            Login
+          </a>
+          <a
+            routerLink="/register"
+            class="rounded-lg bg-[#00D4AA] px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#0A0A0F] transition hover:opacity-90"
+          >
+            Register
+          </a>
+        </div>
+      }
+    </header>
+
+    <main class="grid flex-1 items-center gap-12 py-10 lg:grid-cols-2 lg:py-16">
+      <section class="space-y-8">
+        <p class="text-xs uppercase tracking-[0.3em] text-[#94A3B8]">Precision Finance Platform</p>
+        <h1 class="text-[clamp(2.2rem,6vw,4.2rem)] font-semibold leading-[0.95] tracking-[-0.02em]">
+          Tu dinero.
+          <br />
+          Tu control.
+          <br />
+          Tu visión.
+        </h1>
+        <p class="max-w-xl text-base leading-relaxed text-[#94A3B8]">
+          Fintrax concentra cuentas, transacciones, metas y reportes en una experiencia clara, rápida y confiable.
+          Diseñado para operar con criterio financiero en tiempo real.
+        </p>
+
+        <div class="flex flex-wrap gap-3">
+          <a
+            routerLink="/register"
+            class="rounded-lg bg-[#00D4AA] px-6 py-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#0A0A0F] transition hover:shadow-[0_0_20px_rgba(0,212,170,0.3)]"
+          >
+            Comenzar gratis
+          </a>
+          <a
+            routerLink="/login"
+            class="rounded-lg border border-[#1E293B] px-6 py-3 text-sm uppercase tracking-[0.16em] text-[#F8FAFC] transition hover:border-[#6366F1] hover:text-[#6366F1]"
+          >
+            Ya tengo cuenta
+          </a>
+        </div>
+      </section>
+
+      <section class="grid gap-4 rounded-xl border border-[#1E293B] bg-[#12121A] p-6">
+        <div class="grid grid-cols-2 gap-4">
+          <article class="rounded-lg border border-[#1E293B] bg-[#0A0A0F] p-4">
+            <p class="text-[11px] uppercase tracking-[0.2em] text-[#94A3B8]">Balance total</p>
+            <p class="mt-3 font-mono text-2xl tabular-nums">$128,450.32</p>
+            <p class="mt-2 text-xs text-[#00D4AA]">+6.8% este mes</p>
+          </article>
+          <article class="rounded-lg border border-[#1E293B] bg-[#0A0A0F] p-4">
+            <p class="text-[11px] uppercase tracking-[0.2em] text-[#94A3B8]">Ahorro neto</p>
+            <p class="mt-3 font-mono text-2xl tabular-nums">$9,780.40</p>
+            <p class="mt-2 text-xs text-[#00D4AA]">Objetivo en curso</p>
+          </article>
+        </div>
+        <article class="rounded-lg border border-[#1E293B] bg-[#0A0A0F] p-4">
+          <p class="text-[11px] uppercase tracking-[0.2em] text-[#94A3B8]">Últimas transacciones</p>
+          <div class="mt-4 space-y-3 text-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-[#94A3B8]">Transferencia recibida</span>
+              <span class="font-mono text-[#00D4AA]">+$1,200.00</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-[#94A3B8]">Suscripción SaaS</span>
+              <span class="font-mono text-[#EF4444]">-$49.99</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-[#94A3B8]">Inversión automática</span>
+              <span class="font-mono text-[#F8FAFC]">-$300.00</span>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+</div>

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { SupabaseService } from './services/supabase.service';
-import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { authInterceptor } from './interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [],
@@ -14,7 +14,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     SupabaseService,
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
+      useValue: authInterceptor,
       multi: true
     }
   ]

@@ -1,15 +1,15 @@
-import { Injectable, ExecutionContext, CanActivate } from '@nestjs/common';
+import { Injectable, ExecutionContext, CanActivate, Inject, BadRequestException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AppLoggerService } from '../logger/logger.service';
 import { RATE_LIMIT_KEY, RateLimitOptions } from '../decorators/rate-limit.decorator';
+import { Redis } from 'ioredis';
 
 @Injectable()
 export class RateLimitGuard implements CanActivate {
-  private rateLimitMap = new Map<string, { count: number; resetTime: number }>();
-
   constructor(
     private readonly reflector: Reflector,
     private logger: AppLoggerService,
+    @Inject('REDIS_CLIENT') private redis: Redis,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -26,42 +26,32 @@ export class RateLimitGuard implements CanActivate {
     // Create tracker key
     const tracker = userId ? `user:${userId}` : `ip:${ip}:${Buffer.from(userAgent).toString('base64').slice(0, 16)}`;
     
-    const now = Date.now();
-    const windowStart = now - (ttl * 1000);
-    
-    // Clean up old entries
-    for (const [key, value] of this.rateLimitMap.entries()) {
-      if (value.resetTime < now) {
-        this.rateLimitMap.delete(key);
+    try {
+      // Use Redis for distributed rate limiting
+      const current = await this.redis.incr(tracker);
+      
+      if (current === 1) {
+        // First request in window - set expiration
+        await this.redis.expire(tracker, ttl);
       }
-    }
-
-    // Check current rate limit
-    const current = this.rateLimitMap.get(tracker);
-    
-    if (!current || current.resetTime < now) {
-      // Reset window
-      this.rateLimitMap.set(tracker, {
-        count: 1,
-        resetTime: now + (ttl * 1000),
-      });
+      
+      if (current > limit) {
+        this.logger.logSecurityEvent('Rate limit exceeded', userId, ip, {
+          userAgent,
+          endpoint: `${request.method} ${request.url}`,
+          limit,
+          ttl,
+          currentCount: current,
+        });
+        
+        throw new BadRequestException('Rate limit exceeded');
+      }
+      
+      return true;
+    } catch (error) {
+      // If Redis fails, allow request (fail-open)
+      this.logger.error('Rate limiting failed', error.stack, 'RateLimitGuard');
       return true;
     }
-
-    if (current.count >= limit) {
-      this.logger.logSecurityEvent('Rate limit exceeded', userId, ip, {
-        userAgent,
-        endpoint: `${request.method} ${request.url}`,
-        limit,
-        ttl,
-        currentCount: current.count,
-      });
-      
-      throw new Error('Rate limit exceeded');
-    }
-
-    // Increment count
-    current.count++;
-    return true;
   }
 }

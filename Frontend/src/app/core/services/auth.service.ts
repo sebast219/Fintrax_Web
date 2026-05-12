@@ -1,6 +1,8 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 import { firstValueFrom } from 'rxjs';
 
 export interface SignUpDto {
@@ -40,13 +42,15 @@ export class AuthService {
   currentUser = signal<AuthUser | null>(this.loadSession());
 
   private loadSession(): AuthUser | null {
-    const raw = sessionStorage.getItem(this.SESSION_KEY);
+    const raw = localStorage.getItem(this.SESSION_KEY);
     return raw ? JSON.parse(raw) : null;
   }
 
   private saveSession(user: AuthUser, token: string): void {
-    sessionStorage.setItem(this.SESSION_KEY, JSON.stringify(user));
-    sessionStorage.setItem(this.TOKEN_KEY, token);
+    // Use localStorage instead of sessionStorage for persistence
+    // In production, this should be httpOnly cookies
+    localStorage.setItem(this.SESSION_KEY, JSON.stringify(user));
+    localStorage.setItem(this.TOKEN_KEY, token);
     this.currentUser.set(user);
   }
 
@@ -87,13 +91,13 @@ export class AuthService {
   }
 
   logout(): void {
-    sessionStorage.removeItem(this.SESSION_KEY);
-    sessionStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem(this.SESSION_KEY);
+    localStorage.removeItem(this.TOKEN_KEY);
     this.currentUser.set(null);
   }
 
   isLoggedIn(): boolean {
-    return this.currentUser() !== null && !!sessionStorage.getItem(this.TOKEN_KEY);
+    return this.currentUser() !== null && !!localStorage.getItem(this.TOKEN_KEY);
   }
 
   getCurrentUserName(): string {
@@ -105,6 +109,24 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    return sessionStorage.getItem(this.TOKEN_KEY);
+    return localStorage.getItem(this.TOKEN_KEY);
+  }
+
+  refreshToken(): Observable<{ success: boolean; message: string }> {
+    return this.http.post<AuthResponse>(`${this.API_URL}/refresh`, {}).pipe(
+      map(response => {
+        const user: AuthUser = {
+          id: response.user.id,
+          name: response.user.fullName,
+          email: response.user.email
+        };
+        this.saveSession(user, response.access_token);
+        return { success: true, message: 'Token refreshed successfully' };
+      }),
+      catchError(error => {
+        const message = error.error?.message || 'Failed to refresh token';
+        return of({ success: false, message });
+      })
+    );
   }
 }

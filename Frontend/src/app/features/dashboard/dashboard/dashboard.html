@@ -1,35 +1,41 @@
 <app-navbar></app-navbar>
 
 <!-- Background Ambient -->
-<div class="fixed inset-0 overflow-hidden pointer-events-none">
-    <div class="absolute top-0 left-1/4 w-[800px] h-[800px] bg-blue-100/40 rounded-full blur-3xl opacity-30"></div>
-    <div class="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-purple-100/40 rounded-full blur-3xl opacity-30"></div>
+<div class="fixed inset-0 overflow-hidden pointer-events-none"
+     style="background: radial-gradient(ellipse at top, rgba(0,212,170,0.05) 0%, transparent 50%), #0A0A0F;
+            background-image: 
+              radial-gradient(ellipse at top, rgba(0,212,170,0.05) 0%, transparent 50%),
+              linear-gradient(0deg, rgba(255,255,255,0.02) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 20px 20px, 20px 20px;">
+    <div class="absolute top-[-150px] right-[-150px] w-[500px] h-[500px] rounded-full bg-[#00D4AA]/10 blur-[100px]"></div>
+    <div class="absolute bottom-[-200px] left-[-200px] w-[600px] h-[600px] rounded-full bg-[#00D4AA]/8 blur-[120px]"></div>
 </div>
 
 <!-- Main Content Wrapper -->
-<div class="main-content-wrapper">
+<div class="min-h-screen bg-[#0A0A0F] text-[#F8FAFC]">
     <main class="relative z-10 pt-24 pb-12 max-w-7xl mx-auto px-6 lg:px-8">
     
     <!-- Welcome Section -->
-    <section class="mb-10 animate-enter" style="animation-delay: 0.1s">
+    <section class="mb-10 animate-fade-in-up" style="animation-delay: 0.1s">
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
-                <p class="text-sm font-medium text-slate-500 mb-1">Bienvenido de vuelta</p>
-                <h1 class="text-4xl md:text-5xl font-display font-bold tracking-tight text-slate-900">
+                <p class="text-sm font-medium text-[#94A3B8] mb-1">Bienvenido de vuelta</p>
+                <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-white">
                     {{ auth.getCurrentUserName() || 'Usuario' }}
                 </h1>
             </div>
             <div class="flex items-center gap-3">
                 <div class="relative">
                     <select [(ngModel)]="selectedMonth" (change)="onMonthChange(selectedMonth)" 
-                            class="appearance-none bg-white border border-slate-200 text-slate-700 py-2.5 pl-4 pr-10 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer shadow-sm">
+                            class="appearance-none bg-white/5 border border-white/10 backdrop-blur-xl text-white py-2.5 pl-4 pr-10 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20 focus:border-[#00D4AA] cursor-pointer shadow-sm hover:bg-white/10 transition-all duration-300">
                         <option *ngFor="let month of months" [value]="month">{{ month }}</option>
                     </select>
-                    <svg class="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-[#94A3B8] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                     </svg>
                 </div>
-                <button (click)="exportData()" class="p-2.5 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors text-slate-600 shadow-sm" title="Exportar datos">
+                <button (click)="exportData()" class="p-2.5 border border-white/10 rounded-lg hover:bg-white/10 transition-all duration-300 text-[#94A3B8] shadow-sm hover:scale-[1.02] hover:border-[#00D4AA]" title="Exportar datos">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
                     </svg>
@@ -41,98 +47,98 @@
     <!-- KPI Cards -->
     <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <!-- Balance Total -->
-        <div class="bg-white rounded-2xl p-6 shadow-card hover:shadow-card-hover transition-all duration-300 animate-enter hover-lift border border-slate-100" style="animation-delay: 0.15s">
+        <div class="group relative overflow-hidden rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-6 hover:bg-white/10 transition-all duration-300 animate-fade-in-up hover:scale-[1.02] hover:shadow-[0_10px_40px_rgba(0,212,170,0.1)]" style="animation-delay: 0.15s">
             <div class="flex items-start justify-between mb-4">
                 <div>
-                    <p class="text-sm font-medium text-slate-500 mb-1">Balance Total</p>
-                    <p class="text-3xl font-display font-bold text-slate-900 metric-value">${{ filteredTotalBalance | number:'1.2-2' }}</p>
+                    <p class="text-sm font-medium text-[#94A3B8] mb-1">Balance Total</p>
+                    <p class="text-3xl font-bold text-white font-mono tabular-nums metric-value">${{ filteredTotalBalance | number:'1.2-2' }}</p>
                 </div>
-                <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-900 shadow-sm border border-slate-200">
+                <div class="w-10 h-10 rounded-xl bg-[#00D4AA]/10 flex items-center justify-center text-[#00D4AA] shadow-sm border border-[#00D4AA]/20">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
                     </svg>
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full" [ngClass]="filteredTotalBalance >= 0 ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'">
+                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full" [ngClass]="filteredTotalBalance >= 0 ? 'bg-[#00D4AA]/10 text-[#00D4AA]' : 'bg-red-500/10 text-red-400'">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="filteredTotalBalance >= 0 ? 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6' : 'M13 17h8m0 0V9m0 8l-8-8-4 4-6-6'"/>
                     </svg>
                     {{ filteredTotalBalance >= 0 ? '+' : '' }}{{ filteredTotalBalance | number:'1.0-0' }}
                 </span>
-                <span class="text-xs text-slate-400">vs mes anterior</span>
+                <span class="text-xs text-[#94A3B8]">vs mes anterior</span>
             </div>
         </div>
 
         <!-- Ingresos -->
-        <div class="bg-white rounded-2xl p-6 shadow-card hover:shadow-card-hover transition-all duration-300 animate-enter hover-lift border border-slate-100" style="animation-delay: 0.2s">
+        <div class="group relative overflow-hidden rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-6 hover:bg-white/10 transition-all duration-300 animate-fade-in-up hover:scale-[1.02] hover:shadow-[0_10px_40px_rgba(0,212,170,0.1)]" style="animation-delay: 0.2s">
             <div class="flex items-start justify-between mb-4">
                 <div>
-                    <p class="text-sm font-medium text-slate-500 mb-1">Ingresos del Mes</p>
-                    <p class="text-3xl font-display font-bold text-emerald-600 metric-value">${{ filteredMonthlyIncome | number:'1.2-2' }}</p>
+                    <p class="text-sm font-medium text-[#94A3B8] mb-1">Ingresos del Mes</p>
+                    <p class="text-3xl font-bold text-[#00D4AA] font-mono tabular-nums metric-value">${{ filteredMonthlyIncome | number:'1.2-2' }}</p>
                 </div>
-                <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 shadow-sm border border-emerald-100">
+                <div class="w-10 h-10 rounded-xl bg-[#00D4AA]/10 flex items-center justify-center text-[#00D4AA] shadow-sm border border-[#00D4AA]/20">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4"/>
                     </svg>
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold">
+                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-[#00D4AA]/10 text-[#00D4AA] text-xs font-semibold">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                     </svg>
                     {{ filteredMonthlyIncome > previousMonthIncome ? '+' : '' }}{{ ((filteredMonthlyIncome - previousMonthIncome) / previousMonthIncome * 100) | number:'1.1-1' }}%
                 </span>
-                <span class="text-xs text-slate-400">vs mes anterior</span>
+                <span class="text-xs text-[#94A3B8]">vs mes anterior</span>
             </div>
         </div>
 
         <!-- Gastos -->
-        <div class="bg-white rounded-2xl p-6 shadow-card hover:shadow-card-hover transition-all duration-300 animate-enter hover-lift border border-slate-100" style="animation-delay: 0.25s">
+        <div class="group relative overflow-hidden rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-6 hover:bg-white/10 transition-all duration-300 animate-fade-in-up hover:scale-[1.02] hover:shadow-[0_10px_40px_rgba(239,68,68,0.1)]" style="animation-delay: 0.25s">
             <div class="flex items-start justify-between mb-4">
                 <div>
-                    <p class="text-sm font-medium text-slate-500 mb-1">Gastos del Mes</p>
-                    <p class="text-3xl font-display font-bold text-red-600 metric-value">${{ filteredMonthlyExpense | number:'1.2-2' }}</p>
+                    <p class="text-sm font-medium text-[#94A3B8] mb-1">Gastos del Mes</p>
+                    <p class="text-3xl font-bold text-red-400 font-mono tabular-nums metric-value">${{ filteredMonthlyExpense | number:'1.2-2' }}</p>
                 </div>
-                <div class="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center text-red-600 shadow-sm border border-red-100">
+                <div class="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-400 shadow-sm border border-red-500/20">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 12H4"/>
                     </svg>
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold shadow-sm border" [ngClass]="filteredMonthlyExpense > previousMonthExpense ? 'bg-red-50 text-red-700 border-red-100' : 'bg-emerald-50 text-emerald-700 border-emerald-100'">
+                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold shadow-sm border" [ngClass]="filteredMonthlyExpense > previousMonthExpense ? 'bg-red-500/10 text-red-400 border-red-500/20' : 'bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]/20'">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="filteredMonthlyExpense > previousMonthExpense ? 'M13 17h8m0 0V9m0 8l-8-8-4 4-6-6' : 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6'"/>
                     </svg>
                     {{ filteredMonthlyExpense > previousMonthExpense ? '+' : '-' }}{{ ((filteredMonthlyExpense - previousMonthExpense) / previousMonthExpense * 100) | number:'1.1-1' }}%
                 </span>
-                <span class="text-xs text-slate-400">vs mes anterior</span>
+                <span class="text-xs text-[#94A3B8]">vs mes anterior</span>
             </div>
         </div>
 
         <!-- Ahorros -->
-        <div class="bg-white rounded-2xl p-6 shadow-card hover:shadow-card-hover transition-all duration-300 animate-enter hover-lift border border-slate-100" style="animation-delay: 0.3s">
+        <div class="group relative overflow-hidden rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-6 hover:bg-white/10 transition-all duration-300 animate-fade-in-up hover:scale-[1.02] hover:shadow-[0_10px_40px_rgba(59,130,246,0.1)]" style="animation-delay: 0.3s">
             <div class="flex items-start justify-between mb-4">
                 <div>
-                    <p class="text-sm font-medium text-slate-500 mb-1">Tasa de Ahorro</p>
-                    <p class="text-3xl font-display font-bold text-blue-600 metric-value">{{ filteredSavingsRate }}%</p>
+                    <p class="text-sm font-medium text-[#94A3B8] mb-1">Tasa de Ahorro</p>
+                    <p class="text-3xl font-bold text-blue-400 font-mono tabular-nums metric-value">{{ filteredSavingsRate }}%</p>
                 </div>
-                <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shadow-sm border border-blue-100">
+                <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 shadow-sm border border-blue-500/20">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold shadow-sm border" [ngClass]="filteredSavingsRate >= 30 ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : filteredSavingsRate >= 20 ? 'bg-blue-50 text-blue-700 border-blue-100' : 'bg-amber-50 text-amber-700 border-amber-100'">
+                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold shadow-sm border" [ngClass]="filteredSavingsRate >= 30 ? 'bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]/20' : filteredSavingsRate >= 20 ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-amber-500/10 text-amber-400 border-amber-500/20'">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                     </svg>
                     {{ filteredSavingsRate >= 30 ? 'Excelente' : filteredSavingsRate >= 20 ? 'Bueno' : 'Mejorable' }}
                 </span>
-                <span class="text-xs text-slate-400">Meta: 30%</span>
+                <span class="text-xs text-[#94A3B8]">Meta: 30%</span>
             </div>
         </div>
     </section>
@@ -141,37 +147,37 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         
         <!-- Chart Section -->
-        <section class="chart-section lg:col-span-2 bg-white rounded-2xl p-6 shadow-card animate-enter border border-slate-100" style="animation-delay: 0.35s">
+        <section class="chart-section lg:col-span-2 bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10 animate-fade-in-up hover:bg-white/10 transition-all duration-300 hover:scale-[1.01]" style="animation-delay: 0.35s">
             <div class="flex items-center justify-between mb-6">
                 <div>
-                    <h2 class="text-lg font-display font-bold text-slate-900">Resumen Financiero</h2>
-                    <p class="text-sm text-slate-500">Comparación mensual de ingresos vs gastos</p>
+                    <h2 class="text-lg font-bold text-white">Resumen Financiero</h2>
+                    <p class="text-sm text-[#94A3B8]">Comparación mensual de ingresos vs gastos</p>
                 </div>
-                <div class="flex gap-2 bg-slate-100 p-1 rounded-lg shadow-sm border border-slate-200">
+                <div class="flex gap-2 bg-white/10 p-1 rounded-lg shadow-sm border border-white/10">
                     <button (click)="setChartRange('6M')" 
                             [class.bg-white]="chartRange === '6M'"
-                            [class.text-slate-900]="chartRange === '6M'"
+                            [class.text-white]="chartRange === '6M'"
                             [class.font-semibold]="chartRange === '6M'"
                             [class.shadow-sm]="chartRange === '6M'"
-                            [class.border-slate-200]="chartRange === '6M'"
-                            [class.text-slate-600]="chartRange !== '6M'"
-                            class="px-3 py-1.5 rounded-md text-xs font-medium border border-transparent transition-all">6M</button>
+                            [class.border-white/10]="chartRange === '6M'"
+                            [class.text-[#94A3B8]]="chartRange !== '6M'"
+                            class="px-3 py-1.5 rounded-md text-xs font-medium border border-transparent transition-all hover:bg-white/20">6M</button>
                     <button (click)="setChartRange('1A')"
                             [class.bg-white]="chartRange === '1A'"
-                            [class.text-slate-900]="chartRange === '1A'"
+                            [class.text-white]="chartRange === '1A'"
                             [class.font-semibold]="chartRange === '1A'"
                             [class.shadow-sm]="chartRange === '1A'"
-                            [class.border-slate-200]="chartRange === '1A'"
-                            [class.text-slate-600]="chartRange !== '1A'"
-                            class="px-3 py-1.5 rounded-md text-xs font-medium border border-transparent transition-all">1A</button>
+                            [class.border-white/10]="chartRange === '1A'"
+                            [class.text-[#94A3B8]]="chartRange !== '1A'"
+                            class="px-3 py-1.5 rounded-md text-xs font-medium border border-transparent transition-all hover:bg-white/20">1A</button>
                     <button (click)="setChartRange('ALL')"
                             [class.bg-white]="chartRange === 'ALL'"
-                            [class.text-slate-900]="chartRange === 'ALL'"
+                            [class.text-white]="chartRange === 'ALL'"
                             [class.font-semibold]="chartRange === 'ALL'"
                             [class.shadow-sm]="chartRange === 'ALL'"
-                            [class.border-slate-200]="chartRange === 'ALL'"
-                            [class.text-slate-600]="chartRange !== 'ALL'"
-                            class="px-3 py-1.5 rounded-md text-xs font-medium border border-transparent transition-all">Todo</button>
+                            [class.border-white/10]="chartRange === 'ALL'"
+                            [class.text-[#94A3B8]]="chartRange !== 'ALL'"
+                            class="px-3 py-1.5 rounded-md text-xs font-medium border border-transparent transition-all hover:bg-white/20">Todo</button>
                 </div>
             </div>
             
@@ -179,17 +185,17 @@
                 <svg viewBox="0 0 800 300" class="w-full h-full overflow-visible" *ngIf="getChartCoordinates(getMonthlyData()) as chart">
                     <defs>
                         <linearGradient id="incomeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:#10B981;stop-opacity:0.2"/>
-                            <stop offset="100%" style="stop-color:#10B981;stop-opacity:0"/>
+                            <stop offset="0%" style="stop-color:#00D4AA;stop-opacity:0.3"/>
+                            <stop offset="100%" style="stop-color:#00D4AA;stop-opacity:0"/>
                         </linearGradient>
                         <linearGradient id="expenseGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:#EF4444;stop-opacity:0.2"/>
+                            <stop offset="0%" style="stop-color:#EF4444;stop-opacity:0.3"/>
                             <stop offset="100%" style="stop-color:#EF4444;stop-opacity:0"/>
                         </linearGradient>
                     </defs>
                     
                     <!-- Grid -->
-                    <g stroke="#F1F5F9" stroke-width="1">
+                    <g stroke="rgba(255,255,255,0.1)" stroke-width="1">
                         <line x1="0" y1="50" x2="800" y2="50"/>
                         <line x1="0" y1="100" x2="800" y2="100"/>
                         <line x1="0" y1="150" x2="800" y2="150"/>
@@ -198,100 +204,100 @@
                     </g>
 
                     <!-- Income Area (dinámico) -->
-                    <path [attr.d]="chart.incomeArea" fill="url(#incomeGrad)" opacity="0.6"/>
-                    <path [attr.d]="chart.incomePoints" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" class="chart-line"/>
+                    <path [attr.d]="chart.incomeArea" fill="url(#incomeGrad)" opacity="0.7"/>
+                    <path [attr.d]="chart.incomePoints" fill="none" stroke="#00D4AA" stroke-width="3" stroke-linecap="round" class="chart-line"/>
 
                     <!-- Expense Area (dinámico) -->
-                    <path [attr.d]="chart.expenseArea" fill="url(#expenseGrad)" opacity="0.6"/>
+                    <path [attr.d]="chart.expenseArea" fill="url(#expenseGrad)" opacity="0.7"/>
                     <path [attr.d]="chart.expensePoints" fill="none" stroke="#EF4444" stroke-width="3" stroke-linecap="round" class="chart-line" style="animation-delay: 0.3s"/>
 
                     <!-- Data Points (dinámicos) -->
                     <g *ngFor="let point of getChartPoints()">
                         <circle [attr.cx]="point.cx" [attr.cy]="point.cy" r="4" 
-                                [attr.fill]="point.type === 'income' ? '#10B981' : '#EF4444'" 
+                                [attr.fill]="point.type === 'income' ? '#00D4AA' : '#EF4444'" 
                                 stroke="white" stroke-width="2"/>
                     </g>
 
                     <!-- Labels de meses (dinámicos desde mes seleccionado hacia atrás) -->
                     <g *ngFor="let monthData of getMonthlyData(); let i = index; let last = last">
-                        <text [attr.x]="i * (800 / (getMonthlyData().length - 1 || 1))" y="280" fill="#64748B" font-size="11" font-weight="500" [attr.text-anchor]="i === 0 ? 'start' : last ? 'end' : 'middle'">{{ monthData.month }}</text>
+                        <text [attr.x]="i * (800 / (getMonthlyData().length - 1 || 1))" y="280" fill="#94A3B8" font-size="11" font-weight="500" [attr.text-anchor]="i === 0 ? 'start' : last ? 'end' : 'middle'">{{ monthData.month }}</text>
                     </g>
                 </svg>
             </div>
 
-            <div class="flex items-center justify-center gap-6 mt-4 pt-4 border-t border-slate-100">
+            <div class="flex items-center justify-center gap-6 mt-4 pt-4 border-t border-white/10">
                 <div class="flex items-center gap-2">
-                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                    <span class="text-sm font-medium text-slate-600">Ingresos</span>
+                    <div class="w-3 h-3 rounded-full bg-[#00D4AA]"></div>
+                    <span class="text-sm font-medium text-white">Ingresos</span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                    <span class="text-sm font-medium text-slate-600">Gastos</span>
+                    <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                    <span class="text-sm font-medium text-white">Gastos</span>
                 </div>
             </div>
         </section>
 
         <!-- Quick Actions -->
-        <section class="bg-white rounded-2xl p-6 shadow-card animate-enter border border-slate-100" style="animation-delay: 0.4s">
-            <h2 class="text-lg font-display font-bold text-slate-900 mb-6">Acciones Rápidas</h2>
+        <section class="bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10 animate-fade-in-up hover:bg-white/10 transition-all duration-300" style="animation-delay: 0.4s">
+            <h2 class="text-lg font-bold text-white mb-6">Acciones Rápidas</h2>
             <div class="space-y-3">
-                <button (click)="openTransactionModal('income')" class="w-full group flex items-center gap-4 p-4 rounded-xl border border-slate-100 hover:border-emerald-200 hover:bg-emerald-50/30 transition-all duration-200 shadow-sm hover:shadow-md">
-                    <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm border border-emerald-200">
+                <button (click)="openTransactionModal('income')" class="w-full group flex items-center gap-4 p-4 rounded-xl border border-white/10 hover:border-[#00D4AA]/20 hover:bg-[#00D4AA]/10 transition-all duration-300 shadow-sm hover:shadow-md hover:scale-[1.02]">
+                    <div class="w-10 h-10 rounded-lg bg-[#00D4AA]/10 text-[#00D4AA] flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm border border-[#00D4AA]/20">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                         </svg>
                     </div>
                     <div class="text-left">
-                        <p class="font-semibold text-slate-900 text-sm">Agregar Ingreso</p>
-                        <p class="text-xs text-slate-500">Registrar nueva entrada</p>
+                        <p class="font-semibold text-white text-sm">Agregar Ingreso</p>
+                        <p class="text-xs text-[#94A3B8]">Registrar nueva entrada</p>
                     </div>
-                    <svg class="w-4 h-4 text-slate-400 ml-auto group-hover:text-emerald-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-[#94A3B8] ml-auto group-hover:text-[#00D4AA] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                     </svg>
                 </button>
 
-                <button (click)="openTransactionModal('expense')" class="w-full group flex items-center gap-4 p-4 rounded-xl border border-slate-100 hover:border-red-200 hover:bg-red-50/30 transition-all duration-200 shadow-sm hover:shadow-md">
-                    <div class="w-10 h-10 rounded-lg bg-red-100 text-red-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm border border-red-200">
+                <button (click)="openTransactionModal('expense')" class="w-full group flex items-center gap-4 p-4 rounded-xl border border-white/10 hover:border-red-400/20 hover:bg-red-500/10 transition-all duration-300 shadow-sm hover:shadow-md hover:scale-[1.02]">
+                    <div class="w-10 h-10 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm border border-red-400/20">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
                         </svg>
                     </div>
                     <div class="text-left">
-                        <p class="font-semibold text-slate-900 text-sm">Agregar Gasto</p>
-                        <p class="text-xs text-slate-500">Registrar nueva salida</p>
+                        <p class="font-semibold text-white text-sm">Agregar Gasto</p>
+                        <p class="text-xs text-[#94A3B8]">Registrar nueva salida</p>
                     </div>
-                    <svg class="w-4 h-4 text-slate-400 ml-auto group-hover:text-red-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-[#94A3B8] ml-auto group-hover:text-red-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                     </svg>
                 </button>
 
-                <button (click)="navigateToReports()" class="w-full group flex items-center gap-4 p-4 rounded-xl border border-slate-100 hover:border-purple-200 hover:bg-purple-50/30 transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer">
-                    <div class="w-10 h-10 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm border border-purple-200">
+                <button (click)="navigateToReports()" class="w-full group flex items-center gap-4 p-4 rounded-xl border border-white/10 hover:border-purple-400/20 hover:bg-purple-500/10 transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer hover:scale-[1.02]">
+                    <div class="w-10 h-10 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm border border-purple-400/20">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                         </svg>
                     </div>
                     <div class="text-left">
-                        <p class="font-semibold text-slate-900 text-sm">Ver Informes</p>
-                        <p class="text-xs text-slate-500">Análisis detallados</p>
+                        <p class="font-semibold text-white text-sm">Ver Informes</p>
+                        <p class="text-xs text-[#94A3B8]">Análisis detallados</p>
                     </div>
-                    <svg class="w-4 h-4 text-slate-400 ml-auto group-hover:text-purple-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-[#94A3B8] ml-auto group-hover:text-purple-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                     </svg>
                 </button>
 
-                <button (click)="navigateToSettings()" class="w-full group flex items-center gap-4 p-4 rounded-xl border border-slate-100 hover:border-blue-200 hover:bg-blue-50/30 transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer">
-                    <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm border border-blue-200">
+                <button (click)="navigateToSettings()" class="w-full group flex items-center gap-4 p-4 rounded-xl border border-white/10 hover:border-blue-400/20 hover:bg-blue-500/10 transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer hover:scale-[1.02]">
+                    <div class="w-10 h-10 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm border border-blue-400/20">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c-.94 1.543.826 3.31 2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543-.826-3.31-2.37-2.37a1.724 1.724 0 00-1.065 2.572c-1.756.426-1.756 2.924 0 3.35a1.724 1.724 0 001.066 2.573c-.94 1.543.826 3.31 2.37 2.37.996.608 2.296.07 2.572-1.065z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c-.94 1.543.826 3.31 2.37 2.37a1.724 1.724 0 00-2.572 1.065c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                         </svg>
                     </div>
                     <div class="text-left">
-                        <p class="font-semibold text-slate-900 text-sm">Configuración</p>
-                        <p class="text-xs text-slate-500">Preferencias del sistema</p>
+                        <p class="font-semibold text-white text-sm">Configuración</p>
+                        <p class="text-xs text-[#94A3B8]">Preferencias del sistema</p>
                     </div>
-                    <svg class="w-4 h-4 text-slate-400 ml-auto group-hover:text-blue-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-[#94A3B8] ml-auto group-hover:text-blue-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                     </svg>
                 </button>
@@ -303,38 +309,38 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
         <!-- Recent Transactions -->
-        <section class="bg-white rounded-2xl p-6 shadow-card animate-enter border border-slate-100" style="animation-delay: 0.45s">
+        <section class="bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10 animate-fade-in-up hover:bg-white/10 transition-all duration-300" style="animation-delay: 0.45s">
             <div class="flex items-center justify-between mb-6">
-                <h2 class="text-lg font-display font-bold text-slate-900">Transacciones Recientes</h2>
-                <button (click)="openAllTransactionsModal()" class="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors cursor-pointer">Ver todas</button>
+                <h2 class="text-lg font-bold text-white">Transacciones Recientes</h2>
+                <button (click)="openAllTransactionsModal()" class="text-sm font-medium text-[#00D4AA] hover:text-[#00D4AA]/80 transition-colors cursor-pointer">Ver todas</button>
             </div>
             
             <div class="space-y-3">
-                <div *ngFor="let transaction of filteredTransactions.slice(0, 4)" class="group flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer shadow-sm hover:shadow-md border border-transparent hover:border-slate-100">
+                <div *ngFor="let transaction of filteredTransactions.slice(0, 4)" class="group flex items-center justify-between p-3 rounded-xl hover:bg-white/10 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md border border-white/10 hover:border-[#00D4AA]/20 hover:scale-[1.01]">
                     <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center text-lg shadow-sm border" [ngClass]="transaction.type === 'income' ? 'bg-emerald-100 border-emerald-200' : 'bg-red-100 border-red-200'">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center text-lg shadow-sm border" [ngClass]="transaction.type === 'income' ? 'bg-[#00D4AA]/10 border-[#00D4AA]/20 text-[#00D4AA]' : 'bg-red-500/10 border-red-500/20 text-red-400'">
                             {{ transaction.icon }}
                         </div>
                         <div>
-                            <p class="font-semibold text-slate-900 text-sm">{{ transaction.description }}</p>
-                            <p class="text-xs text-slate-500">{{ transaction.date }}</p>
+                            <p class="font-semibold text-white text-sm">{{ transaction.description }}</p>
+                            <p class="text-xs text-[#94A3B8]">{{ transaction.date }}</p>
                         </div>
                     </div>
                     <div class="text-right">
-                        <p class="font-bold text-sm" [ngClass]="transaction.type === 'income' ? 'text-emerald-600' : 'text-red-600'">
+                        <p class="font-bold text-sm" [ngClass]="transaction.type === 'income' ? 'text-[#00D4AA]' : 'text-red-400'">
                             {{ transaction.type === 'income' ? '+' : '-' }}${{ transaction.amount | number:'1.2-2' }}
                         </p>
-                        <p class="text-xs text-slate-400">{{ transaction.type === 'income' ? 'Ingreso' : 'Gasto' }}</p>
+                        <p class="text-xs text-[#94A3B8]">{{ transaction.type === 'income' ? 'Ingreso' : 'Gasto' }}</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Budget Overview -->
-        <section class="bg-white rounded-2xl p-6 shadow-card animate-enter border border-slate-100" style="animation-delay: 0.5s">
+        <section class="bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10 animate-fade-in-up hover:bg-white/10 transition-all duration-300" style="animation-delay: 0.5s">
             <div class="flex items-center justify-between mb-6">
-                <h2 class="text-lg font-display font-bold text-slate-900">Presupuesto del Mes</h2>
-                <button (click)="openCreateBudgetModal()" class="px-3 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">+ Nuevo</button>
+                <h2 class="text-lg font-bold text-white">Presupuesto del Mes</h2>
+                <button (click)="openCreateBudgetModal()" class="px-3 py-1.5 text-xs font-medium text-[#00D4AA] bg-[#00D4AA]/10 rounded-lg hover:bg-[#00D4AA]/20 transition-colors">+ Nuevo</button>
             </div>
 
             <div class="space-y-5">
@@ -342,14 +348,14 @@
                     <!-- Action buttons (visible on hover) -->
                     <div class="absolute -top-1 right-0 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
                         <button (click)="openBudgetItemModal(item)"
-                                class="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
+                                class="p-1.5 text-[#94A3B8] hover:text-[#00D4AA] hover:bg-[#00D4AA]/10 rounded-lg transition-all"
                                 title="Editar">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828L8.586-8.586z"/>
                             </svg>
                         </button>
                         <button (click)="confirmDeleteBudget(item)"
-                                class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                                class="p-1.5 text-[#94A3B8] hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
                                 title="Eliminar">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -358,29 +364,29 @@
                     </div>
                     <div class="flex items-center justify-between mb-2 pr-16">
                         <div class="flex items-center gap-2">
-                            <span class="text-sm font-medium text-slate-700">{{ item.label }}</span>
+                            <span class="text-sm font-medium text-white">{{ item.label }}</span>
                         </div>
-                        <span class="text-sm font-semibold text-slate-900">${{ item.spent | number:'1.0-0' }} <span class="text-slate-400 font-normal">/ ${{ item.total | number:'1.0-0' }}</span></span>
+                        <span class="text-sm font-semibold text-white">${{ item.spent | number:'1.0-0' }} <span class="text-[#94A3B8] font-normal">/ ${{ item.total | number:'1.0-0' }}</span></span>
                     </div>
-                    <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden shadow-inner border border-slate-200">
+                    <div class="w-full bg-white/10 rounded-full h-2 overflow-hidden shadow-inner border border-white/10">
                         <div class="h-full rounded-full transition-all duration-500"
-                             [class.bg-red-500]="item.spent / item.total > 0.9"
-                             [class.bg-amber-500]="item.spent / item.total > 0.75 && item.spent / item.total <= 0.9"
-                             [class.bg-blue-500]="item.spent / item.total <= 0.75"
+                             [class.bg-red-400]="item.spent / item.total > 0.9"
+                             [class.bg-amber-400]="item.spent / item.total > 0.75 && item.spent / item.total <= 0.9"
+                             [class.bg-blue-400]="item.spent / item.total <= 0.75"
                              [style.width.%]="(item.spent / item.total) * 100"></div>
                     </div>
                 </div>
 
-                <div class="pt-4 border-t border-slate-100">
+                <div class="pt-4 border-t border-white/10">
                     <div class="flex items-center justify-between mb-2">
-                        <span class="text-sm font-medium text-slate-600">Total Utilizado</span>
-                        <span class="text-lg font-bold text-slate-900">{{ totalBudgetPercentage }}%</span>
+                        <span class="text-sm font-medium text-[#94A3B8]">Total Utilizado</span>
+                        <span class="text-lg font-bold text-white">{{ totalBudgetPercentage }}%</span>
                     </div>
-                    <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
-                        <div class="h-full bg-gradient-to-r from-slate-700 to-slate-900 rounded-full transition-all duration-500" 
+                    <div class="w-full bg-white/10 rounded-full h-3 overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-[#00D4AA] to-blue-400 rounded-full transition-all duration-500" 
                              [style.width.%]="totalBudgetPercentage"></div>
                     </div>
-                    <p class="text-xs text-slate-500 mt-2">${{ totalBudgetTotal - totalBudgetSpent | number:'1.0-0' }} restantes para este mes</p>
+                    <p class="text-xs text-[#94A3B8] mt-2">${{ totalBudgetTotal - totalBudgetSpent | number:'1.0-0' }} restantes para este mes</p>
                 </div>
             </div>
         </section>
@@ -390,59 +396,59 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
         
         <!-- AI Insights -->
-        <section class="bg-white rounded-2xl p-6 shadow-card animate-enter border border-slate-100" style="animation-delay: 0.55s">
+        <section class="bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10 animate-fade-in-up hover:bg-white/10 transition-all duration-300" style="animation-delay: 0.55s">
             <div class="flex items-center gap-3 mb-6">
-                <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-200">
-                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center shadow-lg shadow-indigo-500/20 border border-indigo-500/20">
+                    <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                     </svg>
                 </div>
-                <h2 class="text-lg font-display font-bold text-slate-900">Insights Inteligentes</h2>
+                <h2 class="text-lg font-bold text-white">Insights Inteligentes</h2>
             </div>
 
             <div class="space-y-4">
                 <!-- Insight: Categoría con mayor gasto -->
-                <div *ngIf="getTopSpendingCategory() as topCategory" class="flex gap-4 p-4 bg-white rounded-xl border border-indigo-50 shadow-sm">
-                    <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center flex-shrink-0 mt-0.5 shadow-md hover:shadow-lg border border-amber-200">
+                <div *ngIf="getTopSpendingCategory() as topCategory" class="flex gap-4 p-4 bg-white/5 rounded-xl border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300">
+                    <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center flex-shrink-0 mt-0.5 shadow-md hover:shadow-lg border border-amber-500/20">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                         </svg>
                     </div>
                     <div>
-                        <h3 class="font-semibold text-slate-900 text-sm mb-1">Mayor gasto: {{ topCategory.label }}</h3>
-                        <p class="text-sm text-slate-600 leading-relaxed">Has gastado ${{ topCategory.amount | number:'1.0-0' }} en {{ topCategory.label.toLowerCase() }}. Esto representa el {{ topCategory.percentage | number:'1.0-0' }}% de tus gastos totales.</p>
+                        <h3 class="font-semibold text-white text-sm mb-1">Mayor gasto: {{ topCategory.label }}</h3>
+                        <p class="text-sm text-[#94A3B8] leading-relaxed">Has gastado ${{ topCategory.amount | number:'1.0-0' }} en {{ topCategory.label.toLowerCase() }}. Esto representa el {{ topCategory.percentage | number:'1.0-0' }}% de tus gastos totales.</p>
                     </div>
                 </div>
 
                 <!-- Insight: Meta de ahorro -->
-                <div class="flex gap-4 p-4 bg-white rounded-xl border border-indigo-50 shadow-sm">
+                <div class="flex gap-4 p-4 bg-white/5 rounded-xl border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 shadow-md hover:shadow-lg border"
-                         [ngClass]="filteredSavingsRate >= 30 ? 'bg-emerald-100 text-emerald-600 border-emerald-200' : 'bg-amber-100 text-amber-600 border-amber-200'">
+                         [ngClass]="filteredSavingsRate >= 30 ? 'bg-[#00D4AA]/10 text-[#00D4AA] border-[#00D4AA]/20' : 'bg-amber-500/10 text-amber-400 border-amber-500/20'">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>
                     <div>
-                        <h3 class="font-semibold text-slate-900 text-sm mb-1">
+                        <h3 class="font-semibold text-white text-sm mb-1">
                             {{ filteredSavingsRate >= 30 ? '¡Excelente ahorro!' : 'Meta de ahorro' }}
                         </h3>
-                        <p class="text-sm text-slate-600 leading-relaxed">
+                        <p class="text-sm text-[#94A3B8] leading-relaxed">
                             Tu tasa de ahorro es del {{ filteredSavingsRate }}%. {{ filteredSavingsRate >= 30 ? 'Estás superando tu meta del 30%.' : 'Intenta llegar al 30% reduciendo gastos innecesarios.' }}
                         </p>
                     </div>
                 </div>
 
                 <!-- Insight: Presupuesto -->
-                <div *ngIf="getBudgetInsight() as budgetInsight" class="flex gap-4 p-4 bg-white rounded-xl border border-indigo-50 shadow-sm">
+                <div *ngIf="getBudgetInsight() as budgetInsight" class="flex gap-4 p-4 bg-white/5 rounded-xl border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 shadow-md hover:shadow-lg border"
-                         [ngClass]="budgetInsight.percentage > 90 ? 'bg-red-100 text-red-600 border-red-200' : budgetInsight.percentage > 75 ? 'bg-amber-100 text-amber-600 border-amber-200' : 'bg-blue-100 text-blue-600 border-blue-200'">
+                         [ngClass]="budgetInsight.percentage > 90 ? 'bg-red-500/10 text-red-400 border-red-500/20' : budgetInsight.percentage > 75 ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : 'bg-blue-500/10 text-blue-400 border-blue-500/20'">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>
                     <div>
-                        <h3 class="font-semibold text-slate-900 text-sm mb-1">Presupuesto: {{ budgetInsight.label }}</h3>
-                        <p class="text-sm text-slate-600 leading-relaxed">
+                        <h3 class="font-semibold text-white text-sm mb-1">Presupuesto: {{ budgetInsight.label }}</h3>
+                        <p class="text-sm text-[#94A3B8] leading-relaxed">
                             Has usado el {{ budgetInsight.percentage | number:'1.0-0' }}% de tu presupuesto de {{ budgetInsight.label.toLowerCase() }}. {{ budgetInsight.percentage > 90 ? '¡Cuidado, estás cerca del límite!' : budgetInsight.percentage > 75 ? 'Vas por buen camino pero mantén el control.' : 'Llevas buen ritmo de gasto.' }}
                         </p>
                     </div>
@@ -451,18 +457,18 @@
         </section>
 
         <!-- Financial Goals -->
-        <section class="bg-white rounded-2xl p-6 shadow-card animate-enter border border-slate-100" style="animation-delay: 0.6s">
+        <section class="bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10 animate-fade-in-up hover:bg-white/10 transition-all duration-300" style="animation-delay: 0.6s">
             <div class="flex items-center justify-between mb-6">
-                <h2 class="text-lg font-display font-bold text-slate-900">Metas Financieras</h2>
-                <button (click)="openGoalModal()" class="px-3 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">+ Nueva</button>
+                <h2 class="text-lg font-bold text-white">Metas Financieras</h2>
+                <button (click)="openGoalModal()" class="px-3 py-1.5 text-xs font-medium text-[#00D4AA] bg-[#00D4AA]/10 rounded-lg hover:bg-[#00D4AA]/20 transition-colors">+ Nueva</button>
             </div>
 
             <div class="space-y-5">
                 <div *ngFor="let goal of goals" (click)="openGoalModal(goal)"
-                     class="p-4 rounded-xl bg-white border border-slate-100 shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer group relative">
+                     class="p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm shadow-lg hover:shadow-xl hover:bg-white/10 transition-all duration-300 cursor-pointer group relative hover:scale-[1.01]">
                     <!-- Delete button (visible on hover) -->
                     <button (click)="$event.stopPropagation(); confirmDeleteGoal(goal)"
-                            class="absolute top-2 right-2 p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all opacity-0 group-hover:opacity-100 z-10"
+                            class="absolute top-2 right-2 p-1.5 text-[#94A3B8] hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all opacity-0 group-hover:opacity-100 z-10"
                             title="Eliminar meta">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -472,17 +478,17 @@
                         <div class="flex items-center gap-3">
                             <span class="text-2xl">{{ goal.icon }}</span>
                             <div>
-                                <p class="font-semibold text-slate-900 text-sm">{{ goal.name }}</p>
-                                <p class="text-xs text-slate-500">Meta: ${{ goal.target | number:'1.0-0' }}</p>
+                                <p class="font-semibold text-white text-sm">{{ goal.name }}</p>
+                                <p class="text-xs text-[#94A3B8]">Meta: ${{ goal.target | number:'1.0-0' }}</p>
                             </div>
                         </div>
-                        <span class="text-sm font-bold text-blue-600">{{ getGoalPercentage(goal) }}%</span>
+                        <span class="text-sm font-bold text-blue-400">{{ getGoalPercentage(goal) }}%</span>
                     </div>
-                    <div class="w-full bg-white rounded-full h-2.5 overflow-hidden border border-slate-200 shadow-sm">
-                        <div class="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all duration-500"
+                    <div class="w-full bg-white/10 rounded-full h-2.5 overflow-hidden border border-white/10 shadow-sm">
+                        <div class="h-full bg-gradient-to-r from-blue-400 to-[#00D4AA] rounded-full transition-all duration-500"
                              [style.width.%]="getGoalPercentage(goal)"></div>
                     </div>
-                    <div class="flex justify-between mt-2 text-xs text-slate-500">
+                    <div class="flex justify-between mt-2 text-xs text-[#94A3B8]">
                         <span>${{ goal.current | number:'1.0-0' }} ahorrados</span>
                         <span>${{ goal.target - goal.current | number:'1.0-0' }} restantes</span>
                     </div>

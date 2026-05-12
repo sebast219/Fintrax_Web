@@ -1,0 +1,99 @@
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { PrismaService } from '../../prisma/prisma.service';
+import { collectDefaultMetrics, Registry, Counter, Histogram } from 'prom-client';
+
+@Injectable()
+export class MetricsService implements OnModuleInit {
+  private userCounter: Counter<string>;
+  private transactionCounter: Counter<string>;
+  private httpRequestDuration: Histogram<string>;
+  private authAttempts: Counter<string>;
+  private register: Registry;
+
+  constructor(private readonly prisma: PrismaService) {
+    this.register = collectDefaultMetrics() as Registry;
+  }
+
+  onModuleInit() {
+    // Custom metrics for Fintrax
+    this.defineCustomMetrics();
+  }
+
+  private defineCustomMetrics() {
+    // User metrics
+    this.userCounter = new Counter({
+      name: 'fintrax_users_total',
+      help: 'Total number of registered users',
+      labelNames: ['status'],
+      registers: [this.register],
+    });
+
+    // Transaction metrics
+    this.transactionCounter = new Counter({
+      name: 'fintrax_transactions_total',
+      help: 'Total number of transactions',
+      labelNames: ['type', 'status'],
+      registers: [this.register],
+    });
+
+    // Request metrics
+    this.httpRequestDuration = new Histogram({
+      name: 'fintrax_http_request_duration_seconds',
+      help: 'Duration of HTTP requests in seconds',
+      labelNames: ['method', 'route', 'status_code'],
+      registers: [this.register],
+      buckets: [0.1, 0.3, 0.5, 0.7, 1, 3, 5, 7, 10],
+    });
+
+    // Authentication metrics
+    this.authAttempts = new Counter({
+      name: 'fintrax_auth_attempts_total',
+      help: 'Total authentication attempts',
+      labelNames: ['status', 'type'],
+      registers: [this.register],
+    });
+  }
+
+  // Methods to increment metrics
+  incrementUserCount(status: 'success' | 'failed') {
+    if (this.userCounter) {
+      this.userCounter.inc({ status });
+    }
+  }
+
+  incrementTransactionCount(type: string, status: 'success' | 'failed') {
+    if (this.transactionCounter) {
+      this.transactionCounter.inc({ type, status });
+    }
+  }
+
+  recordHttpRequestDuration(method: string, route: string, statusCode: number, duration: number) {
+    if (this.httpRequestDuration) {
+      this.httpRequestDuration.observe(
+        { method, route, status_code: statusCode.toString() },
+        duration / 1000 // Convert ms to seconds
+      );
+    }
+  }
+
+  incrementAuthAttempts(status: 'success' | 'failed', type: 'login' | 'signup' | 'refresh') {
+    if (this.authAttempts) {
+      this.authAttempts.inc({ status, type });
+    }
+  }
+
+  // Get metrics for Prometheus
+  async getMetrics(): Promise<string> {
+    return this.register.metrics();
+  }
+
+  // Database health check
+  async getDatabaseHealth() {
+    try {
+      await this.prisma.$queryRaw`SELECT 1`;
+      return { status: 'healthy', responseTime: 0 };
+    } catch (error) {
+      return { status: 'unhealthy', error: error.message, responseTime: 0 };
+    }
+  }
+}
