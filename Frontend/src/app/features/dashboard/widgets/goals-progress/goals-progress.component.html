@@ -1,0 +1,177 @@
+<div class="goals-progress-widget bg-white rounded-lg shadow-md p-6">
+  
+  <!-- Header -->
+  <div class="flex justify-between items-start mb-6">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-800">Metas de Ahorro</h2>
+      <p class="text-gray-600 text-sm mt-1">{{ getActiveGoalsCount() }} metas activas</p>
+    </div>
+    <button 
+      (click)="onAddGoalClick()"
+      class="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200"
+      title="Agregar nueva meta">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg>
+    </button>
+  </div>
+  
+  <!-- Estadísticas generales -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 border-t pt-6">
+    
+    <!-- Progreso general -->
+    <div class="text-center">
+      <p class="text-gray-600 text-sm mb-1">Progreso General</p>
+      <div class="relative w-20 h-20 mx-auto mb-2">
+        <svg class="w-20 h-20 transform -rotate-90">
+          <circle cx="40" cy="40" r="36" stroke="#E5E7EB" stroke-width="8" fill="none" />
+          <circle cx="40" cy="40" r="36" 
+                  stroke="#3B82F6" 
+                  stroke-width="8" 
+                  fill="none"
+                  [attr.stroke-dasharray]="226"
+                  [attr.stroke-dashoffset]="226 - (226 * overallProgress() / 100)"
+                  class="transition-all duration-500" />
+        </svg>
+        <div class="absolute inset-0 flex items-center justify-center">
+          <span class="text-lg font-bold text-gray-800">{{ overallProgress() | number:'1.0-0' }}%</span>
+        </div>
+      </div>
+      <p class="text-sm text-gray-600">{{ formatCurrency(data().totalSaved) }}/{{ formatCurrency(data().totalTarget) }}</p>
+    </div>
+    
+    <!-- Siguiente meta -->
+    <div class="text-center">
+      <p class="text-gray-600 text-sm mb-1">Siguiente Meta</p>
+      @if (nextGoal()) {
+        <div class="flex items-center justify-center gap-2 mb-2">
+          <span class="text-2xl">{{ nextGoal()?.icon }}</span>
+          <span class="font-semibold text-gray-800">{{ nextGoal()?.name }}</span>
+        </div>
+        <p class="text-sm text-blue-600">{{ nextGoal()?.percentage | number:'1.0-0' }}% completado</p>
+      } @else {
+        <p class="text-gray-500">No hay metas activas</p>
+      }
+    </div>
+    
+    <!-- Total restante -->
+    <div class="text-center">
+      <p class="text-gray-600 text-sm mb-1">Total Restante</p>
+      <p class="text-2xl font-bold text-orange-600">
+        {{ formatCurrency(totalRemaining()) }}
+      </p>
+      <p class="text-sm text-gray-600">para completar todas</p>
+    </div>
+  </div>
+  
+  <!-- Metas activas -->
+  @if (hasActiveGoals()) {
+    <div class="border-t pt-6">
+      <h3 class="font-semibold text-gray-800 mb-4">Metas Activas</h3>
+      <div class="space-y-4">
+        @for (goal of activeGoals(); track goal.id) {
+          <div class="goal-card p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors duration-200"
+               (click)="onGoalClick(goal)">
+            
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <span class="text-2xl">{{ goal.icon }}</span>
+                <div>
+                  <p class="font-medium text-gray-800">{{ goal.name }}</p>
+                  <p class="text-sm text-gray-600">{{ goal.category }}</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-lg">{{ getStatusIcon(goal) }}</span>
+                <span [class]="'text-sm font-medium ' + getUrgencyStatus(goal.daysRemaining).color">
+                  {{ getUrgencyStatus(goal.daysRemaining).icon }} {{ formatDaysRemaining(goal.daysRemaining) }}
+                </span>
+              </div>
+            </div>
+            
+            <!-- Progreso -->
+            <div class="mb-3">
+              <div class="flex justify-between text-sm mb-1">
+                <span class="text-gray-600">Progreso</span>
+                <span [class]="'font-medium ' + (goal.percentage >= 100 ? 'text-green-600' : 'text-gray-800')">
+                  {{ goal.percentage | number:'1.0-0' }}%
+                </span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                <div class="h-full transition-all duration-500"
+                     [style.width.%]="goal.percentage"
+                     [style.background-color]="getProgressColor(goal.percentage)">
+                </div>
+              </div>
+            </div>
+            
+            <!-- Montos -->
+            <div class="flex justify-between items-center">
+              <div class="text-sm">
+                <span class="text-gray-600">Actual: </span>
+                <span class="font-medium text-gray-800">{{ formatCurrency(goal.currentAmount) }}</span>
+              </div>
+              <div class="text-sm">
+                <span class="text-gray-600">Meta: </span>
+                <span class="font-medium text-gray-800">{{ formatCurrency(goal.targetAmount) }}</span>
+              </div>
+              <button 
+                (click)="onContributeClick(goal, $event)"
+                class="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition-colors duration-200">
+                Contribuir
+              </button>
+            </div>
+            
+          </div>
+        }
+      </div>
+    </div>
+  }
+  
+  <!-- Metas completadas -->
+  @if (hasCompletedGoals()) {
+    <div class="border-t pt-6">
+      <h3 class="font-semibold text-gray-800 mb-4">Metas Completadas</h3>
+      <div class="space-y-3">
+        @for (goal of completedGoals(); track goal.id) {
+          <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+            <div class="flex items-center gap-3">
+              <span class="text-xl">✅</span>
+              <div>
+                <p class="font-medium text-gray-800">{{ goal.name }}</p>
+                <p class="text-sm text-green-600">{{ formatCurrency(goal.currentAmount) }} ahorrado</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-sm font-medium text-green-600">Completada</p>
+              <p class="text-xs text-gray-500">{{ goal.deadline | date:'short' }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+  
+  <!-- Estado vacío -->
+  @if (!hasActiveGoals() && !hasCompletedGoals()) {
+    <div class="text-center py-12">
+      <div class="text-4xl mb-4">🎯</div>
+      <h3 class="text-lg font-medium text-gray-800 mb-2">Sin metas de ahorro</h3>
+      <p class="text-gray-600 mb-4">Crea tu primera meta para comenzar a ahorrar</p>
+      <button 
+        (click)="onAddGoalClick()"
+        class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200">
+        Crear Primera Meta
+      </button>
+    </div>
+  }
+  
+  <!-- Footer -->
+  <div class="mt-6 pt-6 border-t">
+    <div class="flex justify-between items-center text-sm text-gray-600">
+      <span>{{ getCompletedGoalsCount() }} metas completadas</span>
+      <span>Promedio: {{ averageProgress() | number:'1.0-0' }}%</span>
+    </div>
+  </div>
+  
+</div>

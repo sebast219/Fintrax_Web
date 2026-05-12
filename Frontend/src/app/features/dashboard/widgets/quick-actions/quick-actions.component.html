@@ -1,0 +1,71 @@
+<div class="quick-actions-widget bg-white rounded-lg shadow-md p-6">
+  
+  <!-- Header -->
+  <div class="flex justify-between items-start mb-6">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-800">Acciones Rápidas</h2>
+      <p class="text-gray-600 text-sm mt-1">{{ getActionsCount() }} acciones disponibles</p>
+    </div>
+  </div>
+  
+  <!-- Grid de acciones -->
+  @if (hasActions()) {
+    <div [class]="gridClasses()">
+      @for (action of currentActions(); track action.id) {
+        <div 
+          [class]="getActionClasses(action)"
+          (click)="onActionClick(action)"
+          (keydown)="onActionKeydown($event, action)"
+          tabindex="0"
+          role="button"
+          [attr.aria-label]="action.label">
+          
+          <!-- Icono -->
+          <div class="flex justify-center mb-3">
+            <span [class]="getIconSize()">{{ action.icon }}</span>
+          </div>
+          
+          <!-- Contenido -->
+          <div class="text-center">
+            @if (showLabels()) {
+              <h3 [class]="'font-semibold ' + action.color + ' ' + getTextSize()">
+                {{ action.label }}
+              </h3>
+              @if (!compactMode()) {
+                <p class="text-xs text-gray-600 mt-1">{{ action.description }}</p>
+              }
+            } @else {
+              <!-- Solo icono en modo compacto -->
+            }
+          </div>
+          
+          <!-- Indicador de hover -->
+          <div class="absolute top-2 right-2 opacity-0 hover:opacity-100 transition-opacity duration-200">
+            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+          
+        </div>
+      }
+    </div>
+  } @else {
+    <!-- Estado vacío -->
+    <div class="text-center py-12">
+      <div class="text-4xl mb-4">⚡</div>
+      <h3 class="text-lg font-medium text-gray-800 mb-2">Sin acciones disponibles</h3>
+      <p class="text-gray-600">Configura tus acciones rápidas</p>
+    </div>
+  }
+  
+  <!-- Footer informativo -->
+  @if (hasActions()) {
+    <div class="mt-6 pt-6 border-t">
+      <div class="flex justify-between items-center text-sm text-gray-600">
+        <span>Accesos directos</span>
+        <span>Presiona Tab para navegar</span>
+      </div>
+    </div>
+  }
+  
+</div>

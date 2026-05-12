@@ -1,0 +1,224 @@
+.goals-progress-widget {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(249, 250, 251, 0.95));
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07),
+              0 10px 20px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(229, 231, 235, 0.5);
+}
+
+.goals-progress-widget:hover {
+  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1),
+              0 10px 15px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+.goal-card {
+  transition: all 0.2s ease-in-out;
+  border-left: 4px solid transparent;
+}
+
+.goal-card:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.goal-card:hover .progress-bar {
+  transform: scaleX(1.02);
+}
+
+.progress-bar {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: left;
+}
+
+/* Animación del círculo de progreso */
+svg circle {
+  transition: stroke-dashoffset 0.5s ease-in-out;
+}
+
+/* Estados de progreso */
+.progress-low {
+  background-color: #EF4444;
+}
+
+.progress-medium {
+  background-color: #F59E0B;
+}
+
+.progress-high {
+  background-color: #3B82F6;
+}
+
+.progress-complete {
+  background-color: #10B981;
+}
+
+/* Botón de contribuir */
+.contribute-btn {
+  transition: all 0.2s ease-in-out;
+}
+
+.contribute-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.contribute-btn:active {
+  transform: scale(0.98);
+}
+
+/* Estados de urgencia */
+.urgency-urgent {
+  animation: pulse-red 2s infinite;
+}
+
+.urgency-soon {
+  animation: pulse-orange 3s infinite;
+}
+
+@keyframes pulse-red {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes pulse-orange {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+/* Empty state */
+.empty-state {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Completado state */
+.completed-goal {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  color: white;
+}
+
+.completed-goal:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .goals-progress-widget {
+    padding: 1rem;
+  }
+  
+  .grid-cols-1.md\:grid-cols-3 {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .goal-card {
+    padding: 1rem;
+  }
+  
+  .goal-card .flex {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .goal-card .text-right {
+    text-align: left;
+  }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .goals-progress-widget {
+    background: linear-gradient(135deg, rgba(31, 41, 55, 0.95), rgba(17, 24, 39, 0.95));
+    border-color: rgba(55, 65, 81, 0.5);
+  }
+  
+  .goals-progress-widget:hover {
+    box-shadow: 0 20px 25px rgba(0, 0, 0, 0.3),
+                0 10px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .text-gray-800 {
+    color: #e5e7eb;
+  }
+  
+  .text-gray-600 {
+    color: #9ca3af;
+  }
+  
+  .bg-gray-50 {
+    background-color: #374151;
+  }
+  
+  .bg-gray-50:hover {
+    background-color: #4b5563;
+  }
+  
+  .bg-gray-200 {
+    background-color: #4b5563;
+  }
+  
+  .border-t {
+    border-color: rgba(55, 65, 81, 0.5);
+  }
+  
+  .goal-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Animaciones de entrada */
+.goal-card {
+  animation: slideInLeft 0.3s ease-out;
+  animation-fill-mode: both;
+}
+
+.goal-card:nth-child(1) { animation-delay: 0.1s; }
+.goal-card:nth-child(2) { animation-delay: 0.2s; }
+.goal-card:nth-child(3) { animation-delay: 0.3s; }
+.goal-card:nth-child(4) { animation-delay: 0.4s; }
+.goal-card:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Tooltip styles */
+.tooltip {
+  position: relative;
+}
+
+.tooltip:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  z-index: 1000;
+  margin-bottom: 0.25rem;
+}

@@ -1,0 +1,143 @@
+<div class="balance-card-widget">
+  <!-- Header del Widget -->
+  <div class="widget-header">
+    <h3 class="widget-title">Balance General</h3>
+    <div class="widget-actions">
+      <button class="action-btn" (click)="refreshData()" title="Actualizar datos">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 2m-15.357-2v5a8 001 8.001 0 014.582-2m15.357-2v5a8 001 8.001 0 01-4.581-2" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Grid de KPIs -->
+  <div class="balance-grid">
+    <!-- Balance Total -->
+    <div class="balance-card main-balance" [class]="getBalanceBackground()">
+      <div class="card-content">
+        <div class="card-header">
+          <span class="card-label">Balance Total</span>
+          <span class="card-icon">💳</span>
+        </div>
+        <div class="card-body">
+          <div class="balance-amount" [class]="getBalanceClass()">
+            {{ formatCurrency(data().totalBalance) }}
+          </div>
+          <div class="balance-change">
+            <span class="change-icon">{{ getChangeIcon() }}</span>
+            <span class="change-text" [class]="getChangeColor()">
+              {{ getChangeText() }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ingresos Mensuales -->
+    <div class="balance-card income-card">
+      <div class="card-content">
+        <div class="card-header">
+          <span class="card-label">Ingresos Mensuales</span>
+          <span class="card-icon">📈</span>
+        </div>
+        <div class="card-body">
+          <div class="amount positive">
+            +{{ formatCurrency(data().monthlyIncome) }}
+          </div>
+          <div class="trend-indicator">
+            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+            </svg>
+            <span class="trend-text">vs mes anterior</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gastos Mensuales -->
+    <div class="balance-card expense-card">
+      <div class="card-content">
+        <div class="card-header">
+          <span class="card-label">Gastos Mensuales</span>
+          <span class="card-icon">📉</span>
+        </div>
+        <div class="card-body">
+          <div class="amount negative">
+            -{{ formatCurrency(data().monthlyExpense) }}
+          </div>
+          <div class="trend-indicator">
+            <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4-4-6 6" />
+            </svg>
+            <span class="trend-text">vs mes anterior</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sección de Ahorro -->
+  <div class="savings-section">
+    <div class="savings-header">
+      <h4 class="savings-title">Tasa de Ahorro</h4>
+      <div class="savings-status" [class]="savingsStatus().bg">
+        <span class="status-icon">{{ getSavingsIcon() }}</span>
+        <span class="status-text">{{ getSavingsText() }}</span>
+      </div>
+    </div>
+    
+    <div class="savings-details">
+      <div class="savings-metrics">
+        <div class="metric">
+          <span class="metric-label">Ingreso Neto</span>
+          <span class="metric-value" [class]="netIncome() >= 0 ? 'positive' : 'negative'">
+            {{ netIncome() >= 0 ? '+' : '' }}{{ formatCurrency(netIncome()) }}
+          </span>
+        </div>
+        
+        <div class="metric">
+          <span class="metric-label">Tasa de Ahorro</span>
+          <span class="metric-value" [class]="savingsStatus().color">
+            {{ data().savingsRate.toFixed(1) }}%
+          </span>
+        </div>
+        
+        <div class="metric">
+          <span class="metric-label">Promedio Diario</span>
+          <span class="metric-value">
+            {{ formatCurrency(data().monthlyExpense / 30) }}
+          </span>
+        </div>
+      </div>
+      
+      <!-- Barra de progreso de ahorro -->
+      <div class="savings-progress">
+        <div class="progress-header">
+          <span>Meta de Ahorro</span>
+          <span>{{ data().savingsRate.toFixed(0) }}%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" 
+               [style.width.%]="data().savingsRate"
+               [class]="savingsStatus().bg">
+          </div>
+        </div>
+        <div class="progress-labels">
+          <span>0%</span>
+          <span>Meta: 20%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer del Widget -->
+  <div class="widget-footer">
+    <div class="last-updated">
+      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3l3 3m-9-6h.01M3 15h.01" />
+      </svg>
+      <span>Actualizado: {{ lastUpdated | date:'short' }}</span>
+    </div>
+  </div>
+</div>
