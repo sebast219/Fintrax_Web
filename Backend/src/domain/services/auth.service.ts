@@ -6,7 +6,8 @@ import * as bcrypt from 'bcrypt';
 export interface SignUpRequest {
   email: string;
   password: string;
-  fullName: string;
+  firstName: string;
+  lastName: string;
 }
 
 export interface SignInRequest {
@@ -40,11 +41,16 @@ export class AuthDomainService {
     // Hash password
     const passwordHash = await bcrypt.hash(request.password, 12);
 
+    // Create fullName from firstName and lastName
+    const fullName = `${request.firstName} ${request.lastName}`;
+
     // Create user
     const user = await this.userRepository.create({
       email: request.email,
       passwordHash,
-      fullName: request.fullName,
+      firstName: request.firstName,
+      lastName: request.lastName,
+      fullName,
       currency: 'USD',
       locale: 'es',
       timezone: 'America/Mexico_City',

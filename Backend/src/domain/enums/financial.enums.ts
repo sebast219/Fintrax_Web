@@ -1,0 +1,36 @@
+export enum TransactionStatus {
+  PENDING = 'PENDING',      // En proceso (banco)
+  COMPLETED = 'COMPLETED',  // Confirmado
+  FAILED = 'FAILED'         // Rechazado
+}
+
+export enum GoalStatus {
+  ACTIVE = 'ACTIVE',
+  COMPLETED = 'COMPLETED',
+  PAUSED = 'PAUSED',
+  ABANDONED = 'ABANDONED'
+}
+
+export enum BalanceType {
+  CONFIRMED = 'CONFIRMED',  // Transacciones completadas
+  EXPECTED = 'EXPECTED'     // Incluye pendientes
+}
+
+export enum AllocationErrorType {
+  INSUFFICIENT_FUNDS = 'INSUFFICIENT_FUNDS',
+  GOAL_NOT_FOUND = 'GOAL_NOT_FOUND',
+  EXCEEDS_TARGET = 'EXCEEDS_TARGET',
+  INVALID_AMOUNT = 'INVALID_AMOUNT',
+  GOAL_COMPLETED = 'GOAL_COMPLETED',
+  GOAL_PAUSED = 'GOAL_PAUSED'
+}
+
+export enum AlertType {
+  NEGATIVE_BALANCE = 'NEGATIVE_BALANCE',
+  PENDING_TRANSACTIONS = 'PENDING_TRANSACTIONS',
+  FAILED_TRANSACTIONS = 'FAILED_TRANSACTIONS',
+  GOAL_OFF_TRACK = 'GOAL_OFF_TRACK',
+  GOAL_DEADLINE_SOON = 'GOAL_DEADLINE_SOON',
+  LOW_SAVINGS_RATE = 'LOW_SAVINGS_RATE',
+  HIGH_EXPENSE_RATE = 'HIGH_EXPENSE_RATE'
+}
