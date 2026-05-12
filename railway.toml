@@ -1,5 +1,6 @@
 [build]
-builder = "NIXPACKS"
+builder = "DOCKERFILE"
+dockerfilePath = "Backend/Dockerfile"
 
 [deploy]
 healthcheckPath = "/api/v1/health"
@@ -10,4 +11,4 @@ restartPolicyMaxRetries = 10
 [env]
 NODE_ENV = "production"
 PORT = "3000"
-NPM_CONFIG_PRODUCTION = "false"
+DATABASE_URL = "${{Postgres.DATABASE_URL}}"
