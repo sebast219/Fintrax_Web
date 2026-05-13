@@ -27,6 +27,10 @@
   },
   "private": true,
   "packageManager": "npm@10.8.2",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
   "dependencies": {
     "@angular/common": "^21.1.0",
     "@angular/compiler": "^21.1.0",

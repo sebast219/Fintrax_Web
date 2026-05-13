@@ -5,6 +5,7 @@
   "outputDirectory": "dist/fintrax-web",
   "installCommand": "npm install",
   "framework": "angular",
+  "nodeVersion": "18.x",
   "rewrites": [
     {
       "source": "/(.*)",
