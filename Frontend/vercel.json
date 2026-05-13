@@ -1,7 +1,7 @@
 {
   "version": 2,
   "name": "fintrax-web",
-  "buildCommand": "ng build --configuration production",
+  "buildCommand": "npm run build",
   "outputDirectory": "dist/fintrax-web",
   "installCommand": "npm install",
   "framework": null,
