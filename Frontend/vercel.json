@@ -1,31 +1,10 @@
 {
   "version": 2,
   "name": "fintrax-web",
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist/fintrax-web"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html",
-      "methods": ["GET", "HEAD", "OPTIONS"]
-    }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  },
-  "build": {
-    "env": {
-      "NODE_ENV": "production"
-    }
-  },
-  "functions": {},
+  "buildCommand": "ng build --configuration production",
+  "outputDirectory": "dist/fintrax-web",
+  "installCommand": "npm install",
+  "framework": null,
   "rewrites": [
     {
       "source": "/(.*)",
