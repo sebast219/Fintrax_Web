@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, inject, signal } from '@angular/core';
+import { Component, OnInit, AfterViewInit, inject, signal, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Navbar } from '../../../layout/navbar/navbar';
@@ -84,6 +84,10 @@ export class CardsComponent implements OnInit, AfterViewInit {
   // Month selector properties
   selectedMonth = signal<string>('');
   months = signal<string[]>([]);
+
+  // Dropdown properties
+  showMonthDropdown = signal<boolean>(false);
+  showCardTypeDropdown = signal<boolean>(false);
 
   // Generate months dynamically based on current date
   private generateMonths(): string[] {
@@ -518,5 +522,65 @@ export class CardsComponent implements OnInit, AfterViewInit {
         }
       }
     });
+  }
+
+  // Dropdown methods
+  toggleDropdown(dropdownName: string): void {
+    // Close all dropdowns first
+    this.showMonthDropdown.set(false);
+    this.showCardTypeDropdown.set(false);
+    
+    // Open the selected dropdown
+    switch (dropdownName) {
+      case 'month':
+        this.showMonthDropdown.set(!this.showMonthDropdown());
+        break;
+      case 'cardType':
+        this.showCardTypeDropdown.set(!this.showCardTypeDropdown());
+        break;
+    }
+  }
+
+  closeAllDropdowns(): void {
+    this.showMonthDropdown.set(false);
+    this.showCardTypeDropdown.set(false);
+  }
+
+  selectDropdownOption(dropdownName: string, value: string): void {
+    switch (dropdownName) {
+      case 'month':
+        this.selectedMonth.set(value);
+        this.onMonthChange(value);
+        break;
+      case 'cardType':
+        this.newCard.type = value as 'CREDIT' | 'DEBIT' | 'PREPAID';
+        break;
+    }
+    this.closeAllDropdowns();
+  }
+
+  getSelectedLabel(options: any[], currentValue: string): string {
+    const option = options.find(opt => opt.value === currentValue);
+    return option ? option.label : currentValue;
+  }
+
+  trackByOption(index: number, option: any): string {
+    return option.value || option;
+  }
+
+  // Card type options
+  cardTypeOptions = [
+    { value: 'CREDIT', label: '💳 Tarjeta de Crédito', icon: '💳' },
+    { value: 'DEBIT', label: '💰 Tarjeta de Débito', icon: '💰' },
+    { value: 'PREPAID', label: '💎 Tarjeta Prepaga', icon: '💎' }
+  ];
+
+  // Close dropdowns when clicking outside
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.custom-dropdown')) {
+      this.closeAllDropdowns();
+    }
   }
 }

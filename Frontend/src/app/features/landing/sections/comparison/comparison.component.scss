@@ -1,0 +1,59 @@
+.comparison-section {
+  .comparison-table {
+    .feature-row {
+      &:hover {
+        background: rgba(0, 212, 170, 0.05);
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+    }
+  }
+
+  .competitor-card {
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 212, 170, 0.15);
+      transition: all 0.3s ease;
+    }
+  }
+
+  .feature-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    
+    &.yes {
+      background: rgba(34, 197, 94, 0.1);
+      color: #22c55e;
+    }
+    
+    &.no {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+    }
+    
+    &.partial {
+      background: rgba(250, 204, 21, 0.1);
+      color: #facc15;
+    }
+    
+    &.premium {
+      background: rgba(168, 85, 247, 0.1);
+      color: #a855f7;
+    }
+  }
+
+  .cta-section {
+    background: linear-gradient(135deg, rgba(0, 212, 170, 0.1) 0%, rgba(0, 212, 170, 0.05) 100%);
+    border: 1px solid rgba(0, 212, 170, 0.2);
+    border-radius: 1rem;
+    backdrop-filter: blur(10px);
+  }
+}

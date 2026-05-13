@@ -21,54 +21,78 @@ export class FaqComponent {
     {
       id: '1',
       question: '¿Es gratis usar Fintrax?',
-      answer: 'Sí, ofrecemos un plan gratuito con características básicas perfectas para empezar a gestionar tus finanzas. También tenemos planes de pago con funcionalidades avanzadas.',
+      answer: 'Sí, nuestro plan Starter es completamente gratuito y hasta 50 transacciones mensuales. Perfecto para quienes comienzan. Nuestro plan Pro ($9.99/mes) incluye transacciones ilimitadas, reportes avanzados y sincronización bancaria. El plan Business ($29.99/mes) añade soporte prioritario y API para equipos.',
       category: 'general'
     },
     {
       id: '2',
       question: '¿Cómo protegen mis datos personales?',
-      answer: 'Utilizamos encriptación de nivel bancario y seguimos las mejores prácticas de seguridad. Todos tus datos están protegidos y nunca los compartimos con terceros sin tu consentimiento.',
+      answer: 'Implementamos seguridad de nivel enterprise: encriptación AES-256, certificación ISO 27001, cumplimiento SOC 2 Type II, y autenticación 2FA. Nuestros servidores están en AWS con copias de seguridad automáticas cada 6 horas. Nunca vendemos datos y cumplimos con GDPR y CCPA.',
       category: 'seguridad'
     },
     {
       id: '3',
-      question: '¿Puedo conectar mis cuentas bancarias?',
-      answer: 'Sí, en nuestros planes profesionales y empresariales puedes conectar tus cuentas bancarias de forma segura para sincronizar transacciones automáticamente.',
-      category: 'funcionalidades'
+      question: '¿Qué diferencia a Fintrax de YNAB o Mint?',
+      answer: 'Fintrax está diseñado específicamente para el mercado latinoamericano con soporte para múltiples monedas, impuestos locales y categorías regionales. A diferencia de YNAB, ofrecemos IA para predicción de gastos y, a diferencia de Mint, no compartimos tus datos con terceros para publicidad.',
+      category: 'competitiva'
     },
     {
       id: '4',
-      question: '¿Qué tipo de reportes puedo generar?',
-      answer: 'Puedes generar reportes de gastos, ingresos, balance general, análisis por categoría, tendencias mensuales y reportes personalizados según tus necesidades.',
+      question: '¿Puedo conectar mis cuentas bancarias?',
+      answer: 'Sí, mediante Plaid y API bancaria segura. Conectamos 200+ bancos en 6 países clave: Argentina (BBVA Francés, Santander, Galicia), Brasil (Itaú, Bradesco, Banco do Brasil), México (BBVA México, Banorte, Santander), Colombia (Bancolombia, Daviplata), Chile (Banco de Chile, Santander), Perú (BCP, Interbank). Soporte para ARS, BRL, MXN, COP, CLP, PEN.',
       category: 'funcionalidades'
     },
     {
       id: '5',
-      question: '¿Hay una aplicación móvil?',
-      answer: 'Sí, Fintrax está disponible para iOS y Android. Puedes sincronizar tus datos entre dispositivos y acceder a tu información desde cualquier lugar.',
-      category: 'general'
-    },
-    {
-      id: '6',
-      question: '¿Cómo funciona el soporte técnico?',
-      answer: 'Ofrecemos soporte por email para todos los planes. Los usuarios de planes pagados tienen soporte prioritario y el plan empresarial incluye soporte 24/7.',
-      category: 'soporte'
-    },
-    {
-      id: '7',
-      question: '¿Puedo exportar mis datos?',
-      answer: 'Sí, puedes exportar todos tus datos en formato CSV, JSON o PDF en cualquier momento. Creemos en la portabilidad de tus datos.',
+      question: '¿Qué tipo de reportes puedo generar?',
+      answer: 'Genera +30 tipos de reportes: análisis de flujo de caja, proyecciones con IA, reportes de impuestos, análisis por categoría personalizados, comparativos año-año, y reportes de inversión. Exporta en PDF, Excel o compite directamente con tu contador.',
       category: 'funcionalidades'
     },
     {
-      id: '8',
-      question: '¿Cómo cancelo mi suscripción?',
-      answer: 'Puedes cancelar tu suscripción en cualquier momento desde tu configuración de cuenta. No hay penalizaciones y mantienes acceso hasta el final del período facturado.',
+      id: '6',
+      question: '¿Hay una aplicación móvil?',
+      answer: 'Sí, apps nativas para iOS (iPhone/iPad) y Android con biometría facial/huella. Sincronización offline perfecta y notificaciones inteligentes de presupuesto. Calificación 4.8★ con más de 100,000 descargas.',
       category: 'general'
+    },
+    {
+      id: '7',
+      question: '¿Cómo funciona el soporte técnico?',
+      answer: 'Soporte multicanal 24/7: chat en vivo (respuesta < 2 min), email (respuesta < 4 horas), y teléfono para planes Business. Base de conocimientos con 200+ tutoriales y webinars semanales gratuitos. 99.9% de satisfacción del cliente.',
+      category: 'soporte'
+    },
+    {
+      id: '8',
+      question: '¿Puedo exportar mis datos?',
+      answer: 'Totalmente. Exporta en CSV, Excel, PDF, JSON o QIF. Incluye auditoría completa de cambios y puedes importar desde otras plataformas (YNAB, Mint, Quicken). Garantizamos portabilidad total según GDPR Art. 20.',
+      category: 'funcionalidades'
+    },
+    {
+      id: '9',
+      question: '¿Qué garantías ofrecen?',
+      answer: '30 días de garantía de devolución del dinero sin preguntas. Uptime 99.9% garantizado. Recuperación de datos ante desastres en menos de 1 hora. Cumplimiento regulatorio y auditorías de seguridad trimestrales por terceros.',
+      category: 'garantias'
+    },
+    {
+      id: '10',
+      question: '¿Para empresas hay funcionalidades especiales?',
+      answer: 'Sí, plan Business incluye: gestión multi-usuario con permisos, integración contable (QuickBooks, Xero), reportes fiscales automáticos, API personalizada, y entrenamiento dedicado. Ideal para PYMES y freelancers.',
+      category: 'empresas'
+    },
+    {
+      id: '11',
+      question: '¿Cómo funciona la inteligencia artificial?',
+      answer: 'Nuestra IA utiliza algoritmos de machine learning entrenados con 100K+ transacciones para lograr 95% de precisión en categorización automática. Predice gastos con margen de error ±5%, detecta anomalías en tiempo real, y optimiza presupuestos basados en tus patrones históricos. Auditoría externa disponible.',
+      category: 'ia'
+    },
+    {
+      id: '12',
+      question: '¿Aceptan criptomonedas?',
+      answer: 'Sí, soporte completo para Bitcoin, Ethereum, y 50+ criptomonedas principales. Conecta wallets como Coinbase, Binance, o MetaMask. Reportes de ganancias/pérdidas para declaración de impuestos y seguimiento de portafolio en tiempo real.',
+      category: 'cripto'
     }
   ]);
 
-  categories = ['general', 'seguridad', 'funcionalidades', 'soporte'];
+  categories = ['general', 'seguridad', 'funcionalidades', 'soporte', 'competitiva', 'garantias', 'empresas', 'ia', 'cripto'];
   selectedCategory = signal<string>('todos');
 
   constructor() {}

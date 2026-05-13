@@ -1,4 +1,4 @@
-import { Component, input, signal, computed, output, EventEmitter } from '@angular/core';
+import { Component, input, signal, computed, output, EventEmitter, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { TransactionSummary } from '../../../../core/models/dashboard.model';
@@ -41,6 +41,11 @@ export class TransactionsListWidgetComponent {
   selectedCategory = signal<string>('all');
   selectedType = signal<string>('all');
   selectedDateRange = signal<string>('month');
+
+  // Dropdown properties
+  showTypeDropdown = signal<boolean>(false);
+  showCategoryDropdown = signal<boolean>(false);
+  showDateRangeDropdown = signal<boolean>(false);
   
   // Formulario de filtros
   filterForm: FormGroup;
@@ -348,5 +353,82 @@ export class TransactionsListWidgetComponent {
    */
   executeAction(action: TransactionAction): void {
     action.action();
+  }
+
+  // Dropdown methods
+  toggleDropdown(dropdownName: string): void {
+    // Close all dropdowns first
+    this.showTypeDropdown.set(false);
+    this.showCategoryDropdown.set(false);
+    this.showDateRangeDropdown.set(false);
+    
+    // Open the selected dropdown
+    switch (dropdownName) {
+      case 'type':
+        this.showTypeDropdown.set(!this.showTypeDropdown());
+        break;
+      case 'category':
+        this.showCategoryDropdown.set(!this.showCategoryDropdown());
+        break;
+      case 'dateRange':
+        this.showDateRangeDropdown.set(!this.showDateRangeDropdown());
+        break;
+    }
+  }
+
+  closeAllDropdowns(): void {
+    this.showTypeDropdown.set(false);
+    this.showCategoryDropdown.set(false);
+    this.showDateRangeDropdown.set(false);
+  }
+
+  selectDropdownOption(dropdownName: string, value: string): void {
+    switch (dropdownName) {
+      case 'type':
+        this.selectedType.set(value);
+        this.filterForm.patchValue({ type: value });
+        break;
+      case 'category':
+        this.selectedCategory.set(value);
+        this.filterForm.patchValue({ category: value });
+        break;
+      case 'dateRange':
+        this.selectedDateRange.set(value);
+        this.filterForm.patchValue({ dateRange: value });
+        break;
+    }
+    this.closeAllDropdowns();
+    this.applyFilters();
+  }
+
+  getSelectedLabel(options: any[], currentValue: string): string {
+    const option = options.find(opt => opt.value === currentValue);
+    return option ? option.label : currentValue;
+  }
+
+  trackByOption(index: number, option: any): string {
+    return option.value || option;
+  }
+
+  // Dropdown options
+  typeOptions = [
+    { value: 'all', label: '📊 Todas', icon: '📊' },
+    { value: 'income', label: '💰 Ingresos', icon: '💰' },
+    { value: 'expense', label: '💸 Gastos', icon: '💸' }
+  ];
+
+  dateRangeOptions = [
+    { value: 'week', label: '📅 Esta semana', icon: '📅' },
+    { value: 'month', label: '📆 Este mes', icon: '📆' },
+    { value: 'year', label: '📋 Este año', icon: '📋' }
+  ];
+
+  // Close dropdowns when clicking outside
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.custom-dropdown')) {
+      this.closeAllDropdowns();
+    }
   }
 }

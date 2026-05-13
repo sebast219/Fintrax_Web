@@ -61,11 +61,33 @@ export class ReportsService {
   private readonly API_URL = `${environment.apiUrl}/reports`;
 
   async getMonthlyReport(year: number, month: number): Promise<MonthlyReportData> {
-    return firstValueFrom(
-      this.http.get<MonthlyReportData>(`${this.API_URL}/monthly`, {
-        params: { year: year.toString(), month: month.toString() }
-      })
-    );
+    console.log(`📅 Fetching monthly report for ${year}-${month}`);
+    
+    try {
+      const result = await firstValueFrom(
+        this.http.get<MonthlyReportData>(`${this.API_URL}/monthly`, {
+          params: { year: year.toString(), month: month.toString() }
+        })
+      );
+      console.log(`✅ Monthly report received for ${year}-${month}`);
+      return result;
+    } catch (error: any) {
+      console.error(`❌ Error fetching monthly report for ${year}-${month}:`, error);
+      
+      // If it's a timeout or network error, provide a default empty response
+      if (error.name === 'TimeoutError' || error.name === 'HttpErrorResponse') {
+        console.log(`⚠️ Using empty data for ${year}-${month} due to error`);
+        return {
+          year,
+          month,
+          incomeByCategory: [],
+          expensesByCategory: [],
+          dailyBalance: []
+        };
+      }
+      
+      throw error;
+    }
   }
 
   async getReportsDataForRange(userId: string, range: string): Promise<MonthlyReportData[]> {

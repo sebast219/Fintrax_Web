@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed, OnInit, OnDestroy, AfterViewInit, Renderer2, ElementRef } from '@angular/core';
+import { Component, inject, signal, computed, OnInit, OnDestroy, AfterViewInit, Renderer2, ElementRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -94,6 +94,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   // Mes seleccionado
   selectedMonth!: string;
   months!: string[];
+
+  // Dropdown properties
+  showMonthDropdown = signal<boolean>(false);
+  showTransactionCategoryDropdown = signal<boolean>(false);
+  showGoalCategoryDropdown = signal<boolean>(false);
+  showBudgetCategoryDropdown = signal<boolean>(false);
+  showAllocationAccountDropdown = signal<boolean>(false);
+  showDeallocationAccountDropdown = signal<boolean>(false);
 
   private monthNames = [
     'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -1011,5 +1019,98 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   navigateToReports() {
     this.router.navigate(['/reports']);
+  }
+
+  // Dropdown methods
+  toggleDropdown(dropdownName: string): void {
+    // Close all dropdowns first
+    this.showMonthDropdown.set(false);
+    this.showTransactionCategoryDropdown.set(false);
+    this.showGoalCategoryDropdown.set(false);
+    this.showBudgetCategoryDropdown.set(false);
+    this.showAllocationAccountDropdown.set(false);
+    this.showDeallocationAccountDropdown.set(false);
+    
+    // Open the selected dropdown
+    switch (dropdownName) {
+      case 'month':
+        this.showMonthDropdown.set(!this.showMonthDropdown());
+        break;
+      case 'transactionCategory':
+        this.showTransactionCategoryDropdown.set(!this.showTransactionCategoryDropdown());
+        break;
+      case 'goalCategory':
+        this.showGoalCategoryDropdown.set(!this.showGoalCategoryDropdown());
+        break;
+      case 'budgetCategory':
+        this.showBudgetCategoryDropdown.set(!this.showBudgetCategoryDropdown());
+        break;
+      case 'allocationAccount':
+        this.showAllocationAccountDropdown.set(!this.showAllocationAccountDropdown());
+        break;
+      case 'deallocationAccount':
+        this.showDeallocationAccountDropdown.set(!this.showDeallocationAccountDropdown());
+        break;
+    }
+  }
+
+  closeAllDropdowns(): void {
+    this.showMonthDropdown.set(false);
+    this.showTransactionCategoryDropdown.set(false);
+    this.showGoalCategoryDropdown.set(false);
+    this.showBudgetCategoryDropdown.set(false);
+    this.showAllocationAccountDropdown.set(false);
+    this.showDeallocationAccountDropdown.set(false);
+  }
+
+  selectDropdownOption(dropdownName: string, value: string): void {
+    switch (dropdownName) {
+      case 'month':
+        this.selectedMonth = value;
+        this.onMonthChange(value);
+        break;
+      case 'transactionCategory':
+        this.transactionForm.category = value;
+        break;
+      case 'goalCategory':
+        // Handle goal category selection
+        break;
+      case 'budgetCategory':
+        // Handle budget category selection
+        break;
+      case 'allocationAccount':
+        this.allocationForm.accountId = value;
+        break;
+      case 'deallocationAccount':
+        this.deallocationForm.accountId = value;
+        break;
+    }
+    this.closeAllDropdowns();
+  }
+
+  getSelectedLabel(options: any[], currentValue: string): string {
+    const option = options.find(opt => opt.value === currentValue);
+    return option ? option.label : currentValue;
+  }
+
+  trackByOption(index: number, option: any): string {
+    return option.value || option;
+  }
+
+  // Account options for allocation dropdowns
+  accountOptions = [
+    { value: '', label: '🏦 Selecciona una cuenta', icon: '🏦' },
+    { value: 'default-account', label: '💳 Cuenta Principal', icon: '💳' },
+    { value: 'savings-account', label: '💰 Cuenta de Ahorros', icon: '💰' },
+    { value: 'investment-account', label: '📈 Cuenta de Inversión', icon: '📈' }
+  ];
+
+  // Close dropdowns when clicking outside
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.custom-dropdown')) {
+      this.closeAllDropdowns();
+    }
   }
 }

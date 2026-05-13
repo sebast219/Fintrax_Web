@@ -1,0 +1,808 @@
+<div class="min-h-screen bg-[#0A0A0F] text-white">
+  <!-- Header -->
+  <div class="bg-white/5 backdrop-blur-xl border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-4">
+          <button (click)="goBack()" class="p-2 text-[#94A3B8] hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+          </button>
+          <h1 class="text-2xl font-bold text-white">Ajustes</h1>
+        </div>
+        
+        <!-- Save Message -->
+        @if (saveMessage()) {
+          <div class="px-4 py-2 rounded-lg bg-[#00D4AA]/20 text-[#00D4AA] text-sm font-medium animate-fade-in-up">
+            {{ saveMessage() }}
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <!-- Sidebar -->
+      <div class="lg:col-span-1">
+        <div class="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-6">
+          <nav class="space-y-2">
+            <button 
+              (click)="setActiveTab('profile')"
+              [class]="activeTab() === 'profile' ? 'bg-[#00D4AA]/20 text-[#00D4AA]' : 'text-[#94A3B8] hover:text-white hover:bg-white/10'"
+              class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-200">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>
+              Perfil
+            </button>
+            
+            <button 
+              (click)="setActiveTab('security')"
+              [class]="activeTab() === 'security' ? 'bg-[#00D4AA]/20 text-[#00D4AA]' : 'text-[#94A3B8] hover:text-white hover:bg-white/10'"
+              class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-200">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+              </svg>
+              Seguridad
+            </button>
+            
+            <button 
+              (click)="setActiveTab('notifications')"
+              [class]="activeTab() === 'notifications' ? 'bg-[#00D4AA]/20 text-[#00D4AA]' : 'text-[#94A3B8] hover:text-white hover:bg-white/10'"
+              class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-200">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+              </svg>
+              Notificaciones
+            </button>
+            
+            <button 
+              (click)="setActiveTab('preferences')"
+              [class]="activeTab() === 'preferences' ? 'bg-[#00D4AA]/20 text-[#00D4AA]' : 'text-[#94A3B8] hover:text-white hover:bg-white/10'"
+              class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-200">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+              </svg>
+              Preferencias
+            </button>
+            
+            <button 
+              (click)="setActiveTab('subscription')"
+              [class]="activeTab() === 'subscription' ? 'bg-[#00D4AA]/20 text-[#00D4AA]' : 'text-[#94A3B8] hover:text-white hover:bg-white/10'"
+              class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-200">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+              </svg>
+              Suscripción
+            </button>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="lg:col-span-3">
+        <!-- Profile Tab -->
+        @if (activeTab() === 'profile') {
+          <div class="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-8">
+            <h2 class="text-2xl font-bold text-white mb-6">Información del Perfil</h2>
+            
+            <form [formGroup]="profileForm" class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-sm font-medium text-[#94A3B8] mb-2">Nombre</label>
+                  <input 
+                    type="text" 
+                    formControlName="firstName"
+                    class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-[#64748B] focus:outline-none focus:border-[#00D4AA] focus:bg-white/10 transition-all duration-200"
+                    placeholder="Tu nombre">
+                  @if (profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched) {
+                    <p class="mt-1 text-sm text-red-400">El nombre es requerido</p>
+                  }
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-[#94A3B8] mb-2">Apellido</label>
+                  <input 
+                    type="text" 
+                    formControlName="lastName"
+                    class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-[#64748B] focus:outline-none focus:border-[#00D4AA] focus:bg-white/10 transition-all duration-200"
+                    placeholder="Tu apellido">
+                  @if (profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched) {
+                    <p class="mt-1 text-sm text-red-400">El apellido es requerido</p>
+                  }
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-[#94A3B8] mb-2">Email</label>
+                <input 
+                  type="email" 
+                  formControlName="email"
+                  class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-[#64748B] focus:outline-none focus:border-[#00D4AA] focus:bg-white/10 transition-all duration-200"
+                  placeholder="tu@email.com">
+                @if (profileForm.get('email')?.invalid && profileForm.get('email')?.touched) {
+                  <p class="mt-1 text-sm text-red-400">Email inválido</p>
+                }
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-sm font-medium text-[#94A3B8] mb-2">Teléfono</label>
+                  <input 
+                    type="tel" 
+                    formControlName="phone"
+                    class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-[#64748B] focus:outline-none focus:border-[#00D4AA] focus:bg-white/10 transition-all duration-200"
+                    placeholder="+54 9 11 1234-5678">
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-[#94A3B8] mb-2">Fecha de Nacimiento</label>
+                  <input 
+                    type="date" 
+                    formControlName="birthDate"
+                    class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-[#64748B] focus:outline-none focus:border-[#00D4AA] focus:bg-white/10 transition-all duration-200">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-[#94A3B8] mb-2">País</label>
+                <div class="relative custom-dropdown">
+                  <div class="relative group">
+                    <div class="absolute inset-0 bg-gradient-to-r from-[#00D4AA]/10 to-[#00D4AA]/5 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 blur-sm"></div>
+                    <button (click)="toggleDropdown('country')" 
+                            class="relative w-full bg-white/5 backdrop-blur-xl border border-white/10 text-white py-3 pl-5 pr-12 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20 focus:border-[#00D4AA] cursor-pointer shadow-lg hover:bg-white/10 hover:border-[#00D4AA]/30 hover:shadow-[#00D4AA]/20 transition-all duration-300 hover:scale-[1.02] group-hover:border-[#00D4AA]/30 text-left">
+                      {{ getSelectedLabel(countryOptions, profileForm.value.country) }}
+                    </button>
+                    <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none flex items-center gap-2">
+                      <div class="w-px h-4 bg-white/20"></div>
+                      <svg class="w-4 h-4 text-[#00D4AA] transition-transform duration-300" 
+                           [class]="showCountryDropdown() ? 'rotate-180' : ''" 
+                           fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                      </svg>
+                    </div>
+                  </div>
+
+                  @if (showCountryDropdown()) {
+                    <div class="absolute top-full mt-2 w-full bg-[#0A0A0F]/95 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl z-50 animate-fade-in-up overflow-hidden">
+                      <div class="py-2 max-h-60 overflow-y-auto">
+                        <div *ngFor="let option of countryOptions; trackBy: trackByOption" 
+                             (click)="selectDropdownOption('country', option.value)"
+                             class="flex items-center gap-3 px-4 py-3 hover:bg-white/10 cursor-pointer transition-all duration-200 group">
+                          <span class="text-xl group-hover:scale-110 transition-transform duration-200">{{ option.icon }}</span>
+                          <span class="text-white font-medium group-hover:text-[#00D4AA] transition-colors duration-200">{{ option.label }}</span>
+                          @if (profileForm.value.country === option.value) {
+                            <svg class="w-4 h-4 text-[#00D4AA] ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <div class="flex justify-end">
+                <button 
+                  type="submit"
+                  (click)="saveProfile()"
+                  [disabled]="isLoading()"
+                  class="px-6 py-3 bg-[#00D4AA] text-[#0A0A0F] rounded-xl font-semibold hover:bg-[#00D4AA]/90 transition-all duration-200 hover:scale-[1.02] shadow-lg shadow-[#00D4AA]/25 disabled:opacity-50 disabled:cursor-not-allowed">
+                  @if (isLoading()) {
+                    <span class="flex items-center gap-2">
+                      <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Guardando...
+                    </span>
+                  } @else {
+                    Guardar Cambios
+                  }
+                </button>
+              </div>
+            </form>
+          </div>
+        }
+
+        <!-- Security Tab -->
+        @if (activeTab() === 'security') {
+          <div class="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-8">
+            <h2 class="text-2xl font-bold text-white mb-6">Seguridad</h2>
+            
+            <form [formGroup]="securityForm" class="space-y-6">
+              <div>
+                <label class="block text-sm font-medium text-[#94A3B8] mb-2">Contraseña Actual</label>
+                <input 
+                  type="password" 
+                  formControlName="currentPassword"
+                  class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-[#64748B] focus:outline-none focus:border-[#00D4AA] focus:bg-white/10 transition-all duration-200"
+                  placeholder="Ingresa tu contraseña actual">
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-[#94A3B8] mb-2">Nueva Contraseña</label>
+                <input 
+                  type="password" 
+                  formControlName="newPassword"
+                  class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-[#64748B] focus:outline-none focus:border-[#00D4AA] focus:bg-white/10 transition-all duration-200"
+                  placeholder="Mínimo 8 caracteres">
+                @if (securityForm.get('newPassword')?.invalid && securityForm.get('newPassword')?.touched) {
+                  <p class="mt-1 text-sm text-red-400">La contraseña debe tener al menos 8 caracteres</p>
+                }
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-[#94A3B8] mb-2">Confirmar Nueva Contraseña</label>
+                <input 
+                  type="password" 
+                  formControlName="confirmPassword"
+                  class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-[#64748B] focus:outline-none focus:border-[#00D4AA] focus:bg-white/10 transition-all duration-200"
+                  placeholder="Repite tu nueva contraseña">
+              </div>
+
+              <div class="flex justify-end">
+                <button 
+                  type="submit"
+                  (click)="changePassword()"
+                  [disabled]="isLoading()"
+                  class="px-6 py-3 bg-[#00D4AA] text-[#0A0A0F] rounded-xl font-semibold hover:bg-[#00D4AA]/90 transition-all duration-200 hover:scale-[1.02] shadow-lg shadow-[#00D4AA]/25 disabled:opacity-50 disabled:cursor-not-allowed">
+                  @if (isLoading()) {
+                    <span class="flex items-center gap-2">
+                      <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Actualizando...
+                    </span>
+                  } @else {
+                    Cambiar Contraseña
+                  }
+                </button>
+              </div>
+            </form>
+          </div>
+        }
+
+        <!-- Notifications Tab -->
+        @if (activeTab() === 'notifications') {
+          <div class="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-8">
+            <h2 class="text-2xl font-bold text-white mb-6">Notificaciones</h2>
+            
+            <form [formGroup]="notificationsForm" class="space-y-6">
+              <div class="space-y-4">
+                <label class="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all duration-200 cursor-pointer">
+                  <div>
+                    <span class="text-white font-medium">Notificaciones por Email</span>
+                    <p class="text-sm text-[#94A3B8] mt-1">Recibe actualizaciones importantes en tu email</p>
+                  </div>
+                  <input type="checkbox" formControlName="emailNotifications" class="w-5 h-5 text-[#00D4AA] bg-white/10 border-white/20 rounded focus:ring-[#00D4AA]">
+                </label>
+
+                <label class="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all duration-200 cursor-pointer">
+                  <div>
+                    <span class="text-white font-medium">Notificaciones Push</span>
+                    <p class="text-sm text-[#94A3B8] mt-1">Alertas instantáneas en tu dispositivo</p>
+                  </div>
+                  <input type="checkbox" formControlName="pushNotifications" class="w-5 h-5 text-[#00D4AA] bg-white/10 border-white/20 rounded focus:ring-[#00D4AA]">
+                </label>
+
+                <label class="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all duration-200 cursor-pointer">
+                  <div>
+                    <span class="text-white font-medium">Notificaciones SMS</span>
+                    <p class="text-sm text-[#94A3B8] mt-1">Alertas críticas por mensaje de texto</p>
+                  </div>
+                  <input type="checkbox" formControlName="smsNotifications" class="w-5 h-5 text-[#00D4AA] bg-white/10 border-white/20 rounded focus:ring-[#00D4AA]">
+                </label>
+
+                <label class="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all duration-200 cursor-pointer">
+                  <div>
+                    <span class="text-white font-medium">Alertas de Presupuesto</span>
+                    <p class="text-sm text-[#94A3B8] mt-1">Notificaciones cuando te acercas a tus límites</p>
+                  </div>
+                  <input type="checkbox" formControlName="budgetAlerts" class="w-5 h-5 text-[#00D4AA] bg-white/10 border-white/20 rounded focus:ring-[#00D4AA]">
+                </label>
+
+                <label class="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all duration-200 cursor-pointer">
+                  <div>
+                    <span class="text-white font-medium">Reportes Semanales</span>
+                    <p class="text-sm text-[#94A3B8] mt-1">Resumen financiero cada semana</p>
+                  </div>
+                  <input type="checkbox" formControlName="weeklyReports" class="w-5 h-5 text-[#00D4AA] bg-white/10 border-white/20 rounded focus:ring-[#00D4AA]">
+                </label>
+
+                <label class="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all duration-200 cursor-pointer">
+                  <div>
+                    <span class="text-white font-medium">Emails de Marketing</span>
+                    <p class="text-sm text-[#94A3B8] mt-1">Promociones y novedades de Fintrax</p>
+                  </div>
+                  <input type="checkbox" formControlName="marketingEmails" class="w-5 h-5 text-[#00D4AA] bg-white/10 border-white/20 rounded focus:ring-[#00D4AA]">
+                </label>
+              </div>
+
+              <div class="flex justify-end">
+                <button 
+                  type="submit"
+                  (click)="saveNotifications()"
+                  [disabled]="isLoading()"
+                  class="px-6 py-3 bg-[#00D4AA] text-[#0A0A0F] rounded-xl font-semibold hover:bg-[#00D4AA]/90 transition-all duration-200 hover:scale-[1.02] shadow-lg shadow-[#00D4AA]/25 disabled:opacity-50 disabled:cursor-not-allowed">
+                  @if (isLoading()) {
+                    <span class="flex items-center gap-2">
+                      <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Guardando...
+                    </span>
+                  } @else {
+                    Guardar Preferencias
+                  }
+                </button>
+              </div>
+            </form>
+          </div>
+        }
+
+        <!-- Preferences Tab -->
+        @if (activeTab() === 'preferences') {
+          <div class="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-8">
+            <h2 class="text-2xl font-bold text-white mb-6">Preferencias</h2>
+            
+            <form [formGroup]="preferencesForm" class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-sm font-medium text-[#94A3B8] mb-2">Idioma</label>
+                  <div class="relative custom-dropdown">
+                    <div class="relative group">
+                      <div class="absolute inset-0 bg-gradient-to-r from-[#00D4AA]/10 to-[#00D4AA]/5 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 blur-sm"></div>
+                      <button (click)="toggleDropdown('language')" 
+                              class="relative w-full bg-white/5 backdrop-blur-xl border border-white/10 text-white py-3 pl-5 pr-12 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20 focus:border-[#00D4AA] cursor-pointer shadow-lg hover:bg-white/10 hover:border-[#00D4AA]/30 hover:shadow-[#00D4AA]/20 transition-all duration-300 hover:scale-[1.02] group-hover:border-[#00D4AA]/30 text-left">
+                        {{ getSelectedLabel(languageOptions, preferencesForm.value.language) }}
+                      </button>
+                      <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none flex items-center gap-2">
+                        <div class="w-px h-4 bg-white/20"></div>
+                        <svg class="w-4 h-4 text-[#00D4AA] transition-transform duration-300" 
+                             [class]="showLanguageDropdown() ? 'rotate-180' : ''" 
+                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                      </div>
+                    </div>
+
+                    @if (showLanguageDropdown()) {
+                      <div class="absolute top-full mt-2 w-full bg-[#0A0A0F]/95 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl z-50 animate-fade-in-up overflow-hidden">
+                        <div class="py-2">
+                          <div *ngFor="let option of languageOptions; trackBy: trackByOption" 
+                               (click)="selectDropdownOption('language', option.value)"
+                               class="flex items-center gap-3 px-4 py-3 hover:bg-white/10 cursor-pointer transition-all duration-200 group">
+                            <span class="text-xl group-hover:scale-110 transition-transform duration-200">{{ option.icon }}</span>
+                            <span class="text-white font-medium group-hover:text-[#00D4AA] transition-colors duration-200">{{ option.label }}</span>
+                            @if (preferencesForm.value.language === option.value) {
+                              <svg class="w-4 h-4 text-[#00D4AA] ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                              </svg>
+                            }
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-[#94A3B8] mb-2">Moneda</label>
+                  <div class="relative custom-dropdown">
+                    <div class="relative group">
+                      <div class="absolute inset-0 bg-gradient-to-r from-[#00D4AA]/10 to-[#00D4AA]/5 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 blur-sm"></div>
+                      <button (click)="toggleDropdown('currency')" 
+                              class="relative w-full bg-white/5 backdrop-blur-xl border border-white/10 text-white py-3 pl-5 pr-12 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20 focus:border-[#00D4AA] cursor-pointer shadow-lg hover:bg-white/10 hover:border-[#00D4AA]/30 hover:shadow-[#00D4AA]/20 transition-all duration-300 hover:scale-[1.02] group-hover:border-[#00D4AA]/30 text-left">
+                        {{ getSelectedLabel(currencyOptions, preferencesForm.value.currency) }}
+                      </button>
+                      <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none flex items-center gap-2">
+                        <div class="w-px h-4 bg-white/20"></div>
+                        <svg class="w-4 h-4 text-[#00D4AA] transition-transform duration-300" 
+                             [class]="showCurrencyDropdown() ? 'rotate-180' : ''" 
+                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                      </div>
+                    </div>
+
+                    @if (showCurrencyDropdown()) {
+                      <div class="absolute top-full mt-2 w-full bg-[#0A0A0F]/95 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl z-50 animate-fade-in-up overflow-hidden">
+                        <div class="py-2 max-h-60 overflow-y-auto">
+                          <div *ngFor="let option of currencyOptions; trackBy: trackByOption" 
+                               (click)="selectDropdownOption('currency', option.value)"
+                               class="flex items-center gap-3 px-4 py-3 hover:bg-white/10 cursor-pointer transition-all duration-200 group">
+                            <span class="text-xl group-hover:scale-110 transition-transform duration-200">{{ option.icon }}</span>
+                            <span class="text-white font-medium group-hover:text-[#00D4AA] transition-colors duration-200">{{ option.label }}</span>
+                            @if (preferencesForm.value.currency === option.value) {
+                              <svg class="w-4 h-4 text-[#00D4AA] ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                              </svg>
+                            }
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-[#94A3B8] mb-2">Zona Horaria</label>
+                <div class="relative custom-dropdown">
+                  <div class="relative group">
+                    <div class="absolute inset-0 bg-gradient-to-r from-[#00D4AA]/10 to-[#00D4AA]/5 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 blur-sm"></div>
+                    <button (click)="toggleDropdown('timezone')" 
+                            class="relative w-full bg-white/5 backdrop-blur-xl border border-white/10 text-white py-3 pl-5 pr-12 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20 focus:border-[#00D4AA] cursor-pointer shadow-lg hover:bg-white/10 hover:border-[#00D4AA]/30 hover:shadow-[#00D4AA]/20 transition-all duration-300 hover:scale-[1.02] group-hover:border-[#00D4AA]/30 text-left">
+                      {{ getSelectedLabel(timezoneOptions, preferencesForm.value.timezone) }}
+                    </button>
+                    <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none flex items-center gap-2">
+                      <div class="w-px h-4 bg-white/20"></div>
+                      <svg class="w-4 h-4 text-[#00D4AA] transition-transform duration-300" 
+                           [class]="showTimezoneDropdown() ? 'rotate-180' : ''" 
+                           fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                      </svg>
+                    </div>
+                  </div>
+
+                  @if (showTimezoneDropdown()) {
+                    <div class="absolute top-full mt-2 w-full bg-[#0A0A0F]/95 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl z-50 animate-fade-in-up overflow-hidden">
+                      <div class="py-2 max-h-60 overflow-y-auto">
+                        <div *ngFor="let option of timezoneOptions; trackBy: trackByOption" 
+                             (click)="selectDropdownOption('timezone', option.value)"
+                             class="flex items-center gap-3 px-4 py-3 hover:bg-white/10 cursor-pointer transition-all duration-200 group">
+                          <span class="text-xl group-hover:scale-110 transition-transform duration-200">{{ option.icon }}</span>
+                          <span class="text-white font-medium group-hover:text-[#00D4AA] transition-colors duration-200">{{ option.label }}</span>
+                          @if (preferencesForm.value.timezone === option.value) {
+                            <svg class="w-4 h-4 text-[#00D4AA] ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-[#94A3B8] mb-2">Formato de Fecha</label>
+                <div class="relative custom-dropdown">
+                  <div class="relative group">
+                    <div class="absolute inset-0 bg-gradient-to-r from-[#00D4AA]/10 to-[#00D4AA]/5 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 blur-sm"></div>
+                    <button (click)="toggleDropdown('dateFormat')" 
+                            class="relative w-full bg-white/5 backdrop-blur-xl border border-white/10 text-white py-3 pl-5 pr-12 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20 focus:border-[#00D4AA] cursor-pointer shadow-lg hover:bg-white/10 hover:border-[#00D4AA]/30 hover:shadow-[#00D4AA]/20 transition-all duration-300 hover:scale-[1.02] group-hover:border-[#00D4AA]/30 text-left">
+                      {{ getSelectedLabel(dateFormatOptions, preferencesForm.value.dateFormat) }}
+                    </button>
+                    <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none flex items-center gap-2">
+                      <div class="w-px h-4 bg-white/20"></div>
+                      <svg class="w-4 h-4 text-[#00D4AA] transition-transform duration-300" 
+                           [class]="showDateFormatDropdown() ? 'rotate-180' : ''" 
+                           fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                      </svg>
+                    </div>
+                  </div>
+
+                  @if (showDateFormatDropdown()) {
+                    <div class="absolute top-full mt-2 w-full bg-[#0A0A0F]/95 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl z-50 animate-fade-in-up overflow-hidden">
+                      <div class="py-2">
+                        <div *ngFor="let option of dateFormatOptions; trackBy: trackByOption" 
+                             (click)="selectDropdownOption('dateFormat', option.value)"
+                             class="flex items-center gap-3 px-4 py-3 hover:bg-white/10 cursor-pointer transition-all duration-200 group">
+                          <span class="text-xl group-hover:scale-110 transition-transform duration-200">{{ option.icon }}</span>
+                          <span class="text-white font-medium group-hover:text-[#00D4AA] transition-colors duration-200">{{ option.label }}</span>
+                          @if (preferencesForm.value.dateFormat === option.value) {
+                            <svg class="w-4 h-4 text-[#00D4AA] ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-[#94A3B8] mb-2">Tema</label>
+                <div class="relative custom-dropdown">
+                  <div class="relative group">
+                    <div class="absolute inset-0 bg-gradient-to-r from-[#00D4AA]/10 to-[#00D4AA]/5 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 blur-sm"></div>
+                    <button (click)="toggleDropdown('theme')" 
+                            class="relative w-full bg-white/5 backdrop-blur-xl border border-white/10 text-white py-3 pl-5 pr-12 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20 focus:border-[#00D4AA] cursor-pointer shadow-lg hover:bg-white/10 hover:border-[#00D4AA]/30 hover:shadow-[#00D4AA]/20 transition-all duration-300 hover:scale-[1.02] group-hover:border-[#00D4AA]/30 text-left">
+                      {{ getSelectedLabel(themeOptions, preferencesForm.value.theme) }}
+                    </button>
+                    <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none flex items-center gap-2">
+                      <div class="w-px h-4 bg-white/20"></div>
+                      <svg class="w-4 h-4 text-[#00D4AA] transition-transform duration-300" 
+                           [class]="showThemeDropdown() ? 'rotate-180' : ''" 
+                           fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                      </svg>
+                    </div>
+                  </div>
+
+                  @if (showThemeDropdown()) {
+                    <div class="absolute top-full mt-2 w-full bg-[#0A0A0F]/95 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl z-50 animate-fade-in-up overflow-hidden">
+                      <div class="py-2">
+                        <div *ngFor="let option of themeOptions; trackBy: trackByOption" 
+                             (click)="selectDropdownOption('theme', option.value)"
+                             class="flex items-center gap-3 px-4 py-3 hover:bg-white/10 cursor-pointer transition-all duration-200 group">
+                          <span class="text-xl group-hover:scale-110 transition-transform duration-200">{{ option.icon }}</span>
+                          <span class="text-white font-medium group-hover:text-[#00D4AA] transition-colors duration-200">{{ option.label }}</span>
+                          @if (preferencesForm.value.theme === option.value) {
+                            <svg class="w-4 h-4 text-[#00D4AA] ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <div class="flex justify-end">
+                <button 
+                  type="submit"
+                  (click)="savePreferences()"
+                  [disabled]="isLoading()"
+                  class="px-6 py-3 bg-[#00D4AA] text-[#0A0A0F] rounded-xl font-semibold hover:bg-[#00D4AA]/90 transition-all duration-200 hover:scale-[1.02] shadow-lg shadow-[#00D4AA]/25 disabled:opacity-50 disabled:cursor-not-allowed">
+                  @if (isLoading()) {
+                    <span class="flex items-center gap-2">
+                      <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Guardando...
+                    </span>
+                  } @else {
+                    Guardar Preferencias
+                  }
+                </button>
+              </div>
+            </form>
+          </div>
+        }
+
+        <!-- Subscription Tab -->
+        @if (activeTab() === 'subscription') {
+          <div class="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-8">
+            <h2 class="text-2xl font-bold text-white mb-6">Gestión de Suscripción</h2>
+            
+            <!-- Current Plan -->
+            <div class="bg-gradient-to-r from-[#00D4AA]/10 to-[#00D4AA]/5 rounded-2xl p-6 border border-[#00D4AA]/20 mb-6">
+              <div class="flex items-center justify-between mb-4">
+                <div>
+                  <h3 class="text-xl font-bold text-white mb-2">Plan Premium</h3>
+                  <div class="flex items-center gap-4">
+                    <span class="px-3 py-1 bg-[#00D4AA]/20 text-[#00D4AA] rounded-full text-sm font-medium">
+                      @if (isSubscriptionActive()) {
+                        Activo
+                      } @else {
+                        Cancelado
+                      }
+                    </span>
+                    <span class="text-[#94A3B8] text-sm">
+                      {{ subscriptionForm.value.amount }}/mes
+                    </span>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <p class="text-[#94A3B8] text-sm mb-1">Próximo cobro</p>
+                  <p class="text-white font-medium">{{ subscriptionForm.value.nextBilling }}</p>
+                </div>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="text-center p-4 bg-white/5 rounded-xl">
+                  <svg class="w-8 h-8 text-[#00D4AA] mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  <p class="text-white font-medium">Transacciones Ilimitadas</p>
+                </div>
+                <div class="text-center p-4 bg-white/5 rounded-xl">
+                  <svg class="w-8 h-8 text-[#00D4AA] mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                  </svg>
+                  <p class="text-white font-medium">IA Predictiva</p>
+                </div>
+                <div class="text-center p-4 bg-white/5 rounded-xl">
+                  <svg class="w-8 h-8 text-[#00D4AA] mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.25a9.75 9.75 0 109.75 9.75 9.75 9.75 0 00-9.75-9.75z"/>
+                  </svg>
+                  <p class="text-white font-medium">Soporte Prioritario</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Billing History -->
+            <div class="mb-6">
+              <h3 class="text-lg font-semibold text-white mb-4">Historial de Facturación</h3>
+              <div class="space-y-3">
+                <div class="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
+                  <div>
+                    <p class="text-white font-medium">Plan Premium - Noviembre 2024</p>
+                    <p class="text-[#94A3B8] text-sm">Facturado el 1 de noviembre de 2024</p>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-white font-medium">$14.99</p>
+                    <span class="px-2 py-1 bg-green-500/20 text-green-400 rounded text-xs">Pagado</span>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
+                  <div>
+                    <p class="text-white font-medium">Plan Premium - Octubre 2024</p>
+                    <p class="text-[#94A3B8] text-sm">Facturado el 1 de octubre de 2024</p>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-white font-medium">$14.99</p>
+                    <span class="px-2 py-1 bg-green-500/20 text-green-400 rounded text-xs">Pagado</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cancellation Section -->
+            @if (isSubscriptionActive()) {
+              <div class="border-t border-white/10 pt-6">
+                <h3 class="text-lg font-semibold text-white mb-4">Cancelar Suscripción</h3>
+                <p class="text-[#94A3B8] mb-4">
+                  Si cancelas tu suscripción, mantendrás acceso a todas las funciones premium hasta el final del período facturado actual.
+                </p>
+                <button 
+                  (click)="openCancelModal()"
+                  class="px-6 py-3 bg-red-500/20 text-red-400 border border-red-500/30 rounded-xl font-semibold hover:bg-red-500/30 transition-all duration-200">
+                  Cancelar Suscripción
+                </button>
+              </div>
+            } @else {
+              <div class="border-t border-white/10 pt-6">
+                <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4">
+                  <div class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                    <div>
+                      <p class="text-yellow-400 font-medium">Suscripción Cancelada</p>
+                      <p class="text-[#94A3B8] text-sm">Tu acceso a las funciones premium finaliza el {{ subscriptionForm.value.nextBilling }}</p>
+                    </div>
+                  </div>
+                </div>
+                <button class="mt-4 px-6 py-3 bg-[#00D4AA] text-[#0A0A0F] rounded-xl font-semibold hover:bg-[#00D4AA]/90 transition-all duration-200 hover:scale-[1.02] shadow-lg shadow-[#00D4AA]/25">
+                  Reactivar Suscripción
+                </button>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cancellation Modal -->
+@if (showCancelModal()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" (click)="closeCancelModal()"></div>
+    
+    <!-- Modal -->
+    <div class="relative bg-[#0A0A0F] rounded-2xl border border-white/20 max-w-md w-full p-6 animate-fade-in-up">
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="text-xl font-bold text-white">Cancelar Suscripción</h3>
+        <button 
+          (click)="closeCancelModal()"
+          class="p-2 text-[#94A3B8] hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Warning Message -->
+      <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-4 mb-6">
+        <div class="flex items-center gap-3">
+          <svg class="w-5 h-5 text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+          </svg>
+          <div>
+            <p class="text-red-400 font-medium">¿Estás seguro?</p>
+            <p class="text-[#94A3B8] text-sm mt-1">
+              Perderás acceso a todas las funciones premium el {{ subscriptionForm.value.nextBilling }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cancellation Reasons -->
+      <div class="mb-6">
+        <p class="text-white font-medium mb-3">¿Por qué cancelas tu suscripción?</p>
+        <div class="space-y-2">
+          <label class="flex items-center p-3 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 cursor-pointer transition-all duration-200">
+            <input 
+              type="radio" 
+              name="cancelReason" 
+              value="too_expensive"
+              (change)="setCancelReason('too_expensive')"
+              class="w-4 h-4 text-[#00D4AA] bg-white/10 border-white/20 rounded focus:ring-[#00D4AA]">
+            <span class="ml-3 text-white">Es muy costoso</span>
+          </label>
+          
+          <label class="flex items-center p-3 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 cursor-pointer transition-all duration-200">
+            <input 
+              type="radio" 
+              name="cancelReason" 
+              value="not_using"
+              (change)="setCancelReason('not_using')"
+              class="w-4 h-4 text-[#00D4AA] bg-white/10 border-white/20 rounded focus:ring-[#00D4AA]">
+            <span class="ml-3 text-white">No uso las funciones</span>
+          </label>
+          
+          <label class="flex items-center p-3 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 cursor-pointer transition-all duration-200">
+            <input 
+              type="radio" 
+              name="cancelReason" 
+              value="found_alternative"
+              (change)="setCancelReason('found_alternative')"
+              class="w-4 h-4 text-[#00D4AA] bg-white/10 border-white/20 rounded focus:ring-[#00D4AA]">
+            <span class="ml-3 text-white">Encontré una alternativa</span>
+          </label>
+          
+          <label class="flex items-center p-3 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 cursor-pointer transition-all duration-200">
+            <input 
+              type="radio" 
+              name="cancelReason" 
+              value="technical_issues"
+              (change)="setCancelReason('technical_issues')"
+              class="w-4 h-4 text-[#00D4AA] bg-white/10 border-white/20 rounded focus:ring-[#00D4AA]">
+            <span class="ml-3 text-white">Problemas técnicos</span>
+          </label>
+          
+          <label class="flex items-center p-3 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 cursor-pointer transition-all duration-200">
+            <input 
+              type="radio" 
+              name="cancelReason" 
+              value="other"
+              (change)="setCancelReason('other')"
+              class="w-4 h-4 text-[#00D4AA] bg-white/10 border-white/20 rounded focus:ring-[#00D4AA]">
+            <span class="ml-3 text-white">Otro motivo</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex gap-3">
+        <button 
+          (click)="closeCancelModal()"
+          class="flex-1 px-4 py-3 border border-white/20 bg-white/5 text-white rounded-xl font-medium hover:bg-white/10 transition-all duration-200">
+          Mantener Suscripción
+        </button>
+        <button 
+          (click)="cancelSubscription()"
+          [disabled]="isCancelling()"
+          class="flex-1 px-4 py-3 bg-red-500 text-white rounded-xl font-medium hover:bg-red-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+          @if (isCancelling()) {
+            <span class="flex items-center justify-center gap-2">
+              <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Cancelando...
+            </span>
+          } @else {
+            Confirmar Cancelación
+          }
+        </button>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,195 @@
+.settings-page {
+  min-height: 100vh;
+  background: #0A0A0F;
+  color: white;
+}
+
+.settings-header {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.settings-sidebar {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.settings-nav {
+  .nav-button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    text-align: left;
+    transition: all 0.2s ease;
+    color: #94A3B8;
+    
+    &:hover {
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    &.active {
+      background: rgba(0, 212, 170, 0.2);
+      color: #00D4AA;
+    }
+  }
+}
+
+.settings-content {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  
+  label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #94A3B8;
+    margin-bottom: 0.5rem;
+  }
+  
+  input, select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    color: white;
+    transition: all 0.2s ease;
+    
+    &:focus {
+      outline: none;
+      border-color: #00D4AA;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    &::placeholder {
+      color: #64748B;
+    }
+  }
+  
+  .error-message {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #ef4444;
+  }
+}
+
+.notification-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .notification-info {
+    flex: 1;
+    
+    .notification-title {
+      color: white;
+      font-weight: 500;
+    }
+    
+    .notification-description {
+      margin-top: 0.25rem;
+      font-size: 0.875rem;
+      color: #94A3B8;
+    }
+  }
+  
+  input[type="checkbox"] {
+    width: 1.25rem;
+    height: 1.25rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.25rem;
+    
+    &:checked {
+      background-color: #00D4AA;
+      border-color: #00D4AA;
+    }
+    
+    &:focus {
+      outline: none;
+      ring: 2px;
+      ring-color: #00D4AA;
+    }
+  }
+}
+
+.save-button {
+  padding: 0.75rem 1.5rem;
+  background: #00D4AA;
+  color: #0A0A0F;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  box-shadow: 0 10px 25px rgba(0, 212, 170, 0.25);
+  
+  &:hover:not(:disabled) {
+    background: rgba(0, 212, 170, 0.9);
+    transform: scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 212, 170, 0.3);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.success-message {
+  padding: 0.5rem 1rem;
+  background: rgba(0, 212, 170, 0.2);
+  color: #00D4AA;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

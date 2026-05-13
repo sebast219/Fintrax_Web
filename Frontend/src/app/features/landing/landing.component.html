@@ -37,6 +37,11 @@
             Características
           </a>
           <a 
+            (click)="smoothScrollToSection('comparison')"
+            class="text-gray-300 hover:text-[#00D4AA] transition-all duration-300 font-medium hover:scale-105 cursor-pointer">
+            Comparación
+          </a>
+          <a 
             (click)="smoothScrollToSection('pricing')"
             class="text-gray-300 hover:text-[#00D4AA] transition-all duration-300 font-medium hover:scale-105 cursor-pointer">
             Planes
@@ -90,6 +95,9 @@
 
   <!-- Features Section -->
   <app-features></app-features>
+
+  <!-- Comparison Section -->
+  <app-comparison></app-comparison>
 
   <!-- Pricing Section -->
   <app-pricing></app-pricing>

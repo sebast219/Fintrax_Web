@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 // Importar sub-componentes
 import { HeroComponent } from './sections/hero/hero.component';
 import { FeaturesComponent } from './sections/features/features.component';
+import { ComparisonComponent } from './sections/comparison/comparison.component';
 import { PricingComponent } from './sections/pricing/pricing.component';
 import { TestimonialsComponent } from './sections/testimonials/testimonials.component';
 import { FaqComponent } from './sections/faq/faq.component';
@@ -14,6 +15,7 @@ import { CtaComponent } from './sections/cta/cta.component';
   imports: [
     HeroComponent,
     FeaturesComponent,
+    ComparisonComponent,
     PricingComponent,
     TestimonialsComponent,
     FaqComponent,

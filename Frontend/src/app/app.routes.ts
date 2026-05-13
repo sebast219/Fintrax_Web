@@ -58,10 +58,10 @@ export const routes: Routes = [
   // ⚙️ SETTINGS (Protegidas)
   {
     path: 'settings',
-    loadComponent: () => import('./features/reports/reports/reports.component')
-      .then(m => m.ReportsComponent),
+    loadComponent: () => import('./features/settings/settings.component')
+      .then(m => m.SettingsComponent),
     canActivate: [authGuard],
-    data: { title: 'Configuración - Próximamente' }
+    data: { title: 'Ajustes' }
   },
   
   // 🔴 ERROR PAGES
