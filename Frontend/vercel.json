@@ -4,7 +4,7 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist/fintrax-web",
   "installCommand": "npm install",
-  "framework": null,
+  "framework": "angular",
   "rewrites": [
     {
       "source": "/(.*)",
