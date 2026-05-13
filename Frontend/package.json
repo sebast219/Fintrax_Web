@@ -4,12 +4,12 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --configuration production",
-    "build:dev": "ng build --configuration development",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "test:e2e": "ng e2e",
-    "lint": "ng lint",
+    "build": "npx ng build --configuration production",
+    "build:dev": "npx ng build --configuration development",
+    "watch": "npx ng build --watch --configuration development",
+    "test": "npx ng test",
+    "test:e2e": "npx ng e2e",
+    "lint": "npx ng lint",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.html\" \"src/**/*.scss\"",
     "format:check": "prettier --check \"src/**/*.ts\" \"src/**/*.html\" \"src/**/*.scss\""
   },
