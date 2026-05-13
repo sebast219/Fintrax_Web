@@ -1,95 +1,735 @@
 <app-navbar></app-navbar>
 
-<!-- Background -->
-<div class="fixed inset-0 overflow-hidden pointer-events-none">
-  <div class="absolute top-0 left-1/4 w-[800px] h-[800px] bg-blue-100/40 rounded-full blur-3xl opacity-30"></div>
-  <div class="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-purple-100/40 rounded-full blur-3xl opacity-30"></div>
+<!-- Background Ambient -->
+<div class="fixed inset-0 overflow-hidden pointer-events-none"
+     style="background: radial-gradient(ellipse at top, rgba(0,212,170,0.05) 0%, transparent 50%), #0A0A0F;
+            background-image: 
+              radial-gradient(ellipse at top, rgba(0,212,170,0.05) 0%, transparent 50%),
+              linear-gradient(0deg, rgba(255,255,255,0.02) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 20px 20px, 20px 20px;">
+    <div class="absolute top-[-150px] right-[-150px] w-[500px] h-[500px] rounded-full bg-[#00D4AA]/10 blur-[100px]"></div>
+    <div class="absolute bottom-[-200px] left-[-200px] w-[600px] h-[600px] rounded-full bg-[#00D4AA]/8 blur-[120px]"></div>
 </div>
 
-<div class="main-content-wrapper">
-  <main class="relative z-10 pt-24 pb-12 max-w-7xl mx-auto px-6">
+<!-- Main Content Wrapper -->
+<div class="min-h-screen bg-[#0A0A0F] text-[#F8FAFC]">
+    <main class="relative z-10 pt-24 pb-12 max-w-7xl mx-auto px-6 lg:px-8">
+    
+        <!-- Welcome Section -->
+        <section class="mb-12 animate-fade-in-up" style="animation-delay: 0.1s">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
+                <div class="space-y-3">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#00D4AA]/10 border border-[#00D4AA]/20 rounded-full">
+                        <span class="w-2 h-2 bg-[#00D4AA] rounded-full animate-pulse"></span>
+                        <p class="text-xs font-semibold text-[#00D4AA] uppercase tracking-wider">Mis Tarjetas</p>
+                    </div>
+                    <h1 class="text-5xl md:text-6xl font-bold tracking-tight text-white">
+                        Gestión de Tarjetas <span class="text-[#00D4AA]"></span>
+                    </h1>
+                    <p class="text-[#94A3B8] mt-3 text-lg font-medium">Administrá tus tarjetas de crédito y débito</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="relative">
+                        <select #monthSelect (change)="onMonthChange(monthSelect.value)" 
+                                class="appearance-none bg-white/5 border border-white/10 backdrop-blur-xl text-white py-3 pl-5 pr-12 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20 focus:border-[#00D4AA] cursor-pointer shadow-lg hover:bg-white/10 transition-all duration-300 hover:scale-[1.02]">
+                            @for (month of months(); track month) {
+                            <option [value]="month" [selected]="month === selectedMonth()">{{ month }}</option>
+                            }
+                        </select>
+                        <svg class="w-4 h-4 text-[#94A3B8] absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </div>
+                    <button (click)="exportCardsData()" class="p-3 border border-white/10 rounded-xl hover:bg-white/10 transition-all duration-300 text-[#94A3B8] shadow-lg hover:scale-[1.02] hover:border-[#00D4AA] hover:text-[#00D4AA]" title="Exportar datos">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                        </svg>
+                    </button>
+                    <button (click)="openAddCardModal()" 
+                            class="inline-flex items-center gap-3 px-8 py-3.5 bg-[#00D4AA] text-[#0A0A0F] font-bold rounded-xl hover:bg-[#00D4AA]/90 transition-all duration-300 hover:scale-[1.02] shadow-xl shadow-[#00D4AA]/30 hover:shadow-[#00D4AA]/40">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        Agregar Tarjeta
+                    </button>
+                </div>
+            </div>
+        </section>
 
-    <!-- Header -->
-    <section class="mb-10">
-      <p class="text-sm text-slate-500">Tus métodos de pago</p>
-      <h1 class="text-4xl font-bold text-slate-900">
-        Mis Tarjetas 💳
-      </h1>
-    </section>
-
-    <!-- Cards Grid -->
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-      <div *ngFor="let card of cards" class="card-container">
-
-        <div class="card-inner">
-
-          <!-- FRONT -->
-          <div 
-            class="card-face card-front"
-            [ngClass]="{
-              'bg-gradient-to-br from-slate-800 to-slate-900 text-white': card.type === 'dark',
-              'bg-gradient-to-br from-gray-300 to-gray-400 text-white': card.type === 'light'
-            }"
-          >
-            <div class="flex justify-between">
-              <span class="text-sm opacity-70">Fintrack</span>
-              <div class="w-10 h-6 bg-white/20 rounded"></div>
+        <!-- KPI Cards -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <!-- Loading State -->
+            @if (loading()) {
+            @for (i of [1, 2, 3, 4]; track i) {
+            <div class="animate-pulse">
+                <div class="group relative overflow-hidden rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <div class="h-4 bg-white/20 rounded w-24 mb-2"></div>
+                            <div class="h-8 bg-white/20 rounded w-16 mb-2"></div>
+                        </div>
+                        <div class="w-10 h-10 bg-white/10 rounded-xl"></div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="h-3 bg-white/10 rounded w-16"></div>
+                        <div class="h-3 bg-white/10 rounded w-20"></div>
+                    </div>
+                </div>
+            </div>
+            }
+            } @else {
+            <!-- Total Cards -->
+            <div class="group relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 p-8 hover:bg-white/8 transition-all duration-500 animate-fade-in-up hover:scale-[1.03] hover:shadow-[0_20px_60px_rgba(0,212,170,0.15)]" style="animation-delay: 0.15s">
+                <div class="absolute inset-0 bg-gradient-to-br from-[#00D4AA]/5 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div class="relative z-10">
+                    <div class="flex items-start justify-between mb-6">
+                        <div>
+                            <p class="text-sm font-bold text-[#94A3B8] uppercase tracking-wider mb-2">Total de Tarjetas</p>
+                            <p class="text-4xl font-bold text-white font-mono tabular-nums">{{ cards().length }}</p>
+                            <div class="mt-3 space-y-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-2 bg-[#00D4AA] rounded-full animate-pulse"></span>
+                                    <span class="text-xs text-[#94A3B8]">Activas:</span>
+                                    <span class="text-xs font-bold text-[#00D4AA]">{{ cardsStats()?.activeCards || 0 }}</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-2 bg-[#8B5CF6] rounded-full"></span>
+                                    <span class="text-xs text-[#94A3B8]">Inactivas:</span>
+                                    <span class="text-xs font-bold text-[#8B5CF6]">{{ (cards().length || 0) - (cardsStats()?.activeCards || 0) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-[#00D4AA]/10 flex items-center justify-center text-[#00D4AA] shadow-lg border border-[#00D4AA]/20 group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-[#00D4AA]/10 text-[#00D4AA]">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                            +{{ calculateMonthOverMonthGrowth() | number:'1.1' }}%
+                        </span>
+                        <span class="text-xs text-[#94A3B8]">vs mes anterior</span>
+                    </div>
+                </div>
             </div>
 
-            <div class="mt-10">
-              <p class="tracking-widest text-lg">{{ card.number }}</p>
+            <!-- Total Balance -->
+            <div class="group relative overflow-hidden rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-6 hover:bg-white/10 transition-all duration-300 animate-fade-in-up hover:scale-[1.02] hover:shadow-[0_10px_40px_rgba(0,212,170,0.1)]" style="animation-delay: 0.2s">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <p class="text-sm font-medium text-[#94A3B8] mb-1">Balance Total</p>
+                        <p class="text-3xl font-bold text-[#00D4AA] font-mono tabular-nums metric-value">{{ totalBalance() | number:'1.2-2' }}</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-[#00D4AA]/10 flex items-center justify-center text-[#00D4AA] shadow-sm border border-[#00D4AA]/20">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-[#00D4AA]/10 text-[#00D4AA] text-xs font-semibold">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                        </svg>
+                        {{ totalBalance() >= 0 ? '+' : '' }}{{ calculateMonthOverMonthGrowth() | number:'1.1' }}%
+                    </span>
+                    <span class="text-xs text-[#94A3B8]">vs mes anterior</span>
+                </div>
             </div>
 
-            <div class="mt-6 flex justify-between items-end">
-              <div>
-                <p class="text-xs opacity-70">Titular</p>
-                <p class="font-semibold">{{ auth.getCurrentUserName() || card.name }}</p>
-              </div>
-              <p class="text-lg font-bold">
-                {{ card.balance | currency:'USD':'symbol' }}
-              </p>
+            <!-- Total Spent -->
+            <div class="group relative overflow-hidden rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-6 hover:bg-white/10 transition-all duration-300 animate-fade-in-up hover:scale-[1.02] hover:shadow-[0_10px_40px_rgba(239,68,68,0.1)]" style="animation-delay: 0.25s">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <p class="text-sm font-medium text-[#94A3B8] mb-1">Gastos del Mes</p>
+                        <p class="text-3xl font-bold text-red-400 font-mono tabular-nums metric-value">{{ totalGastado() | number:'1.2-2' }}</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-400 shadow-sm border border-red-500/20">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 12H4"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold shadow-sm border bg-red-500/10 text-red-400 border-red-500/20">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/>
+                        </svg>
+                        {{ calculateSpendPercentage() | number:'1.1' }}%
+                    </span>
+                    <span class="text-xs text-[#94A3B8]">vs mes anterior</span>
+                </div>
             </div>
-          </div>
 
-          <!-- BACK -->
-          <div class="card-face card-back bg-slate-100">
-            <div class="w-full h-10 bg-slate-800 mt-4"></div>
-
-            <div class="p-4">
-              <p class="text-xs text-slate-500">CVV</p>
-              <div class="bg-white p-2 rounded text-right font-mono shadow-inner">
-                123
-              </div>
-
-              <p class="text-xs text-slate-400 mt-4">
-                No compartas esta información.
-              </p>
+            <!-- Credit Limit -->
+            <div class="group relative overflow-hidden rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-6 hover:bg-white/10 transition-all duration-300 animate-fade-in-up hover:scale-[1.02] hover:shadow-[0_10px_40px_rgba(59,130,246,0.1)]" style="animation-delay: 0.3s">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <p class="text-sm font-medium text-[#94A3B8] mb-1">Límite de Crédito</p>
+                        <p class="text-3xl font-bold text-blue-400 font-mono tabular-nums metric-value">{{ cardsStats()?.totalCreditLimit || 0 | number:'1.2-2' }}</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 shadow-sm border border-blue-500/20">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold shadow-sm border bg-blue-500/10 text-blue-400 border-blue-500/20">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                        </svg>
+                        {{ calculateCreditUtilization() | number:'1.1' }}% utilizado
+                    </span>
+                    <span class="text-xs text-[#94A3B8]">tasa de uso</span>
+                </div>
             </div>
-          </div>
+            }
+        </section>
 
+        <!-- Main Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            
+            <!-- Chart Section -->
+            <section class="chart-section lg:col-span-2 bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10 animate-fade-in-up hover:bg-white/10 transition-all duration-300 hover:scale-[1.01]" style="animation-delay: 0.35s">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-lg font-bold text-white">Análisis de Tarjetas</h2>
+                        <p class="text-sm text-[#94A3B8]">Distribución de gastos por tarjeta</p>
+                    </div>
+                    <div class="flex gap-2 bg-white/10 p-1 rounded-lg shadow-sm border border-white/10">
+                        <button class="px-3 py-1.5 rounded-md text-xs font-medium bg-white text-white border border-white/10 shadow-sm">6M</button>
+                        <button class="px-3 py-1.5 rounded-md text-xs font-medium text-[#94A3B8] border border-transparent transition-all hover:bg-white/20">1A</button>
+                        <button class="px-3 py-1.5 rounded-md text-xs font-medium text-[#94A3B8] border border-transparent transition-all hover:bg-white/20">Todo</button>
+                    </div>
+                </div>
+                
+                <div class="h-64 relative">
+                    @if (loading()) {
+                    <div class="animate-pulse h-full bg-white/5 rounded-2xl"></div>
+                    } @else if (cards().length === 0) {
+                    <div class="flex items-center justify-center h-full text-[#94A3B8]">
+                        <div class="text-center space-y-4">
+                            <span class="text-5xl block">📊</span>
+                            <div>
+                                <p class="font-semibold text-white">No hay datos disponibles</p>
+                                <p class="text-sm mt-2">Agrega tarjetas para ver estadísticas</p>
+                            </div>
+                        </div>
+                    </div>
+                    } @else {
+                    <canvas id="pieChart"></canvas>
+                    }
+                </div>
+            </section>
+
+            <!-- Quick Actions -->
+            <section class="bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10 animate-fade-in-up hover:bg-white/10 transition-all duration-300" style="animation-delay: 0.4s">
+                <h2 class="text-lg font-bold text-white mb-6">Acciones Rápidas</h2>
+                <div class="space-y-3">
+                    <button (click)="openAddCardModal()" class="w-full group flex items-center gap-4 p-4 rounded-xl border border-white/10 hover:border-[#00D4AA]/20 hover:bg-[#00D4AA]/10 transition-all duration-300 shadow-sm hover:shadow-md hover:scale-[1.02]">
+                        <div class="w-10 h-10 rounded-lg bg-[#00D4AA]/10 text-[#00D4AA] flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm border border-[#00D4AA]/20">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <p class="font-semibold text-white text-sm">Agregar Tarjeta</p>
+                            <p class="text-xs text-[#94A3B8]">Nueva tarjeta de crédito/débito</p>
+                        </div>
+                        <svg class="w-4 h-4 text-[#94A3B8] ml-auto group-hover:text-[#00D4AA] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+
+                    <button (click)="exportCardsData()" class="w-full group flex items-center gap-4 p-4 rounded-xl border border-white/10 hover:border-purple-400/20 hover:bg-purple-500/10 transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer hover:scale-[1.02]">
+                        <div class="w-10 h-10 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm border border-purple-400/20">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <p class="font-semibold text-white text-sm">Exportar Datos</p>
+                            <p class="text-xs text-[#94A3B8]">Descargar reporte en PDF</p>
+                        </div>
+                        <svg class="w-4 h-4 text-[#94A3B8] ml-auto group-hover:text-purple-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+
+                    <button routerLink="/dashboard" class="w-full group flex items-center gap-4 p-4 rounded-xl border border-white/10 hover:border-blue-400/20 hover:bg-blue-500/10 transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer hover:scale-[1.02]">
+                        <div class="w-10 h-10 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm border border-blue-400/20">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <p class="font-semibold text-white text-sm">Ir al Dashboard</p>
+                            <p class="text-xs text-[#94A3B8]">Vista principal financiera</p>
+                        </div>
+                        <svg class="w-4 h-4 text-[#94A3B8] ml-auto group-hover:text-blue-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                </div>
+            </section>
         </div>
 
-      </div>
+        <!-- Cards Grid -->
+        <section class="mb-8">
+            <!-- Error State -->
+            @if (error()) {
+            <div class="bg-red-500/10 border border-red-500/30 rounded-2xl p-6 mb-8">
+                <div class="flex items-center gap-3">
+                    <span class="text-red-400 text-xl">⚠️</span>
+                    <div>
+                        <h3 class="text-red-400 font-semibold">Error</h3>
+                        <p class="text-red-300 text-sm">{{ error() }}</p>
+                    </div>
+                    <button (click)="loadCardsData()" class="ml-auto px-4 py-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors duration-200">
+                        Reintentar
+                    </button>
+                </div>
+            </div>
+            }
+            
+            <!-- Loading State -->
+            @if (loading()) {
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @for (i of [1, 2, 3]; track i) {
+                <div class="animate-pulse">
+                    <div class="bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 rounded-3xl p-6 border border-white/10 h-64">
+                        <div class="w-20 h-8 bg-white/10 rounded-lg mb-8"></div>
+                        <div class="h-4 bg-white/20 rounded w-32 mb-4"></div>
+                        <div class="flex justify-between">
+                            <div>
+                                <div class="h-3 bg-white/10 rounded w-16 mb-2"></div>
+                                <div class="h-4 bg-white/20 rounded w-24"></div>
+                            </div>
+                            <div class="text-right">
+                                <div class="h-3 bg-white/10 rounded w-12 mb-2"></div>
+                                <div class="h-6 bg-white/20 rounded w-16"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+            } @else {
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Credit/Debit Cards -->
+                @for (card of cards(); track card.id) {
+                <div class="group relative animate-fade-in-up" 
+                     [style.animation-delay]="'0.2s'">
+                    
+                    <!-- Card Container -->
+                    <div class="relative bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 rounded-3xl p-8 border border-white/10 hover:border-[#00D4AA]/40 transition-all duration-700 hover:scale-[1.03] hover:shadow-2xl hover:shadow-[#00D4AA]/20"
+                         [style.background]="`linear-gradient(135deg, ${card.color}25 0%, ${card.color}15 50%, #1e293b 100%)`">
+                        
+                        <!-- Card Type Badge -->
+                        <div class="absolute top-6 right-6">
+                            <span class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-xl rounded-full text-xs font-bold text-white/90 border border-white/20">
+                                <span class="text-lg">{{ getCardIcon(card.type) }}</span>
+                                {{ getCardTypeLabel(card.type) }}
+                            </span>
+                        </div>
+                        
+                        <!-- Card Content -->
+                        <div class="relative z-10">
+                            <!-- Bank Logo/Brand -->
+                            <div class="flex justify-between items-start mb-10">
+                                <div class="w-14 h-10 bg-white/10 backdrop-blur-xl rounded-xl flex items-center justify-center border border-white/20">
+                                    <span class="text-white/70 text-sm font-bold">FINTRAX</span>
+                                </div>
+                                <div class="w-12 h-12 bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center border border-white/20 group-hover:scale-110 transition-transform duration-300">
+                                    <span class="text-white/70 text-xl">{{ card.icon }}</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Card Number -->
+                            <div class="mb-10">
+                                <p class="text-white/90 font-mono text-2xl tracking-wider font-bold">{{ getCardNumber(card) }}</p>
+                            </div>
+                            
+                            <!-- Card Holder and Balance -->
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <p class="text-white/70 text-xs uppercase tracking-wider mb-2 font-semibold">Titular</p>
+                                    <p class="text-white font-bold text-lg">{{ auth.getCurrentUserName() || card.name }}</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-white/70 text-xs uppercase tracking-wider mb-2 font-semibold">Balance</p>
+                                    <p class="text-white font-bold text-2xl">${{ card.balance | number }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Card Actions -->
+                        <div class="absolute bottom-6 left-8 right-8 flex gap-3 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0">
+                            <button class="flex-1 py-3 bg-white/10 backdrop-blur-xl rounded-xl text-white text-sm font-bold hover:bg-white/20 transition-all duration-300 hover:scale-[1.05] border border-white/20">
+                                Ver Detalles
+                            </button>
+                            <button class="flex-1 py-3 bg-[#00D4AA]/20 backdrop-blur-xl rounded-xl text-[#00D4AA] text-sm font-bold hover:bg-[#00D4AA]/30 transition-all duration-300 hover:scale-[1.05] border border-[#00D4AA]/30">
+                                Configurar
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Card Info -->
+                    <div class="mt-6 p-6 bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 hover:bg-white/8 transition-all duration-300">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-white/70 text-sm font-semibold mb-1">Gasto este mes</p>
+                                <p class="text-red-400 font-bold text-lg">${{ getCardSpending(card) | number }}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-white/70 text-sm font-semibold mb-1">Estado</p>
+                                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold"
+                                      [class]="card.isActive ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-red-500/20 text-red-400 border border-red-500/30'">
+                                    <span class="w-2 h-2 rounded-full animate-pulse"
+                                          [class]="card.isActive ? 'bg-green-400' : 'bg-red-400'"></span>
+                                    {{ card.isActive ? 'Activa' : 'Inactiva' }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                }
+                
+                <!-- Add New Card -->
+                <div class="group relative animate-fade-in-up" [style.animation-delay]="'0.3s'">
+                    <button (click)="openAddCardModal()" 
+                            class="w-full h-full min-h-[320px] bg-white/5 backdrop-blur-xl rounded-3xl border-2 border-dashed border-white/20 hover:border-[#00D4AA]/60 hover:bg-white/10 transition-all duration-700 hover:scale-[1.03] flex flex-col items-center justify-center gap-6 group">
+                        <div class="w-20 h-20 bg-[#00D4AA]/10 rounded-full flex items-center justify-center group-hover:bg-[#00D4AA]/20 transition-all duration-500 group-hover:scale-110">
+                            <svg class="w-10 h-10 text-[#00D4AA]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                            </svg>
+                        </div>
+                        <div class="text-center space-y-2">
+                            <h3 class="text-white font-bold text-lg">Agregar Nueva Tarjeta</h3>
+                            <p class="text-[#94A3B8] text-sm font-medium">Débito, crédito o wallet</p>
+                        </div>
+                        <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <span class="text-[#00D4AA] text-sm font-semibold">Click para agregar</span>
+                        </div>
+                    </button>
+                </div>
+                
+            </div>
+            }
+        </section>
+        <!-- Spending Analytics -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- Spending by Card Chart -->
+            <div class="group relative bg-white/5 backdrop-blur-xl rounded-3xl p-10 border border-white/10 hover:bg-white/8 hover:border-[#00D4AA]/40 transition-all duration-700 hover:scale-[1.02]">
+                <div class="absolute inset-0 bg-gradient-to-br from-[#00D4AA]/5 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                <div class="relative z-10">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="w-12 h-12 bg-[#00D4AA]/10 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-[#00D4AA]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">Gasto por Tarjeta</h3>
+                    </div>
+                    <div class="relative h-72">
+                        @if (loading()) {
+                        <div class="animate-pulse h-full bg-white/5 rounded-2xl"></div>
+                        } @else if (cards().length === 0) {
+                        <div class="flex items-center justify-center h-full text-[#94A3B8]">
+                            <div class="text-center space-y-4">
+                                <span class="text-5xl block">📊</span>
+                                <div>
+                                    <p class="font-semibold text-white">No hay datos disponibles</p>
+                                    <p class="text-sm mt-2">Agrega tarjetas para ver estadísticas</p>
+                                </div>
+                            </div>
+                        </div>
+                        } @else {
+                        <canvas id="pieChart"></canvas>
+                        }
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Transactions -->
+            <div class="group relative bg-white/5 backdrop-blur-xl rounded-3xl p-10 border border-white/10 hover:bg-white/8 hover:border-[#00D4AA]/40 transition-all duration-700 hover:scale-[1.02]">
+                <div class="absolute inset-0 bg-gradient-to-br from-[#00D4AA]/5 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                <div class="relative z-10">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="w-12 h-12 bg-[#00D4AA]/10 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-[#00D4AA]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">Transacciones Recientes</h3>
+                    </div>
+                    <div class="space-y-3">
+                        @if (loading()) {
+                        @for (i of [1, 2, 3]; track i) {
+                        <div class="animate-pulse flex items-center justify-between p-5 bg-white/5 rounded-2xl border border-white/10">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-white/10 rounded-full"></div>
+                                <div>
+                                    <div class="h-4 bg-white/20 rounded w-28 mb-2"></div>
+                                    <div class="h-3 bg-white/10 rounded w-20"></div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="h-4 bg-white/20 rounded w-20 mb-2"></div>
+                                <div class="h-3 bg-white/10 rounded w-16"></div>
+                            </div>
+                        </div>
+                        }
+                        } @else if (recentTransactions().length === 0) {
+                        <div class="flex items-center justify-center h-80 text-[#94A3B8]">
+                            <div class="text-center space-y-4">
+                                <span class="text-5xl block">📝</span>
+                                <div>
+                                    <p class="font-semibold text-white">No hay transacciones</p>
+                                    <p class="text-sm mt-2">Las transacciones aparecerán aquí</p>
+                                </div>
+                            </div>
+                        </div>
+                        } @else {
+                        @for (transaction of recentTransactions(); track transaction.id) {
+                        <div class="flex items-center justify-between p-5 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-all duration-300 animate-fade-in-up hover:scale-[1.02] hover:border-[#00D4AA]/30"
+                             [style.animation-delay]="'0.1s'">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-[#00D4AA]/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                    <span class="text-[#00D4AA] text-lg">{{ transaction.icon }}</span>
+                                </div>
+                                <div>
+                                    <p class="text-white font-semibold">{{ transaction.description }}</p>
+                                    <p class="text-[#94A3B8] text-sm font-medium">{{ transaction.cardNumber }}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-white font-bold text-lg">${{ transaction.amount | number }}</p>
+                                <p class="text-[#94A3B8] text-sm font-medium">{{ transaction.date }}</p>
+                            </div>
+                        </div>
+                        }
+                        }
+                    </div>
+                </div>
+            </div>
+            
+        </section>
 
-    </section>
-    <div class="grid md:grid-cols-2 gap-6 mt-6">
+        <!-- Bottom Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- Recent Transactions -->
+            <section class="bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10 animate-fade-in-up hover:bg-white/10 transition-all duration-300" style="animation-delay: 0.45s">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-lg font-bold text-white">Transacciones Recientes</h2>
+                    <button class="text-sm font-medium text-[#00D4AA] hover:text-[#00D4AA]/80 transition-colors cursor-pointer">Ver todas</button>
+                </div>
+                
+                <div class="space-y-3">
+                    @if (loading()) {
+                    @for (i of [1, 2, 3, 4]; track i) {
+                    <div class="animate-pulse flex items-center justify-between p-3 rounded-xl border border-white/10">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-white/10 rounded-full"></div>
+                            <div>
+                                <div class="h-4 bg-white/20 rounded w-28 mb-2"></div>
+                                <div class="h-3 bg-white/10 rounded w-20"></div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="h-4 bg-white/20 rounded w-20 mb-2"></div>
+                            <div class="h-3 bg-white/10 rounded w-16"></div>
+                        </div>
+                    </div>
+                    }
+                    } @else if (recentTransactions().length === 0) {
+                    <div class="flex items-center justify-center h-40 text-[#94A3B8]">
+                        <div class="text-center space-y-4">
+                            <span class="text-5xl block">📝</span>
+                            <div>
+                                <p class="font-semibold text-white">No hay transacciones</p>
+                                <p class="text-sm mt-2">Las transacciones aparecerán aquí</p>
+                            </div>
+                        </div>
+                    </div>
+                    } @else {
+                    @for (transaction of recentTransactions().slice(0, 4); track transaction.id) {
+                    <div class="group flex items-center justify-between p-3 rounded-xl hover:bg-white/10 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-md border border-white/10 hover:border-[#00D4AA]/20 hover:scale-[1.01]">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center text-lg shadow-sm border bg-[#00D4AA]/10 border-[#00D4AA]/20 text-[#00D4AA]">
+                                {{ transaction.icon }}
+                            </div>
+                            <div>
+                                <p class="font-semibold text-white text-sm">{{ transaction.description }}</p>
+                                <p class="text-xs text-[#94A3B8]">{{ transaction.date }}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-sm text-[#00D4AA]">
+                                -${{ transaction.amount | number }}
+                            </p>
+                            <p class="text-xs text-[#94A3B8]">Gasto</p>
+                        </div>
+                    </div>
+                    }
+                    }
+                </div>
+            </section>
 
-  <!-- Total gastado -->
-  <div class="bg-white p-4 rounded-xl shadow">
-    <h2 class="text-lg font-semibold">Total Gastado</h2>
-    <p class="text-3xl font-bold text-red-500 mt-2">
-      $ {{ totalGastado | number }}
-    </p>
-  </div>
+            <!-- Card Statistics -->
+            <section class="bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10 animate-fade-in-up hover:bg-white/10 transition-all duration-300" style="animation-delay: 0.5s">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-lg font-bold text-white">Estadísticas de Tarjetas</h2>
+                    <button (click)="openAddCardModal()" class="px-3 py-1.5 text-xs font-medium text-[#00D4AA] bg-[#00D4AA]/10 rounded-lg hover:bg-[#00D4AA]/20 transition-colors">+ Nueva</button>
+                </div>
 
-  <!-- Gráfico pastel -->
-  <div class="bg-white p-4 rounded-xl shadow">
-    <h2 class="text-lg font-semibold mb-4">Gasto por tarjeta</h2>
-    <canvas id="pieChart"></canvas>
-  </div>
+                <div class="space-y-5">
+                    @for (card of cards().slice(0, 3); track card.id) {
+                    <div class="group relative">
+                        <div class="flex items-center justify-between mb-2 pr-16">
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm font-medium text-white">{{ card.name }}</span>
+                            </div>
+                            <span class="text-sm font-semibold text-white">${{ getCardSpending(card) | number }} <span class="text-[#94A3B8] font-normal">/ ${{ card.balance | number }}</span></span>
+                        </div>
+                        <div class="w-full bg-white/10 rounded-full h-2 overflow-hidden shadow-inner border border-white/10">
+                            <div class="h-full rounded-full transition-all duration-500 bg-[#00D4AA]"
+                                 [style.width.%]="(getCardSpending(card) / card.balance) * 100"></div>
+                        </div>
+                    </div>
+                    }
 
+                    <div class="pt-4 border-t border-white/10">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-medium text-[#94A3B8]">Total Utilizado</span>
+                            <span class="text-lg font-bold text-white">{{ ((totalGastado() / (totalBalance() || 1)) * 100) | number:'1.0-0' }}%</span>
+                        </div>
+                        <div class="w-full bg-white/10 rounded-full h-3 overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-[#00D4AA] to-blue-400 rounded-full transition-all duration-500" 
+                                 [style.width.%]="(totalGastado() / (totalBalance() || 1)) * 100"></div>
+                        </div>
+                        <p class="text-xs text-[#94A3B8] mt-2">${{ totalBalance() - totalGastado() | number:'1.0-0' }} disponibles</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+    </main>
 </div>
 
-  </main>
+<!-- Add Card Modal -->
+@if (showAddCardModal()) {
+<div class="fixed inset-0 bg-black/60 backdrop-blur-xl flex items-center justify-center z-50 p-4 animate-fade-in"
+     (click)="closeAddCardModal()">
+    <div class="bg-[#0A0A0F]/95 backdrop-blur-2xl rounded-3xl p-10 max-w-md w-full border border-white/20 animate-scale-in shadow-2xl" 
+         (click)="$event.stopPropagation()">
+        <div class="flex items-center gap-3 mb-8">
+            <div class="w-12 h-12 bg-[#00D4AA]/10 rounded-xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-[#00D4AA]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-white">Agregar Nueva Tarjeta</h3>
+        </div>
+        
+        <div class="space-y-6">
+            <div>
+                <label class="block text-[#94A3B8] text-sm font-bold mb-3 uppercase tracking-wider">Tipo de Tarjeta</label>
+                <select [(ngModel)]="newCard.type" class="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20 focus:border-[#00D4AA] transition-all duration-300 hover:bg-white/10 font-medium">
+                    <option value="CREDIT">Tarjeta de Crédito</option>
+                    <option value="DEBIT">Tarjeta de Débito</option>
+                    <option value="PREPAID">Tarjeta Prepaga</option>
+                </select>
+            </div>
+            
+            <div>
+                <label class="block text-[#94A3B8] text-sm font-bold mb-3 uppercase tracking-wider">Nombre del Banco</label>
+                <input [(ngModel)]="newCard.bankName" 
+                       type="text" 
+                       placeholder="Ej: Banco Santander"
+                       class="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20 focus:border-[#00D4AA] transition-all duration-300 hover:bg-white/10 font-medium">
+            </div>
+            
+            <div>
+                <label class="block text-[#94A3B8] text-sm font-bold mb-3 uppercase tracking-wider">Últimos 4 dígitos</label>
+                <input [(ngModel)]="newCard.lastFour" 
+                       type="text" 
+                       placeholder="1234"
+                       maxlength="4"
+                       pattern="[0-9]{4}"
+                       class="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20 focus:border-[#00D4AA] transition-all duration-300 hover:bg-white/10 font-medium">
+            </div>
+            
+            <div>
+                <label class="block text-[#94A3B8] text-sm font-bold mb-3 uppercase tracking-wider">Nombre del Titular</label>
+                <input [(ngModel)]="newCard.name" 
+                       type="text" 
+                       placeholder="Juan Pérez"
+                       class="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20 focus:border-[#00D4AA] transition-all duration-300 hover:bg-white/10 font-medium">
+            </div>
+            
+            @if (newCard.type === 'CREDIT') {
+            <div>
+                <label class="block text-[#94A3B8] text-sm font-bold mb-3 uppercase tracking-wider">Límite de Crédito</label>
+                <input [(ngModel)]="newCard.creditLimit" 
+                       type="number" 
+                       placeholder="0.00"
+                       class="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#00D4AA]/20 focus:border-[#00D4AA] transition-all duration-300 hover:bg-white/10 font-medium">
+            </div>
+            }
+            
+            <div>
+                <label class="block text-[#94A3B8] text-sm font-bold mb-3 uppercase tracking-wider">Color de la Tarjeta</label>
+                <div class="grid grid-cols-4 gap-3">
+                    @for (color of availableColors; track color) {
+                    <button type="button" 
+                            (click)="newCard.color = color"
+                            [class]="'w-full h-14 rounded-xl border-2 transition-all duration-300' + (newCard.color === color ? ' border-[#00D4AA] scale-110 shadow-lg shadow-[#00D4AA]/30' : ' border-white/20 hover:border-white/40 hover:scale-105')"
+                            [style.background]="color">
+                    </button>
+                    }
+                </div>
+            </div>
+            
+            <div>
+                <label class="block text-[#94A3B8] text-sm font-bold mb-3 uppercase tracking-wider">Icono</label>
+                <div class="grid grid-cols-4 gap-3">
+                    @for (icon of availableIcons; track icon) {
+                    <button type="button" 
+                            (click)="newCard.icon = icon"
+                            [class]="'w-full h-14 rounded-xl border-2 bg-white/5 transition-all duration-300 flex items-center justify-center text-2xl hover:bg-white/10' + (newCard.icon === icon ? ' border-[#00D4AA] scale-110 shadow-lg shadow-[#00D4AA]/30 bg-white/10' : ' border-white/20 hover:border-white/40 hover:scale-105')">
+                        {{ icon }}
+                    </button>
+                    }
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex gap-4 mt-8">
+            <button (click)="closeAddCardModal()" 
+                    class="flex-1 py-4 bg-white/10 border border-white/20 rounded-xl text-white font-bold hover:bg-white/20 transition-all duration-300 hover:scale-[1.02]">
+                Cancelar
+            </button>
+            <button (click)="addNewCard()" 
+                    [disabled]="loading()"
+                    class="flex-1 py-4 bg-[#00D4AA] text-[#0A0A0F] rounded-xl font-bold hover:bg-[#00D4AA]/90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02] shadow-lg shadow-[#00D4AA]/30 hover:shadow-[#00D4AA]/40">
+                @if (loading()) {
+                <span class="inline-block animate-spin mr-2">⚙️</span> Agregando...
+                } @else {
+                Agregar Tarjeta
+                }
+            </button>
+        </div>
+    </div>
 </div>
+}

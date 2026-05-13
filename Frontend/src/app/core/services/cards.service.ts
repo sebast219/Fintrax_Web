@@ -124,8 +124,8 @@ export class CardsService {
     page: number = 1, 
     limit: number = 20,
     filters?: {
-      startDate?: string;
-      endDate?: string;
+      dateFrom?: string;
+      dateTo?: string;
       category?: string;
       minAmount?: number;
       maxAmount?: number;

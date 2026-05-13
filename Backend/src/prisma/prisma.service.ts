@@ -12,6 +12,12 @@ export class PrismaService
         process.env.NODE_ENV === 'development'
           ? ['query', 'info', 'warn', 'error']
           : ['error'],
+      // Optimized connection pooling for Railway database
+      datasources: {
+        db: {
+          url: process.env.DATABASE_URL,
+        },
+      },
     });
   }
 

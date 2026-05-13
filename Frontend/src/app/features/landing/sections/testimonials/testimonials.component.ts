@@ -47,25 +47,7 @@ export class TestimonialsComponent {
       rating: 4,
       date: '2024-01-08'
     },
-    {
-      id: '4',
-      name: 'Roberto Silva',
-      role: 'Gerente de Proyectos',
-      avatar: '👨‍💼',
-      content: 'La integración con mis cuentas bancarias es perfecta. Puedo ver todas mis transacciones en tiempo real y las categorías automáticas me ahorran mucho tiempo.',
-      rating: 5,
-      date: '2024-01-05'
-    },
-    {
-      id: '5',
-      name: 'Laura Torres',
-      role: 'Diseñadora Gráfica',
-      avatar: '👩‍🎨',
-      content: 'Los análisis visuales de Fintrax son espectaculares. Los gráficos interactivos me ayudan a entender rápidamente dónde estoy gastando mi dinero.',
-      rating: 5,
-      date: '2024-01-03'
-    }
-  ];
+      ];
 
   constructor() {}
 
@@ -86,5 +68,19 @@ export class TestimonialsComponent {
       month: 'long', 
       day: 'numeric' 
     });
+  }
+
+  /**
+   * TrackBy function for testimonials
+   */
+  trackByTestimonial(index: number, testimonial: Testimonial) {
+    return testimonial.id;
+  }
+
+  /**
+   * TrackBy function for stars
+   */
+  trackByStar(index: number, star: number) {
+    return index;
   }
 }

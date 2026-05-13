@@ -1,70 +1,98 @@
-<section id="features" class="py-16 bg-gray-50">
-  <div class="container mx-auto px-4">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+<section id="features" class="relative py-24 text-white overflow-hidden z-10">
+
+  <div class="relative z-10 max-w-7xl mx-auto px-8">
+    <!-- Header -->
+    <div class="text-center mb-20">
+      <h2 class="text-4xl lg:text-6xl font-bold tracking-tight text-white mb-6">
         Características que te
-        <span class="text-blue-600">facilitan la vida</span>
+        <span class="text-[#00D4AA]">transforman</span>
       </h2>
-      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-        Todo lo que necesitas para controlar tus finanzas de forma simple y eficiente
+      <p class="text-xl text-[#94A3B8] max-w-4xl mx-auto leading-relaxed">
+        Todo lo que necesitás para controlar tus finanzas con la precisión y elegancia que merecés
       </p>
     </div>
 
     <!-- Grid de características destacadas -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
       <div 
-        *ngFor="let feature of getHighlightedFeatures(); trackBy: $index" 
-        class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 hover:shadow-xl transition-shadow duration-300">
-        <div class="flex items-center mb-6">
-          <div class="text-4xl">{{ feature.icon }}</div>
-          <div class="ml-4">
-            <h3 class="text-xl font-semibold text-gray-900">{{ feature.title }}</h3>
+        *ngFor="let feature of getHighlightedFeatures(); trackBy: trackByFeature" 
+        class="group relative bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10 hover:bg-white/8 hover:border-[#00D4AA]/30 transition-all duration-500 hover:scale-[1.02]">
+        
+        <!-- Glow Effect on Hover -->
+        <div class="absolute inset-0 bg-[#00D4AA]/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        
+        <div class="relative z-10">
+          <!-- Icon -->
+          <div class="w-16 h-16 rounded-2xl bg-[#00D4AA]/10 flex items-center justify-center mb-6 group-hover:bg-[#00D4AA]/20 transition-colors duration-500">
+            <span class="text-2xl">{{ feature.icon }}</span>
           </div>
+          
+          <!-- Content -->
+          <h3 class="text-2xl font-semibold text-white mb-4">{{ feature.title }}</h3>
+          <p class="text-[#94A3B8] mb-6 leading-relaxed">{{ feature.description }}</p>
+          
+          <!-- Benefits -->
+          <ul class="space-y-3">
+            <li 
+              *ngFor="let benefit of feature.benefits; trackBy: trackByBenefit" 
+              class="flex items-center text-[#94A3B8]">
+              <svg class="w-5 h-5 text-[#00D4AA] mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="text-sm">{{ benefit }}</span>
+            </li>
+          </ul>
         </div>
-        <p class="text-gray-600 mb-6">{{ feature.description }}</p>
-        <ul class="space-y-3">
-          <li 
-            *ngFor="let benefit of feature.benefits; trackBy: $index" 
-            class="flex items-center text-gray-700">
-            <svg class="w-5 h-5 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-            </svg>
-            <span>{{ benefit }}</span>
-          </li>
-        </ul>
       </div>
     </div>
 
     <!-- Grid de todas las características -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
       <div 
-        *ngFor="let feature of getAllFeatures(); trackBy: $index" 
-        class="bg-white rounded-xl shadow-md p-6 border border-gray-100 hover:shadow-lg transition-shadow duration-300">
+        *ngFor="let feature of getAllFeatures(); trackBy: trackByFeature" 
+        class="group bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/5 hover:bg-white/8 hover:border-[#00D4AA]/20 transition-all duration-300">
         <div class="flex items-center mb-4">
-          <div class="text-3xl">{{ feature.icon }}</div>
-          <div class="ml-3">
-            <h3 class="text-lg font-semibold text-gray-900">{{ feature.title }}</h3>
+          <div class="w-12 h-12 rounded-xl bg-[#00D4AA]/10 flex items-center justify-center group-hover:bg-[#00D4AA]/20 transition-colors duration-300">
+            <span class="text-lg">{{ feature.icon }}</span>
+          </div>
+          <div class="ml-4">
+            <h3 class="text-lg font-semibold text-white">{{ feature.title }}</h3>
           </div>
         </div>
-        <p class="text-gray-600 text-sm">{{ feature.description }}</p>
+        <p class="text-[#94A3B8] text-sm leading-relaxed">{{ feature.description }}</p>
       </div>
     </div>
 
-    <!-- CTA secundario -->
-    <div class="text-center mt-12">
-      <h3 class="text-2xl font-bold text-gray-900 mb-4">
-        ¿Listo para tomar control de tus finanzas?
-      </h3>
-      <p class="text-gray-600 mb-8">
-        Únete a miles de usuarios que ya confían en Fintrax
-      </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <button class="px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200 shadow-lg">
-          Comenzar Gratis
-        </button>
-        <button class="px-8 py-3 bg-transparent border-2 border-blue-600 text-blue-600 rounded-lg font-semibold hover:bg-blue-600 hover:text-white transition-colors duration-200">
-          Ver Demo
-        </button>
+    <!-- CTA Section -->
+    <div class="relative bg-gradient-to-r from-[#00D4AA]/10 to-[#00D4AA]/5 rounded-3xl p-12 border border-[#00D4AA]/20 backdrop-blur-xl">
+      <div class="text-center">
+        <h3 class="text-3xl lg:text-4xl font-bold text-white mb-4">
+          ¿Listo para tomar
+          <span class="text-[#00D4AA]">control total</span>
+          de tus finanzas?
+        </h3>
+        <p class="text-[#94A3B8] text-lg mb-8 max-w-2xl mx-auto">
+          Unite a miles de usuarios que ya confían en Fintrax para transformar su futuro financiero
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a 
+            href="/auth/register"
+            class="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#00D4AA] text-[#0A0A0F] font-semibold hover:bg-[#00D4AA]/90 transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-[#00D4AA]/25">
+            Comenzar Gratis
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </a>
+          <a 
+            href="/auth/login"
+            class="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-white/20 bg-white/5 backdrop-blur-xl text-white font-medium hover:bg-white/10 transition-all duration-300 hover:scale-[1.02]">
+            Ver Demo
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </a>
+        </div>
       </div>
     </div>
   </div>

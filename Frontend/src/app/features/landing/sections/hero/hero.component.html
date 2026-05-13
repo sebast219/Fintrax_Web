@@ -1,80 +1,138 @@
-<section class="hero bg-gradient-to-br from-blue-600 to-purple-700 text-white">
-  <div class="container mx-auto px-4 py-16">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-      <!-- Contenido del Hero -->
-      <div class="space-y-8">
-        <h1 class="text-4xl lg:text-6xl font-bold leading-tight">
-          Gestiona tus 
-          <span class="text-yellow-300">finanzas</span>
-          <br>
-          de forma inteligente
-        </h1>
-        <p class="text-xl lg:text-2xl text-blue-100 mt-4">
-          Control total de tus ingresos, gastos y metas financieras
-          <br>
-          en una sola plataforma
-        </p>
-        
-        <div class="flex flex-col sm:flex-row gap-4 mt-8">
-          <button 
-            (click)="navigateToLogin()"
-            class="px-8 py-4 bg-white text-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition-colors duration-200 shadow-lg">
-            Iniciar Sesión
-          </button>
-          <button 
-            (click)="navigateToRegister()"
-            class="px-8 py-4 bg-transparent border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors duration-200">
-            Crear Cuenta
-          </button>
+<section id="hero" class="relative min-h-screen text-white overflow-hidden z-10 pt-16">
+
+  <!-- Main Content -->
+  <div class="relative z-10 flex items-center justify-center min-h-[calc(100vh-200px)] px-8">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      
+      <!-- Left Content -->
+      <div class="space-y-8 animate-fade-in-up">
+        <div class="space-y-6">
+          <h2 class="text-5xl lg:text-7xl font-bold tracking-tight text-white leading-tight">
+            Tu dinero. Tu control. 
+            <span class="text-[#00D4AA]">Tu visión.</span>
+          </h2>
+          <p class="text-[#94A3B8] text-lg leading-relaxed max-w-lg">
+            Concentrá todas tus cuentas, transacciones, metas y reportes en una sola plataforma inteligente. 
+            Visualizá tu futuro financiero con precisión quirúrgica.
+          </p>
         </div>
 
-        <!-- Características rápidas -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-12">
-          <div class="flex items-center space-x-3">
-            <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-              📊
-            </div>
-            <span class="text-sm">Dashboard en tiempo real</span>
+        <!-- Social Proof -->
+        <div class="flex items-center gap-6 text-sm text-[#94A3B8]">
+          <div class="flex gap-4">
+            <span><strong class="text-white">10K+</strong> Usuarios</span>
+            <span><strong class="text-white">500+</strong> Herramientas</span>
+            <span><strong class="text-white">98%</strong> Satisfacción</span>
           </div>
-          <div class="flex items-center space-x-3">
-            <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-              💳
+        </div>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a 
+            href="/auth/register"
+            class="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#00D4AA] text-[#0A0A0F] font-semibold hover:bg-[#00D4AA]/90 transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-[#00D4AA]/25">
+            Comenzar Gratis
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </a>
+          <a 
+            href="/auth/login"
+            class="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl text-white font-medium hover:bg-white/10 transition-all duration-300 hover:scale-[1.02]">
+            Ver Demo
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </a>
+        </div>
+
+        <!-- Quick Features -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+              <span class="text-[#00D4AA] text-sm">📊</span>
             </div>
-            <span class="text-sm">Gestión de tarjetas</span>
+            <span class="text-sm text-[#94A3B8]">Dashboard en vivo</span>
           </div>
-          <div class="flex items-center space-x-3">
-            <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-              📈
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+              <span class="text-[#00D4AA] text-sm">💳</span>
             </div>
-            <span class="text-sm">Reportes detallados</span>
+            <span class="text-sm text-[#94A3B8]">Tarjetas inteligentes</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-[#00D4AA]/10 flex items-center justify-center">
+              <span class="text-[#00D4AA] text-sm">📈</span>
+            </div>
+            <span class="text-sm text-[#94A3B8]">Reportes AI</span>
           </div>
         </div>
       </div>
 
-      <!-- Imagen o gráfico del Hero -->
+      <!-- Right Visual -->
       <div class="relative">
-        <div class="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-purple-400/20 rounded-2xl transform rotate-3"></div>
-        <div class="relative bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
-          <div class="text-center space-y-4">
-            <div class="text-6xl">📱</div>
-            <h3 class="text-xl font-semibold">Disponible en todos tus dispositivos</h3>
-            <p class="text-blue-100">
-              Accede a tus finanzas desde cualquier lugar
-            </p>
+        <div class="relative bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
+          <div class="space-y-6">
+            <!-- Dashboard Preview -->
+            <div class="bg-[#0A0A0F]/50 rounded-2xl p-6 border border-white/5">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-white font-semibold">Dashboard Overview</h3>
+                <span class="text-[#00D4AA] text-xs">Live</span>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="bg-white/5 rounded-lg p-3">
+                  <p class="text-[#94A3B8] text-xs">Balance Total</p>
+                  <p class="text-white text-xl font-bold">$45,230</p>
+                </div>
+                <div class="bg-white/5 rounded-lg p-3">
+                  <p class="text-[#94A3B8] text-xs">Este Mes</p>
+                  <p class="text-[#00D4AA] text-xl font-bold">+12.5%</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chart Preview -->
+            <div class="bg-[#0A0A0F]/50 rounded-2xl p-6 border border-white/5">
+              <h4 class="text-white font-medium mb-3">Gastos por Categoría</h4>
+              <div class="space-y-2">
+                <div class="flex items-center gap-3">
+                  <div class="w-2 h-2 rounded-full bg-[#00D4AA]"></div>
+                  <div class="flex-1 bg-white/10 rounded-full h-2">
+                    <div class="bg-[#00D4AA] h-2 rounded-full" style="width: 65%"></div>
+                  </div>
+                  <span class="text-xs text-[#94A3B8]">65%</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-2 h-2 rounded-full bg-blue-400"></div>
+                  <div class="flex-1 bg-white/10 rounded-full h-2">
+                    <div class="bg-blue-400 h-2 rounded-full" style="width: 25%"></div>
+                  </div>
+                  <span class="text-xs text-[#94A3B8]">25%</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-2 h-2 rounded-full bg-purple-400"></div>
+                  <div class="flex-1 bg-white/10 rounded-full h-2">
+                    <div class="bg-purple-400 h-2 rounded-full" style="width: 10%"></div>
+                  </div>
+                  <span class="text-xs text-[#94A3B8]">10%</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Indicador de scroll -->
-    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-      <button 
-        (click)="scrollToFeatures()"
-        class="text-white/80 hover:text-white transition-colors">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3m0 11V3m-7 7h14M5 10a7 7 0 0 1 14 0v-1a7 7 0 0 1-14 0v1z" />
-        </svg>
-      </button>
-    </div>
+  <!-- Scroll Indicator -->
+  <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+    <button 
+      (click)="scrollToFeatures()"
+      class="text-[#94A3B8] hover:text-white transition-colors">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+      </svg>
+    </button>
   </div>
 </section>

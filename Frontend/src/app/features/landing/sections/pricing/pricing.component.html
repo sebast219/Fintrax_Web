@@ -1,183 +1,214 @@
-<section class="py-16 bg-gradient-to-br from-gray-50 to-blue-50">
-  <div class="container mx-auto px-4">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+<section id="pricing" class="relative py-24 text-white overflow-hidden z-10">
+
+  <div class="relative z-10 max-w-7xl mx-auto px-8">
+    <!-- Header -->
+    <div class="text-center mb-20">
+      <h2 class="text-4xl lg:text-6xl font-bold tracking-tight text-white mb-6">
         Planes que se adaptan a 
-        <span class="text-blue-600">tus necesidades</span>
+        <span class="text-[#00D4AA]">tus necesidades</span>
       </h2>
-      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-        Elige el plan perfecto para gestionar tus finanzas personales
+      <p class="text-xl text-[#94A3B8] max-w-4xl mx-auto leading-relaxed">
+        Elegí el plan perfecto para gestionar tus finanzas personales con la flexibilidad que necesitás
       </p>
     </div>
 
     <!-- Grid de planes -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-20">
       <!-- Plan Básico -->
-      <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-200 hover:shadow-xl transition-shadow duration-300">
-        <div class="text-center mb-8">
-          <h3 class="text-2xl font-bold text-gray-900">{{ plans[0].name }}</h3>
-          <p class="text-gray-500 mt-2">{{ plans[0].description }}</p>
-        </div>
+      <div class="group relative bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10 hover:bg-white/8 hover:border-[#00D4AA]/30 transition-all duration-500 hover:scale-[1.02]">
         
-        <div class="text-center mb-8">
-          <div class="text-4xl font-bold text-gray-900">
-            {{ formatPrice(plans[0].price) }}
+        <!-- Glow Effect on Hover -->
+        <div class="absolute inset-0 bg-[#00D4AA]/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        
+        <div class="relative z-10">
+          <div class="text-center mb-8">
+            <h3 class="text-2xl font-bold text-white">{{ plans[0].name }}</h3>
+            <p class="text-[#94A3B8] mt-2">{{ plans[0].description }}</p>
           </div>
-          <p class="text-gray-500">{{ plans[0].period }}</p>
+          
+          <div class="text-center mb-8">
+            <div class="text-5xl font-bold text-white">
+              {{ formatPrice(plans[0].price) }}
+            </div>
+            <p class="text-[#94A3B8]">{{ plans[0].period }}</p>
+          </div>
+
+          <ul class="space-y-4 mb-8">
+            <li *ngFor="let feature of plans[0].features; trackBy: trackByFeature" class="flex items-start">
+              <svg class="w-5 h-5 text-[#00D4AA] mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="text-[#94A3B8] text-sm">{{ feature }}</span>
+            </li>
+          </ul>
+
+          <button class="w-full px-6 py-4 rounded-full border border-white/20 bg-white/5 backdrop-blur-xl text-white font-medium hover:bg-white/10 transition-all duration-300 hover:scale-[1.02]">
+            Seleccionar Plan
+          </button>
         </div>
-
-        <ul class="space-y-4 mb-8">
-          <li *ngFor="let feature of plans[0].features; trackBy: $index" class="flex items-start">
-            <svg class="w-5 h-5 text-green-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-            </svg>
-            <span class="text-gray-700">{{ feature }}</span>
-          </li>
-        </ul>
-
-        <button class="w-full px-6 py-3 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200 transition-colors duration-200">
-          Seleccionar Plan
-        </button>
       </div>
 
       <!-- Plan Profesional -->
-      <div class="bg-blue-600 text-white rounded-2xl shadow-xl p-8 border-2 border-blue-700 relative transform scale-105">
-        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
-          <span class="bg-yellow-400 text-blue-900 px-3 py-1 rounded-full text-sm font-semibold">
+      <div class="group relative bg-gradient-to-br from-[#00D4AA]/10 to-[#00D4AA]/5 backdrop-blur-xl rounded-3xl p-8 border-2 border-[#00D4AA]/30 relative transform scale-105 hover:scale-[1.08] transition-all duration-500">
+        
+        <!-- Popular Badge -->
+        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
+          <span class="bg-[#00D4AA] text-[#0A0A0F] px-4 py-2 rounded-full text-sm font-bold shadow-lg shadow-[#00D4AA]/25">
             Más Popular
           </span>
         </div>
         
-        <div class="text-center mb-8">
-          <h3 class="text-2xl font-bold">{{ plans[1].name }}</h3>
-          <p class="text-blue-100 mt-2">{{ plans[1].description }}</p>
-        </div>
+        <!-- Glow Effect -->
+        <div class="absolute inset-0 bg-[#00D4AA]/10 rounded-3xl"></div>
         
-        <div class="text-center mb-8">
-          <div class="text-4xl font-bold">
-            {{ formatPrice(plans[1].price) }}
+        <div class="relative z-10">
+          <div class="text-center mb-8">
+            <h3 class="text-2xl font-bold text-white">{{ plans[1].name }}</h3>
+            <p class="text-[#94A3B8] mt-2">{{ plans[1].description }}</p>
           </div>
-          <p class="text-blue-100">{{ plans[1].period }}</p>
+          
+          <div class="text-center mb-8">
+            <div class="text-5xl font-bold text-white">
+              {{ formatPrice(plans[1].price) }}
+            </div>
+            <p class="text-[#94A3B8]">{{ plans[1].period }}</p>
+          </div>
+
+          <ul class="space-y-4 mb-8">
+            <li *ngFor="let feature of plans[1].features; trackBy: trackByFeature" class="flex items-start">
+              <svg class="w-5 h-5 text-[#00D4AA] mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="text-[#94A3B8] text-sm">{{ feature }}</span>
+            </li>
+          </ul>
+
+          <button 
+            (click)="selectPlan('professional')"
+            class="w-full px-6 py-4 rounded-full bg-[#00D4AA] text-[#0A0A0F] font-semibold hover:bg-[#00D4AA]/90 transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-[#00D4AA]/25">
+            Seleccionar Plan
+          </button>
         </div>
-
-        <ul class="space-y-4 mb-8">
-          <li *ngFor="let feature of plans[1].features; trackBy: $index" class="flex items-start">
-            <svg class="w-5 h-5 text-blue-200 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-            </svg>
-            <span class="text-blue-100">{{ feature }}</span>
-          </li>
-        </ul>
-
-        <button 
-          (click)="selectPlan('professional')"
-          class="w-full px-6 py-3 bg-white text-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition-colors duration-200 shadow-lg">
-          Seleccionar Plan
-        </button>
       </div>
 
       <!-- Plan Empresarial -->
-      <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-200 hover:shadow-xl transition-shadow duration-300 relative">
-        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
-          <span class="bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+      <div class="group relative bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10 hover:bg-white/8 hover:border-purple-500/30 transition-all duration-500 hover:scale-[1.02]">
+        
+        <!-- Recommended Badge -->
+        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
+          <span class="bg-purple-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg shadow-purple-500/25">
             Recomendado
           </span>
         </div>
         
-        <div class="text-center mb-8">
-          <h3 class="text-2xl font-bold text-gray-900">{{ plans[2].name }}</h3>
-          <p class="text-gray-500 mt-2">{{ plans[2].description }}</p>
-        </div>
+        <!-- Glow Effect on Hover -->
+        <div class="absolute inset-0 bg-purple-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
         
-        <div class="text-center mb-8">
-          <div class="text-4xl font-bold text-gray-900">
-            {{ formatPrice(plans[2].price) }}
+        <div class="relative z-10">
+          <div class="text-center mb-8">
+            <h3 class="text-2xl font-bold text-white">{{ plans[2].name }}</h3>
+            <p class="text-[#94A3B8] mt-2">{{ plans[2].description }}</p>
           </div>
-          <p class="text-gray-500">{{ plans[2].period }}</p>
-          <div class="mt-2">
-            <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-sm font-semibold">
-              Ahorra 20% anualmente
-            </span>
+          
+          <div class="text-center mb-8">
+            <div class="text-5xl font-bold text-white">
+              {{ formatPrice(plans[2].price) }}
+            </div>
+            <p class="text-[#94A3B8]">{{ plans[2].period }}</p>
+            <div class="mt-2">
+              <span class="bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full text-xs font-semibold border border-purple-500/30">
+                Ahorra 20% anualmente
+              </span>
+            </div>
           </div>
+
+          <ul class="space-y-4 mb-8">
+            <li *ngFor="let feature of plans[2].features; trackBy: trackByFeature" class="flex items-start">
+              <svg class="w-5 h-5 text-purple-400 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="text-[#94A3B8] text-sm">{{ feature }}</span>
+            </li>
+          </ul>
+
+          <button 
+            (click)="selectPlan('enterprise')"
+            class="w-full px-6 py-4 rounded-full bg-purple-500 text-white font-semibold hover:bg-purple-600 transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-purple-500/25">
+            Seleccionar Plan
+          </button>
         </div>
-
-        <ul class="space-y-4 mb-8">
-          <li *ngFor="let feature of plans[2].features; trackBy: $index" class="flex items-start">
-            <svg class="w-5 h-5 text-purple-600 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-            </svg>
-            <span class="text-gray-700">{{ feature }}</span>
-          </li>
-        </ul>
-
-        <button 
-          (click)="selectPlan('enterprise')"
-          class="w-full px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-colors duration-200 shadow-lg">
-          Seleccionar Plan
-        </button>
       </div>
     </div>
 
     <!-- Comparación de planes -->
-    <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
-      <h3 class="text-2xl font-bold text-center text-gray-900 mb-8">
+    <div class="relative bg-white/5 backdrop-blur-xl rounded-3xl p-10 border border-white/10 mb-20">
+      <h3 class="text-3xl font-bold text-center text-white mb-12">
         Comparación de características
       </h3>
       
       <div class="overflow-x-auto">
-        <table class="w-full min-w-full">
+        <table class="w-full">
           <thead>
-            <tr class="border-b border-gray-200">
-              <th class="text-left py-3 px-4 font-semibold text-gray-900">Característica</th>
-              <th class="text-center py-3 px-4 font-semibold text-gray-900">Básico</th>
-              <th class="text-center py-3 px-4 font-semibold text-blue-600">Profesional</th>
-              <th class="text-center py-3 px-4 font-semibold text-purple-600">Empresarial</th>
+            <tr class="border-b border-white/10">
+              <th class="text-left py-4 px-6 font-semibold text-white">Característica</th>
+              <th class="text-center py-4 px-6 font-semibold text-[#94A3B8]">Básico</th>
+              <th class="text-center py-4 px-6 font-semibold text-[#00D4AA]">Profesional</th>
+              <th class="text-center py-4 px-6 font-semibold text-purple-400">Empresarial</th>
             </tr>
           </thead>
           <tbody>
-            <tr class="border-b border-gray-100">
-              <td class="py-4 px-4 text-gray-700">Dashboard</td>
-              <td class="text-center py-4 px-4">✅</td>
-              <td class="text-center py-4 px-4">✅</td>
-              <td class="text-center py-4 px-4">✅</td>
+            <tr class="border-b border-white/5">
+              <td class="py-4 px-6 text-[#94A3B8]">Dashboard</td>
+              <td class="text-center py-4 px-6 text-[#00D4AA]">✅</td>
+              <td class="text-center py-4 px-6 text-[#00D4AA]">✅</td>
+              <td class="text-center py-4 px-6 text-[#00D4AA]">✅</td>
             </tr>
-            <tr class="border-b border-gray-100">
-              <td class="py-4 px-4 text-gray-700">Tarjetas</td>
-              <td class="text-center py-4 px-4">Hasta 5</td>
-              <td class="text-center py-4 px-4">✅</td>
-              <td class="text-center py-4 px-4">✅</td>
+            <tr class="border-b border-white/5">
+              <td class="py-4 px-6 text-[#94A3B8]">Tarjetas</td>
+              <td class="text-center py-4 px-6 text-[#94A3B8]">Hasta 5</td>
+              <td class="text-center py-4 px-6 text-[#00D4AA]">✅</td>
+              <td class="text-center py-4 px-6 text-[#00D4AA]">✅</td>
             </tr>
-            <tr class="border-b border-gray-100">
-              <td class="py-4 px-4 text-gray-700">Reportes</td>
-              <td class="text-center py-4 px-4">Mensuales</td>
-              <td class="text-center py-4 px-4">✅</td>
-              <td class="text-center py-4 px-4">✅</td>
+            <tr class="border-b border-white/5">
+              <td class="py-4 px-6 text-[#94A3B8]">Reportes</td>
+              <td class="text-center py-4 px-6 text-[#94A3B8]">Mensuales</td>
+              <td class="text-center py-4 px-6 text-[#00D4AA]">✅</td>
+              <td class="text-center py-4 px-6 text-[#00D4AA]">✅</td>
             </tr>
             <tr>
-              <td class="py-4 px-4 text-gray-700">Soporte</td>
-              <td class="text-center py-4 px-4">Email</td>
-              <td class="text-center py-4 px-4">Prioritario</td>
-              <td class="text-center py-4 px-4">24/7</td>
+              <td class="py-4 px-6 text-[#94A3B8]">Soporte</td>
+              <td class="text-center py-4 px-6 text-[#94A3B8]">Email</td>
+              <td class="text-center py-4 px-6 text-[#00D4AA]">Prioritario</td>
+              <td class="text-center py-4 px-6 text-purple-400">24/7</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- Preguntas frecuentes -->
-    <div class="text-center mt-12">
-      <h3 class="text-2xl font-bold text-gray-900 mb-4">
+    <!-- CTA Section -->
+    <div class="relative bg-gradient-to-r from-[#00D4AA]/10 to-purple-500/10 rounded-3xl p-12 border border-[#00D4AA]/20 backdrop-blur-xl text-center">
+      <h3 class="text-3xl lg:text-4xl font-bold text-white mb-4">
         ¿Preguntas sobre los planes?
       </h3>
-      <p class="text-gray-600 mb-6">
-        Nuestro equipo de soporte está listo para ayudarte
+      <p class="text-[#94A3B8] text-lg mb-8 max-w-2xl mx-auto">
+        Nuestro equipo de soporte está listo para ayudarte a encontrar el plan perfecto
       </p>
-      <div class="flex justify-center space-x-4">
-        <button class="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200">
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          href="/auth/register"
+          class="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#00D4AA] text-[#0A0A0F] font-semibold hover:bg-[#00D4AA]/90 transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-[#00D4AA]/25">
           Contactar Soporte
-        </button>
-        <button class="px-6 py-3 bg-transparent border-2 border-blue-600 text-blue-600 rounded-lg font-semibold hover:bg-blue-600 hover:text-white transition-colors duration-200">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+        </a>
+        <button class="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-white/20 bg-white/5 backdrop-blur-xl text-white font-medium hover:bg-white/10 transition-all duration-300 hover:scale-[1.02]">
           Ver FAQ
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.651 2.032-2.5 3.772-2.5 1.739 0 3.223.849 3.772 2.5.549 1.651-.238 3.5-3.772 3.5-3.534 0-4.321-.849-3.772-2.5z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 12v9" />
+          </svg>
         </button>
       </div>
     </div>

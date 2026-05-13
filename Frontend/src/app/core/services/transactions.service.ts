@@ -49,8 +49,8 @@ export interface SearchTransactionsDto {
   type?: Transaction['type'];
   accountId?: string;
   categoryId?: string;
-  startDate?: string;
-  endDate?: string;
+  dateFrom?: string;
+  dateTo?: string;
   sortBy?: string;
   sortDir?: 'asc' | 'desc';
 }
@@ -79,8 +79,8 @@ export class TransactionsService {
     if (params.type) queryParams['type'] = params.type;
     if (params.accountId) queryParams['accountId'] = params.accountId;
     if (params.categoryId) queryParams['categoryId'] = params.categoryId;
-    if (params.startDate) queryParams['startDate'] = params.startDate;
-    if (params.endDate) queryParams['endDate'] = params.endDate;
+    if (params.dateFrom) queryParams['dateFrom'] = params.dateFrom;
+    if (params.dateTo) queryParams['dateTo'] = params.dateTo;
     if (params.sortBy) queryParams['sortBy'] = params.sortBy;
     if (params.sortDir) queryParams['sortDir'] = params.sortDir;
 

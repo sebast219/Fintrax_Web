@@ -129,4 +129,18 @@ export class FaqComponent {
       }))
     );
   }
+
+  /**
+   * TrackBy function for categories
+   */
+  trackByCategory(index: number, category: string) {
+    return index;
+  }
+
+  /**
+   * TrackBy function for FAQs
+   */
+  trackByFaq(index: number, faq: FAQ) {
+    return faq.id;
+  }
 }

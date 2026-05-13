@@ -11,6 +11,8 @@ export class UserRepository implements IUserRepository {
       data: {
         email: entity.email!,
         passwordHash: entity.passwordHash!,
+        firstName: entity.firstName!,
+        lastName: entity.lastName!,
         fullName: entity.fullName!,
         avatarUrl: entity.avatarUrl,
         currency: entity.currency || 'USD',
@@ -18,7 +20,7 @@ export class UserRepository implements IUserRepository {
         timezone: entity.timezone || 'America/Mexico_City',
         preferences: entity.preferences || {},
         isActive: entity.isActive ?? true,
-      },
+      } as any,
     });
 
     return this.mapToUser(user);
@@ -89,6 +91,8 @@ export class UserRepository implements IUserRepository {
       id: prismaUser.id,
       email: prismaUser.email,
       passwordHash: prismaUser.passwordHash,
+      firstName: prismaUser.firstName,
+      lastName: prismaUser.lastName,
       fullName: prismaUser.fullName,
       avatarUrl: prismaUser.avatarUrl,
       currency: prismaUser.currency,

@@ -25,6 +25,11 @@ export class CardsController {
     return this.cardsService.findAll(userId);
   }
 
+  @Get('stats')
+  getGeneralStats(@CurrentUser('sub') userId: string) {
+    return this.cardsService.getGeneralStats(userId);
+  }
+
   @Get(':id')
   findOne(
     @CurrentUser('sub') userId: string,

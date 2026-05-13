@@ -27,13 +27,13 @@ export class RateLimitGuard implements CanActivate {
     const tracker = userId ? `user:${userId}` : `ip:${ip}:${Buffer.from(userAgent).toString('base64').slice(0, 16)}`;
     
     try {
-      // Use Redis for distributed rate limiting
-      const current = await this.redis.incr(tracker);
+      // Use Redis pipeline for better performance
+      const pipeline = this.redis.pipeline();
+      pipeline.incr(tracker);
+      pipeline.expire(tracker, ttl);
       
-      if (current === 1) {
-        // First request in window - set expiration
-        await this.redis.expire(tracker, ttl);
-      }
+      const results = await pipeline.exec();
+      const current = (results?.[0] as [any, number] | null)?.[1] || 0;
       
       if (current > limit) {
         this.logger.logSecurityEvent('Rate limit exceeded', userId, ip, {

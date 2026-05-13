@@ -12,6 +12,6 @@ export const RateLimit = (options: RateLimitOptions) => {
 };
 
 // Convenience decorators
-export const RateLimitAuth = () => RateLimit({ ttl: 60, limit: 5 }); // 5 requests per minute for auth
+export const RateLimitAuth = () => RateLimit({ ttl: 60, limit: 10 }); // 10 requests per minute for auth
 export const RateLimitStrict = () => RateLimit({ ttl: 60, limit: 20 }); // 20 requests per minute
 export const RateLimitNormal = () => RateLimit({ ttl: 60, limit: 100 }); // 100 requests per minute

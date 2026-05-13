@@ -1,57 +1,161 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Component, inject, signal, computed } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, ValidationErrors } from '@angular/forms';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+
+export interface LoginFormData {
+  email: string;
+  password: string;
+  rememberMe: boolean;
+}
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterLink
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent implements OnInit {
-  private auth = inject(AuthService);
+export class LoginComponent {
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
-  email = '';
-  password = '';
-  showPassword = false;
-  isLoading = false;
-  error = signal('');
-  success = signal('');
+  // Formulario de login con validación
+  loginForm: FormGroup;
 
-  ngOnInit(): void {
-    if (this.auth.isLoggedIn()) {
-      this.router.navigate(['/dashboard']);
-    }
+  // Estados reactivos
+  isLoading = signal<boolean>(false);
+  showPassword = signal<boolean>(false);
+  errorMessage = signal<string>('');
+  successMessage = signal<string>('');
+  
+  // URL de retorno
+  returnUrl: string = '/dashboard';
+
+  constructor() {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      rememberMe: [false]
+    });
+
+    // Obtener URL de retorno de query params
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
   }
 
-  async onSubmit() {
-    if (!this.email || !this.password) {
-      this.error.set('Completa todos los campos');
+  /**
+   * Obtiene los errores de un campo específico
+   */
+  getFieldError(fieldName: string): string | null {
+    const field = this.loginForm.get(fieldName);
+    if (field && field.errors) {
+      const errors = field.errors;
+      if (errors['required']) {
+        return 'Este campo es requerido';
+      }
+      if (errors['email']) {
+        return 'Email inválido';
+      }
+      if (errors['minlength']) {
+        return `Mínimo ${errors['minlength'].requiredLength} caracteres`;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Verifica si un campo es inválido y ha sido tocado
+   */
+  isFieldInvalid(fieldName: string): boolean {
+    const field = this.loginForm.get(fieldName);
+    return field ? field.invalid && (field.dirty || field.touched) : false;
+  }
+
+  /**
+   * Toggle para mostrar/ocultar contraseña
+   */
+  togglePasswordVisibility(): void {
+    this.showPassword.set(!this.showPassword());
+  }
+
+  /**
+   * Maneja el envío del formulario
+   */
+  async onSubmit(): Promise<void> {
+    if (this.loginForm.invalid) {
+      // Marcar todos los campos como touched para mostrar errores
+      Object.values(this.loginForm.controls).forEach(control => {
+        control.markAsTouched();
+      });
       return;
     }
 
-    this.isLoading = true;
-    this.error.set('');
-    this.success.set('');
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+    this.successMessage.set('');
 
     try {
-      const result = await this.auth.login(this.email, this.password);
-      
+      const formData: LoginFormData = this.loginForm.value;
+      const result = await this.authService.signIn(formData.email, formData.password);
+
       if (result.success) {
-        this.success.set(result.message);
+        this.successMessage.set(result.message);
+        
+        // Esperar un poco antes de redirigir para mostrar el mensaje
         setTimeout(() => {
-          this.router.navigate(['/dashboard']);
-        }, 1000);
+          this.router.navigate([this.returnUrl]);
+        }, 1500);
       } else {
-        this.error.set(result.message);
+        this.errorMessage.set(result.message);
       }
     } catch (error: any) {
-      this.error.set('Error de conexión con el servidor');
+      this.errorMessage.set(error.message || 'Error al iniciar sesión');
     } finally {
-      this.isLoading = false;
+      this.isLoading.set(false);
     }
+  }
+
+  /**
+   * Navega a la página de registro
+   */
+  navigateToRegister(): void {
+    this.router.navigate(['/auth/register']);
+  }
+
+  /**
+   * Navega a la página de recuperación de contraseña
+   */
+  navigateToForgotPassword(): void {
+    this.router.navigate(['/auth/forgot-password']);
+  }
+
+  /**
+   * Verifica si el formulario es válido
+   */
+  get isFormValid(): boolean {
+    return this.loginForm.valid;
+  }
+
+  /**
+   * Obtiene el valor actual de un campo
+   */
+  getFieldValue(fieldName: keyof LoginFormData): any {
+    return this.loginForm.get(fieldName)?.value;
+  }
+
+  /**
+   * Limpia los mensajes de error
+   */
+  clearMessages(): void {
+    this.errorMessage.set('');
+    this.successMessage.set('');
   }
 }

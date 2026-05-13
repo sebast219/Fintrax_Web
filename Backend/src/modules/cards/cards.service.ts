@@ -103,4 +103,28 @@ export class CardsService {
       totalSpent: totalSpent._sum.amount || 0,
     };
   }
+
+  async getGeneralStats(userId: string) {
+    const cards = await this.findAll(userId);
+    
+    const totalCards = cards.length;
+    const activeCards = cards.filter(card => card.isActive).length;
+    
+    // Calculate total balance and credit limit
+    const totalBalance = cards.reduce((sum, card) => sum + Number(card.currentBalance || 0), 0);
+    const totalCreditLimit = cards.reduce((sum, card) => sum + Number(card.creditLimit || 0), 0);
+    
+    // Calculate average utilization
+    const averageUtilization = totalCreditLimit > 0 
+      ? (totalBalance / totalCreditLimit) * 100 
+      : 0;
+
+    return {
+      totalCards,
+      activeCards,
+      totalBalance,
+      totalCreditLimit,
+      averageUtilization: Number(averageUtilization.toFixed(2))
+    };
+  }
 }

@@ -24,6 +24,9 @@ export class AuthService {
 
     const passwordHash = await bcrypt.hash(dto.password, 12);
 
+    // Crear fullName a partir de firstName y lastName
+    const fullName = `${dto.firstName} ${dto.lastName}`;
+
     // Crear usuario + cuenta default + categorías en una transacción
     const user = await this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       // 1. Crear usuario
@@ -31,8 +34,10 @@ export class AuthService {
         data: {
           email: dto.email,
           passwordHash,
-          fullName: dto.fullName,
-        },
+          firstName: dto.firstName,
+          lastName: dto.lastName,
+          fullName,
+        } as any,
       });
 
       // 2. Crear cuenta por defecto
@@ -43,12 +48,12 @@ export class AuthService {
           type: 'CASH',
           icon: 'banknotes',
           color: '#10B981',
-        },
+        } as any,
       });
 
       // 3. Crear categorías por defecto
       await tx.category.createMany({
-        data: this.getDefaultCategories(newUser.id),
+        data: this.getDefaultCategories(newUser.id) as any,
       });
 
       return newUser;
@@ -60,7 +65,7 @@ export class AuthService {
   async signIn(dto: SignInDto) {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email },
-    });
+    } as any);
 
     if (!user) {
       throw new UnauthorizedException('Credenciales inválidas');
@@ -76,7 +81,7 @@ export class AuthService {
     await this.prisma.user.update({
       where: { id: user.id },
       data: { lastLoginAt: new Date() },
-    });
+    } as any);
 
     return this.generateTokenResponse(user.id, user.email, user.fullName);
   }
@@ -84,7 +89,7 @@ export class AuthService {
   async refreshToken(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
-    });
+    } as any);
 
     if (!user || !user.isActive) {
       throw new UnauthorizedException('Usuario no válido');

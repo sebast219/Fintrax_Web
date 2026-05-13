@@ -17,8 +17,8 @@ export interface SignInDto {
 }
 
 export interface AuthResponse {
-  access_token: string;
-  refresh_token: string;
+  accessToken: string;
+  refreshToken: string;
   user: {
     id: string;
     email: string;
@@ -42,8 +42,29 @@ export class AuthService {
   currentUser = signal<AuthUser | null>(this.loadSession());
 
   private loadSession(): AuthUser | null {
-    const raw = localStorage.getItem(this.SESSION_KEY);
-    return raw ? JSON.parse(raw) : null;
+    try {
+      const raw = localStorage.getItem(this.SESSION_KEY);
+      const token = localStorage.getItem(this.TOKEN_KEY);
+      
+      // Only return user if both session and token exist
+      if (raw && token) {
+        const user = JSON.parse(raw);
+        return user;
+      }
+      
+      // Clear invalid session data
+      this.clearSessionData();
+      return null;
+    } catch (error) {
+      console.error('Error loading session:', error);
+      this.clearSessionData();
+      return null;
+    }
+  }
+
+  private clearSessionData(): void {
+    localStorage.removeItem(this.SESSION_KEY);
+    localStorage.removeItem(this.TOKEN_KEY);
   }
 
   private saveSession(user: AuthUser, token: string): void {
@@ -74,7 +95,8 @@ export class AuthService {
         name: response.user.fullName,
         email: response.user.email
       };
-      this.saveSession(user, response.access_token);
+      // Fix: Use accessToken instead of access_token to match backend response
+      this.saveSession(user, response.accessToken);
       return { success: true, message: `Bienvenido ${user.name}` };
     } catch (error: any) {
       const message = error.error?.message || 'Correo o contraseña incorrectos';
@@ -91,8 +113,7 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem(this.SESSION_KEY);
-    localStorage.removeItem(this.TOKEN_KEY);
+    this.clearSessionData();
     this.currentUser.set(null);
   }
 
@@ -120,7 +141,7 @@ export class AuthService {
           name: response.user.fullName,
           email: response.user.email
         };
-        this.saveSession(user, response.access_token);
+        this.saveSession(user, response.accessToken);
         return { success: true, message: 'Token refreshed successfully' };
       }),
       catchError(error => {

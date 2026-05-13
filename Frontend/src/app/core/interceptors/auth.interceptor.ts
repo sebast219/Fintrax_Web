@@ -47,7 +47,12 @@ export const authInterceptor = (
 function addToken(req: HttpRequest<any>, authService: AuthService): HttpRequest<any> {
   const token = authService.getToken();
   
+  // Debug: Log token presence
+  console.log('AuthInterceptor - Token exists:', !!token);
+  console.log('AuthInterceptor - Request URL:', req.url);
+  
   if (token) {
+    console.log('AuthInterceptor - Adding Bearer token');
     return req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`,
@@ -57,6 +62,7 @@ function addToken(req: HttpRequest<any>, authService: AuthService): HttpRequest<
     });
   }
 
+  console.log('AuthInterceptor - No token found');
   return req.clone({
     setHeaders: {
       'Content-Type': 'application/json'

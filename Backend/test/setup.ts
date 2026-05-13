@@ -3,6 +3,9 @@ import { PrismaService } from '../src/prisma/prisma.service';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 
+// Global Jest setup
+import 'jest';
+
 export const createTestingModule = async (controllers: any[], providers: any[] = []) => {
   const module: TestingModule = await Test.createTestingModule({
     imports: [
@@ -101,7 +104,7 @@ export const mockTransaction = {
   amount: 50,
   description: 'Test transaction',
   transactionDate: new Date(),
-  isConfirmed: true,
+  status: 'COMPLETED',
   createdAt: new Date(),
   updatedAt: new Date(),
 };

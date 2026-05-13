@@ -64,4 +64,18 @@ export class FeaturesComponent {
   getAllFeatures() {
     return this.features;
   }
+
+  /**
+   * TrackBy function for features
+   */
+  trackByFeature(index: number, feature: any) {
+    return index;
+  }
+
+  /**
+   * TrackBy function for benefits
+   */
+  trackByBenefit(index: number, benefit: string) {
+    return index;
+  }
 }

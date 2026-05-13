@@ -1,9 +1,15 @@
-import { Component, OnInit, AfterViewInit, Renderer2, ElementRef, inject } from '@angular/core';
+import { Component, inject, signal, computed, OnInit, OnDestroy, AfterViewInit, Renderer2, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Navbar } from '../../../layout/navbar/navbar';
 import { AuthService } from '../../../core/services/auth.service';
+import { DashboardService, DashboardSummary, MonthlyTrend } from '../../../core/services/dashboard.service';
+import { TransactionsService, Transaction as ApiTransaction, CreateTransactionDto } from '../../../core/services/transactions.service';
+import { BudgetsService, Budget, CreateBudgetDto } from '../../../core/services/budgets.service';
+import { GoalsService, Goal as ApiGoal, CreateGoalDto } from '../../../core/services/goals.service';
+import { CategoriesService, Category } from '../../../core/services/categories.service';
+import { Chart, ChartConfiguration, ChartType } from 'chart.js';
 
 interface Transaction {
   id?: string;
@@ -53,12 +59,28 @@ interface Toast {
   styleUrl: './dashboard.scss'
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
+  // Data from API
+  dashboardSummary: DashboardSummary | null = null;
+  monthlyTrends: MonthlyTrend[] = [];
+  budgets: Budget[] = [];
+  allGoals: ApiGoal[] = [];
+  allCategories: Category[] = [];
+  transactions: Transaction[] = [];
+  loading = true;
   showNotifications = false;
   showTransactionModal = false;
   showAllTransactionsModal = false;
   showBudgetModal = false;
   showGoalModal = false;
   transactionType: 'income' | 'expense' = 'income';
+  
+  // Estado financiero (usando dashboard service)
+  financialState = signal<any | null>(null);
+  showAllocationModal = false;
+  showDeallocationModal = false;
+  selectedGoalForAllocation: ApiGoal | null = null;
+  allocationForm = { amount: 0, accountId: '', note: '' };
+  deallocationForm = { amount: 0, accountId: '', note: '' };
   
   // Formulario de transacción
   transactionForm = {
@@ -90,8 +112,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   // Datos calculados para insights
   categorySpending: { [key: string]: number } = {};
-  previousMonthExpense = 2800; // Simulado para comparación
-  previousMonthIncome = 3400; // Simulado para comparación
+  previousMonthExpense = 0; // Se calculará dinámicamente
+  previousMonthIncome = 0; // Se calculará dinámicamente
 
   // Categorías disponibles
   incomeCategories = [
@@ -113,33 +135,29 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     { value: 'other_expense', label: 'Otros', icon: '📦' }
   ];
 
-  // Transacciones recientes
-  recentTransactions: Transaction[] = [
-    { id: '1', type: 'income', amount: 3250.00, name: 'Salario', description: 'Salario Mensual', category: 'salary', date: '2024-11-07', icon: '💼' },
-    { id: '2', type: 'expense', amount: 85.50, name: 'Supermercado', description: 'Compras semanales', category: 'food', date: '2024-11-06', icon: '🛒' },
-    { id: '3', type: 'expense', amount: 120.00, name: 'Luz', description: 'Servicio Eléctrico', category: 'utilities', date: '2024-11-06', icon: '⚡' },
-    { id: '4', type: 'expense', amount: 45.99, name: 'Steam', description: 'Videojuegos', category: 'entertainment', date: '2024-11-05', icon: '🎮' },
-    { id: '5', type: 'expense', amount: 230.00, name: 'Gasolina', description: 'Transporte', category: 'transport', date: '2024-11-04', icon: '🚗' },
-    { id: '6', type: 'income', amount: 500.00, name: 'Freelance', description: 'Proyecto web', category: 'freelance', date: '2024-11-03', icon: '💻' }
-  ];
+  // Transacciones recientes (loaded from API)
+  recentTransactions: Transaction[] = [];
 
-  // Presupuesto
-  budgetItems: BudgetItem[] = [
-    { category: 'food', label: 'Alimentos', spent: 0, total: 1500, color: 'bg-blue-500' },
-    { category: 'transport', label: 'Transporte', spent: 0, total: 600, color: 'bg-blue-500' },
-    { category: 'entertainment', label: 'Entretenimiento', spent: 0, total: 300, color: 'bg-blue-500' },
-    { category: 'utilities', label: 'Servicios', spent: 0, total: 400, color: 'bg-blue-500' }
-  ];
+  // Presupuesto (loaded from API)
+  budgetItems: BudgetItem[] = [];
   editingBudget: BudgetItem | null = null;
   budgetForm = { category: '', label: '', total: 0 };
   showCreateBudgetModal = false;
 
-  // Metas
-  goals: Goal[] = [
-    { id: '1', icon: '🏖️', category: 'emergency', name: 'Fondo de Emergencia', target: 10000, current: 7500 },
-    { id: '2', icon: '✈️', category: 'travel', name: 'Viaje a Europa', target: 5000, current: 2000 },
-    { id: '3', icon: '💻', category: 'tech', name: 'MacBook Pro', target: 2000, current: 1800 }
-  ];
+  // Metas (from API)
+  goals: Goal[] = [];
+  
+  // Transform API goals to component format
+  private transformApiGoals() {
+    this.goals = this.allGoals.map(goal => ({
+      id: goal.id,
+      icon: goal.category.icon,
+      category: goal.category.id,
+      name: goal.name,
+      target: goal.target,
+      current: goal.current
+    }));
+  }
   editingGoal: Goal | null = null;
   goalForm = { icon: '', category: '', name: '', target: 0, current: 0 };
 
@@ -162,17 +180,94 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     return category?.icon || '🎯';
   }
 
-  // Inyectar AuthService
+  // Inyectar servicios
   auth = inject(AuthService);
   private router = inject(Router);
+  private dashboardService = inject(DashboardService);
+  private transactionsService = inject(TransactionsService);
+  private budgetsService = inject(BudgetsService);
+  private goalsService = inject(GoalsService);
+  private categoriesService = inject(CategoriesService);
   
   constructor(private renderer: Renderer2, private el: ElementRef) { }
   
-  ngOnInit() {
+  async loadDashboardData() {
+    try {
+      this.loading = true;
+      
+      // Load all data in parallel
+      const [
+        summary,
+        trends,
+        budgets,
+        goals,
+        categories,
+        transactionsData
+      ] = await Promise.all([
+        this.dashboardService.getSummary(),
+        this.dashboardService.getTrends(6),
+        this.budgetsService.getAll(),
+        this.goalsService.getAll(),
+        this.categoriesService.getAll(),
+        this.transactionsService.search({ pageSize: 50 })
+      ]);
+
+      this.dashboardSummary = summary;
+      this.monthlyTrends = trends;
+      this.budgets = budgets;
+      this.allGoals = goals;
+      this.allCategories = categories;
+      
+      // Create a simple financial state from dashboard summary
+      this.financialState.set({
+        confirmedBalance: {
+          totalBalance: summary.totalBalance,
+          availableBalance: summary.totalBalance * 0.7, // Estimate
+          allocatedBalance: summary.totalBalance * 0.3  // Estimate
+        },
+        monthlyIncome: {
+          confirmed: summary.monthlyIncome
+        },
+        monthlyExpense: {
+          confirmed: summary.monthlyExpenses
+        },
+        savingsRate: {
+          confirmed: summary.monthlyIncome > 0 ? Math.round(((summary.monthlyIncome - summary.monthlyExpenses) / summary.monthlyIncome) * 100) : 0
+        }
+      });
+      
+      // Transform API transactions to component format
+      this.transactions = transactionsData.data.map((t: any) => ({
+        id: t.id,
+        type: t.type.toLowerCase() as 'income' | 'expense',
+        amount: t.amount,
+        name: t.description,
+        description: t.description,
+        category: t.category.name,
+        date: t.transactionDate,
+        icon: t.category.icon
+      }));
+      
+      // Transform API goals to component format
+      this.transformApiGoals();
+      
+      this.filteredTransactions = [...this.transactions];
+      this.calculateCategorySpending();
+      this.calculatePreviousMonthValues();
+      this.updateBudgetFromTransactions();
+      
+    } catch (error) {
+      console.error('Error loading dashboard data:', error);
+      this.showToast('Error al cargar los datos del dashboard', 'warning');
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  async ngOnInit() {
     this.generateMonths();
     this.updateBlurPosition();
-    this.filteredTransactions = [...this.recentTransactions];
-    this.calculateCategorySpending();
+    await this.loadDashboardData();
   }
 
   generateMonths() {
@@ -248,7 +343,18 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   getCategories(): { value: string; label: string; icon: string }[] {
-    return this.transactionType === 'income' ? this.incomeCategories : this.expenseCategories;
+    // Use actual categories from API
+    const categories = this.allCategories
+      .filter(c => c.type === (this.transactionType === 'income' ? 'INCOME' : 'EXPENSE'))
+      .map(c => ({
+        value: c.name,
+        label: c.name,
+        icon: c.icon
+      }));
+    
+    // Fallback to hardcoded categories if API categories are empty
+    return categories.length > 0 ? categories : 
+      (this.transactionType === 'income' ? this.incomeCategories : this.expenseCategories);
   }
 
   getCategoryIcon(categoryValue: string): string {
@@ -257,62 +363,106 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     return category?.icon || '📦';
   }
 
-  submitTransaction() {
+  async submitTransaction() {
     if (!this.transactionForm.amount || !this.transactionForm.description || !this.transactionForm.category) {
       return;
     }
 
-    const newTransaction: Transaction = {
-      id: Date.now().toString(),
-      type: this.transactionType,
-      amount: parseFloat(this.transactionForm.amount),
-      name: this.transactionForm.name,
-      description: this.transactionForm.description,
-      category: this.transactionForm.category,
-      date: this.transactionForm.date,
-      icon: this.getCategoryIcon(this.transactionForm.category)
-    };
+    try {
+      // Find the category ID from the category name
+      const category = this.allCategories.find(c => c.name === this.transactionForm.category);
+      if (!category) {
+        this.showToast('Categoría no válida', 'warning');
+        return;
+      }
 
-    // Add to beginning of array
-    this.recentTransactions.unshift(newTransaction);
+      // Create transaction via API
+      const newTransaction: CreateTransactionDto = {
+        accountId: 'default-account', // TODO: Get from user accounts
+        categoryId: category.id,
+        type: this.transactionType.toUpperCase() as 'INCOME' | 'EXPENSE',
+        amount: parseFloat(this.transactionForm.amount),
+        description: this.transactionForm.description,
+        transactionDate: this.transactionForm.date,
+        isRecurring: false
+      };
 
-    // Recalcular y sincronizar con presupuesto
-    this.calculateCategorySpending();
-    this.updateBudgetFromTransactions();
+      const createdTransaction = await this.transactionsService.create(newTransaction);
+      
+      // Transform to component format and add to local array
+      const transaction: Transaction = {
+        id: createdTransaction.id,
+        type: this.transactionType,
+        amount: createdTransaction.amount,
+        name: createdTransaction.description,
+        description: createdTransaction.description,
+        category: createdTransaction.category.name,
+        date: createdTransaction.transactionDate,
+        icon: createdTransaction.category.icon
+      };
 
-    // Close modal
-    this.closeTransactionModal();
-    this.showToast('Transacción guardada exitosamente', 'success');
+      // Add to beginning of array
+      this.transactions.unshift(transaction);
+      this.filteredTransactions.unshift(transaction);
+
+      // Recalculate and sync with budget
+      this.calculateCategorySpending();
+      this.updateBudgetFromTransactions();
+
+      // Close modal
+      this.closeTransactionModal();
+      this.showToast('Transacción guardada exitosamente', 'success');
+    } catch (error) {
+      console.error('Error creating transaction:', error);
+      this.showToast('Error al guardar la transacción', 'warning');
+    }
   }
 
-  // ========== KPI CALCULATIONS ==========
+  // ========== KPI CALCULATIONS (using API data V2) ==========
   get totalBalance(): number {
-    const income = this.recentTransactions
-      .filter(t => t.type === 'income')
-      .reduce((sum, t) => sum + t.amount, 0);
-    const expense = this.recentTransactions
-      .filter(t => t.type === 'expense')
-      .reduce((sum, t) => sum + t.amount, 0);
-    return income - expense;
+    // Usar el nuevo estado financiero V2 si está disponible
+    const state = this.financialState();
+    if (state) return state.confirmedBalance.totalBalance;
+    return this.dashboardSummary?.totalBalance || 0;
   }
 
   get monthlyIncome(): number {
-    return this.recentTransactions
-      .filter(t => t.type === 'income')
-      .reduce((sum, t) => sum + t.amount, 0);
+    const state = this.financialState();
+    if (state) return state.monthlyIncome.confirmed;
+    return this.dashboardSummary?.monthlyIncome || 0;
   }
 
   get monthlyExpense(): number {
-    return this.recentTransactions
-      .filter(t => t.type === 'expense')
-      .reduce((sum, t) => sum + t.amount, 0);
+    const state = this.financialState();
+    if (state) return state.monthlyExpense.confirmed;
+    return this.dashboardSummary?.monthlyExpenses || 0;
   }
 
   get savingsRate(): number {
+    const state = this.financialState();
+    if (state) return state.savingsRate.confirmed;
+    
+    // Fallback a cálculo original
     const income = this.monthlyIncome;
     const expense = this.monthlyExpense;
     if (income === 0) return 0;
     return Math.round(((income - expense) / income) * 100);
+  }
+
+  // Nuevos getters para el balance desglosado V2
+  get availableBalance(): number {
+    return this.financialState()?.confirmedBalance.availableBalance || 0;
+  }
+
+  get allocatedBalance(): number {
+    return this.financialState()?.confirmedBalance.allocatedBalance || 0;
+  }
+
+  get financialRecommendation() {
+    const state = this.financialState();
+    if (!state) return null;
+    // Por ahora retornar null hasta que implementemos las recomendaciones V2
+    return null;
   }
 
   // ========== CATEGORY SPENDING CALCULATION ==========
@@ -325,22 +475,65 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       });
   }
 
+  // Calculate previous month values dynamically
+  calculatePreviousMonthValues() {
+    const currentDate = new Date();
+    const previousMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+    const previousMonthEnd = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
+    
+    // Filter transactions from previous month
+    const previousMonthTransactions = this.transactions.filter(t => {
+      const tDate = new Date(t.date);
+      return tDate >= previousMonthDate && tDate <= previousMonthEnd;
+    });
+    
+    // Calculate previous month income and expenses
+    this.previousMonthIncome = previousMonthTransactions
+      .filter(t => t.type === 'income')
+      .reduce((sum, t) => sum + t.amount, 0);
+    
+    this.previousMonthExpense = previousMonthTransactions
+      .filter(t => t.type === 'expense')
+      .reduce((sum, t) => sum + t.amount, 0);
+  }
+
   getCategorySpending(category: string): number {
     return this.categorySpending[category] || 0;
   }
 
   getCategorySpendingTrend(category: string): number {
+    const currentDate = new Date();
+    const previousMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+    const previousMonthEnd = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
+    
+    // Calculate current month spending for this category
     const current = this.getCategorySpending(category);
-    const previous = current * 0.85; // Simulado: 15% menos el mes anterior
+    
+    // Calculate previous month spending for this category
+    const previousMonthTransactions = this.transactions.filter(t => {
+      const tDate = new Date(t.date);
+      return t.type === 'expense' && 
+             t.category === category &&
+             tDate >= previousMonthDate && 
+             tDate <= previousMonthEnd;
+    });
+    
+    const previous = previousMonthTransactions.reduce((sum, t) => sum + t.amount, 0);
+    
     if (previous === 0) return 0;
     return Math.round(((current - previous) / previous) * 100);
   }
 
   // Actualizar presupuesto cuando cambian las transacciones
   updateBudgetFromTransactions() {
-    this.budgetItems.forEach(item => {
-      item.spent = this.getCategorySpending(item.category);
-    });
+    // Convert API budgets to component format
+    this.budgetItems = this.budgets.map(budget => ({
+      category: budget.category.id,
+      label: budget.category.name,
+      spent: budget.spent,
+      total: budget.amount,
+      color: 'bg-blue-500'
+    }));
   }
 
   // ========== MONTH SELECTOR ==========
@@ -445,12 +638,18 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.showAllTransactionsModal = false;
   }
 
-  deleteTransaction(id: string) {
-    this.recentTransactions = this.recentTransactions.filter(t => t.id !== id);
-    this.filteredTransactions = this.filteredTransactions.filter(t => t.id !== id);
-    this.calculateCategorySpending();
-    this.updateBudgetFromTransactions();
-    this.showToast('Transacción eliminada', 'warning');
+  async deleteTransaction(id: string) {
+    try {
+      await this.transactionsService.delete(id);
+      this.transactions = this.transactions.filter(t => t.id !== id);
+      this.filteredTransactions = this.filteredTransactions.filter(t => t.id !== id);
+      this.calculateCategorySpending();
+      this.updateBudgetFromTransactions();
+      this.showToast('Transacción eliminada', 'warning');
+    } catch (error) {
+      console.error('Error deleting transaction:', error);
+      this.showToast('Error al eliminar la transacción', 'warning');
+    }
   }
 
   // ========== BUDGET MODAL ==========
@@ -534,43 +733,18 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   getMonthlyData(): { month: string; income: number; expense: number; balance: number }[] {
-    const data: { month: string; income: number; expense: number; balance: number }[] = [];
-    const baseDate = this.getBaseMonth();
-
-    // Determinar cuántos meses mostrar según el rango seleccionado
-    let monthsCount = 6; // default 6M
-    if (this.chartRange === '1A') monthsCount = 12;
-    else if (this.chartRange === 'ALL') monthsCount = 24; // máximo 2 años
-
-    // Generar datos desde el mes seleccionado hacia atrás
-    for (let i = monthsCount - 1; i >= 0; i--) {
-      const date = new Date(baseDate.getFullYear(), baseDate.getMonth() - i, 1);
+    // Use API trends data instead of calculating from transactions
+    return this.monthlyTrends.map(trend => {
+      const date = new Date(trend.month + '-01');
       const monthName = this.monthNames[date.getMonth()];
-      const year = date.getFullYear();
-
-      // Filtrar transacciones de este mes
-      const monthTransactions = this.recentTransactions.filter(t => {
-        const tDate = new Date(t.date);
-        return tDate.getMonth() === date.getMonth() && tDate.getFullYear() === year;
-      });
-
-      const income = monthTransactions
-        .filter(t => t.type === 'income')
-        .reduce((sum, t) => sum + t.amount, 0);
-
-      const expense = monthTransactions
-        .filter(t => t.type === 'expense')
-        .reduce((sum, t) => sum + t.amount, 0);
-
-      data.push({
+      
+      return {
         month: monthName.substring(0, 3), // Abreviado: Ene, Feb, etc.
-        income,
-        expense,
-        balance: income - expense
-      });
-    }
-
-    return data;
+        income: trend.income,
+        expense: trend.expenses,
+        balance: trend.balance
+      };
+    });
   }
 
   // Calcular coordenadas SVG para el gráfico
@@ -659,38 +833,24 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     return points;
   }
 
-  // ========== INSIGHTS METHODS ==========
+  // ========== INSIGHTS METHODS (using API data) ==========
   getTopSpendingCategory(): { label: string; amount: number; percentage: number } | null {
-    const expenseTransactions = this.filteredTransactions.filter(t => t.type === 'expense');
-    if (expenseTransactions.length === 0) return null;
+    if (!this.dashboardSummary?.expensesByCategory || this.dashboardSummary.expensesByCategory.length === 0) {
+      return null;
+    }
 
-    const totalExpense = expenseTransactions.reduce((sum, t) => sum + t.amount, 0);
+    const totalExpense = this.dashboardSummary.expensesByCategory.reduce((sum, cat) => sum + cat.amount, 0);
     if (totalExpense === 0) return null;
 
-    // Agrupar por categoría
-    const spendingByCategory: { [key: string]: number } = {};
-    expenseTransactions.forEach(t => {
-      spendingByCategory[t.category] = (spendingByCategory[t.category] || 0) + t.amount;
-    });
+    // Find the category with highest expense
+    const topCategory = this.dashboardSummary.expensesByCategory.reduce((max, cat) => 
+      cat.amount > max.amount ? cat : max
+    );
 
-    // Encontrar la categoría con mayor gasto
-    let topCategory = '';
-    let maxAmount = 0;
-    Object.entries(spendingByCategory).forEach(([category, amount]) => {
-      if (amount > maxAmount) {
-        maxAmount = amount;
-        topCategory = category;
-      }
-    });
-
-    if (!topCategory) return null;
-
-    // Buscar el label de la categoría
-    const categoryInfo = this.expenseCategories.find(c => c.value === topCategory);
     return {
-      label: categoryInfo?.label || topCategory,
-      amount: maxAmount,
-      percentage: Math.round((maxAmount / totalExpense) * 100)
+      label: topCategory.category.name,
+      amount: topCategory.amount,
+      percentage: Math.round((topCategory.amount / totalExpense) * 100)
     };
   }
 
@@ -778,12 +938,78 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     return Math.round((goal.current / goal.target) * 100);
   }
 
-  // ========== QUICK ACTIONS ==========
-  navigateToReports() {
-    this.showToast('Módulo de informes - Próximamente', 'info');
+  // ========== GOAL ALLOCATION METHODS ==========
+  openAllocationModal(goal: Goal) {
+    this.selectedGoalForAllocation = goal as any; // Type assertion to fix interface mismatch
+    this.allocationForm = { 
+      amount: 0, 
+      accountId: '', 
+      note: `Asignación a meta: ${goal.name}` 
+    };
+    this.showAllocationModal = true;
+  }
+
+  closeAllocationModal() {
+    this.showAllocationModal = false;
+    this.selectedGoalForAllocation = null;
+    this.allocationForm = { amount: 0, accountId: '', note: '' };
+  }
+
+  async allocateToGoal() {
+    // Placeholder implementation since financial-v2 service is not available
+    this.showToast('Función de asignación no disponible temporalmente', 'info');
+    this.closeAllocationModal();
+  }
+
+  openDeallocationModal(goal: Goal) {
+    this.selectedGoalForAllocation = goal as any; // Type assertion to fix interface mismatch
+    this.deallocationForm = { 
+      amount: 0, 
+      accountId: '', 
+      note: `Desasignación de meta: ${goal.name}` 
+    };
+    this.showDeallocationModal = true;
+  }
+
+  closeDeallocationModal() {
+    this.showDeallocationModal = false;
+    this.selectedGoalForAllocation = null;
+    this.deallocationForm = { amount: 0, accountId: '', note: '' };
+  }
+
+  async deallocateFromGoal() {
+    // Placeholder implementation since financial-v2 service is not available
+    this.showToast('Función de desasignación no disponible temporalmente', 'info');
+    this.closeDeallocationModal();
+  }
+
+  getMaxAllocatableAmount(goal: Goal): number {
+    // Simple calculation based on available balance
+    const state = this.financialState();
+    if (!state) return 0;
+    return Math.floor(state.confirmedBalance.availableBalance * 0.8); // 80% of available balance
+  }
+
+  getMaxDeallocatableAmount(goal: Goal): number {
+    // Simple calculation based on current goal amount
+    return Math.floor(Number(goal.current) * 0.9); // 90% of current amount
+  }
+
+  canAllocateToGoal(goal: Goal, amount: number): boolean {
+    const maxAllocatable = this.getMaxAllocatableAmount(goal);
+    return amount <= maxAllocatable && amount > 0;
+  }
+
+  canDeallocateFromGoal(goal: Goal, amount: number): boolean {
+    const maxDeallocatable = this.getMaxDeallocatableAmount(goal);
+    return amount <= maxDeallocatable && amount > 0;
   }
 
   navigateToSettings() {
     this.showToast('Módulo de configuración - Próximamente', 'info');
+  }
+
+  navigateToReports() {
+    this.router.navigate(['/reports']);
   }
 }

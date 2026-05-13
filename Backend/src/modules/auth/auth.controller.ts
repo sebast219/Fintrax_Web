@@ -13,15 +13,11 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('signup')
-  @UseGuards(RateLimitGuard)
-  @RateLimitAuth()
   signUp(@Body() dto: SignUpDto) {
     return this.authService.signUp(dto);
   }
 
   @Post('signin')
-  @UseGuards(RateLimitGuard)
-  @RateLimitAuth()
   signIn(@Body() dto: SignInDto) {
     return this.authService.signIn(dto);
   }

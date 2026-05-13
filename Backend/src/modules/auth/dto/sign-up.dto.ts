@@ -12,11 +12,17 @@ export class SignUpDto {
   @MaxLength(100)
   password: string;
 
-  @ApiProperty({ example: 'Juan Pérez' })
+  @ApiProperty({ example: 'Juan' })
   @IsString()
   @MinLength(2)
-  @MaxLength(100)
-  fullName: string;
+  @MaxLength(50)
+  firstName: string;
+
+  @ApiProperty({ example: 'Pérez' })
+  @IsString()
+  @MinLength(2)
+  @MaxLength(50)
+  lastName: string;
 }
 
 export class SignInDto {

@@ -21,6 +21,7 @@ import { GoalsModule } from './modules/goals/goals.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { ReportsModule } from './modules/reports/reports.module';
 import { RecurringModule } from './modules/recurring/recurring.module';
+import { FinancialV2Module } from './modules/financial-v2/financial-v2.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { RecurringModule } from './modules/recurring/recurring.module';
     DashboardModule,
     ReportsModule,
     RecurringModule,
+    FinancialV2Module,
   ],
   providers: [
     {

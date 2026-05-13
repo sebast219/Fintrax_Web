@@ -6,6 +6,7 @@ export interface PricingPlan {
   name: string;
   price: number;
   period: string;
+  description?: string;
   features: string[];
   highlighted?: boolean;
   popular?: boolean;
@@ -27,6 +28,7 @@ export class PricingComponent {
       name: 'Básico',
       price: 0,
       period: 'para siempre',
+      description: 'Perfecto para empezar a controlar tus finanzas personales',
       features: [
         'Dashboard básico',
         'Hasta 5 tarjetas',
@@ -39,6 +41,7 @@ export class PricingComponent {
       name: 'Profesional',
       price: 9.99,
       period: 'por mes',
+      description: 'Ideal para freelancers y profesionales que necesitan control total',
       features: [
         'Dashboard completo',
         'Tarjetas ilimitadas',
@@ -55,6 +58,7 @@ export class PricingComponent {
       name: 'Empresarial',
       price: 29.99,
       period: 'por mes',
+      description: 'Solución completa para empresas y equipos grandes',
       features: [
         'Todo lo profesional',
         'Usuarios ilimitados',
@@ -113,5 +117,12 @@ export class PricingComponent {
       return Math.round((annualPrice - discountPrice) / annualPrice * 100);
     }
     return 0;
+  }
+
+  /**
+   * TrackBy function for features
+   */
+  trackByFeature(index: number, feature: string) {
+    return index;
   }
 }
